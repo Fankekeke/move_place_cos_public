@@ -30,7 +30,7 @@ public class PaymentRecordController {
      */
     @GetMapping("/page")
     public R page(Page<PaymentRecord> page, PaymentRecord paymentRecord) {
-        return R.ok();
+        return R.ok(paymentRecordService.queryPaymentPage(page, paymentRecord));
     }
 
     /**

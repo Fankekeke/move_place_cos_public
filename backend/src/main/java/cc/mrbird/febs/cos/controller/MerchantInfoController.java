@@ -30,7 +30,7 @@ public class MerchantInfoController {
      */
     @GetMapping("/page")
     public R page(Page<MerchantInfo> page, MerchantInfo merchantInfo) {
-        return R.ok();
+        return R.ok(merchantInfoService.queryMerchantPage(page, merchantInfo));
     }
 
     /**

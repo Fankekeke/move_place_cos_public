@@ -30,7 +30,7 @@ public class ComplaintInfoController {
      */
     @GetMapping("/page")
     public R page(Page<ComplaintInfo> page, ComplaintInfo complaintInfo) {
-        return R.ok();
+        return R.ok(complaintInfoService.queryComplaintPage(page, complaintInfo));
     }
 
     /**

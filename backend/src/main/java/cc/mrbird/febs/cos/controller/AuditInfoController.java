@@ -32,7 +32,7 @@ public class AuditInfoController {
      */
     @GetMapping("/page")
     public R page(Page<AuditInfo> page, AuditInfo auditInfo) {
-        return R.ok();
+        return R.ok(auditInfoService.queryAuditPage(page, auditInfo));
     }
 
     /**

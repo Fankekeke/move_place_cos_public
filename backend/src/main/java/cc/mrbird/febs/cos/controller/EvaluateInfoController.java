@@ -30,7 +30,7 @@ public class EvaluateInfoController {
      */
     @GetMapping("/page")
     public R page(Page<EvaluateInfo> page, EvaluateInfo evaluateInfo) {
-        return R.ok();
+        return R.ok(evaluateInfoService.queryEvaluatePage(page, evaluateInfo));
     }
 
     /**

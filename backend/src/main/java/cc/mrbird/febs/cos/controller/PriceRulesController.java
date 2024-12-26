@@ -30,7 +30,7 @@ public class PriceRulesController {
      */
     @GetMapping("/page")
     public R page(Page<PriceRules> page, PriceRules priceRules) {
-        return R.ok();
+        return R.ok(priceRulesService.queryPriceRulesPage(page, priceRules));
     }
 
     /**
