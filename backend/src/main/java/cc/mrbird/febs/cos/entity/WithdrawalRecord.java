@@ -3,6 +3,9 @@ package cc.mrbird.febs.cos.entity;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -19,6 +22,9 @@ public class WithdrawalRecord implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @TableId(value = "ID", type = IdType.AUTO)
+    private Integer id;
+
     /**
      * 所属商家
      */
@@ -32,7 +38,7 @@ public class WithdrawalRecord implements Serializable {
     /**
      * 申请时间
      */
-    private LocalDateTime createDate;
+    private String createDate;
 
     /**
      * 审核状态 0.未审核 1.审核通过 2.驳回
@@ -42,7 +48,7 @@ public class WithdrawalRecord implements Serializable {
     /**
      * 状态时间
      */
-    private LocalDateTime statusDate;
+    private String statusDate;
 
 
 }

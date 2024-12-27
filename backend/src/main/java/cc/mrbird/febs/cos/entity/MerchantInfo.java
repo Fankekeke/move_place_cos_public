@@ -4,6 +4,9 @@ import java.math.BigDecimal;
 import java.time.LocalTime;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -19,6 +22,9 @@ import lombok.experimental.Accessors;
 public class MerchantInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    @TableId(value = "ID", type = IdType.AUTO)
+    private Integer id;
 
     /**
      * 搬运公司名称
@@ -58,12 +64,12 @@ public class MerchantInfo implements Serializable {
     /**
      * 开始营业时间
      */
-    private LocalTime operateStartTime;
+    private String operateStartTime;
 
     /**
      * 营业结束时间
      */
-    private LocalTime operateEndTime;
+    private String operateEndTime;
 
     /**
      * 图片
@@ -73,7 +79,7 @@ public class MerchantInfo implements Serializable {
     /**
      * 创建时间
      */
-    private LocalDateTime createDate;
+    private String createDate;
 
     /**
      * 经度
