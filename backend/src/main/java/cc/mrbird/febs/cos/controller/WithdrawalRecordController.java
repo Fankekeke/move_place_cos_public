@@ -30,7 +30,7 @@ public class WithdrawalRecordController {
      */
     @GetMapping("/page")
     public R page(Page<WithdrawalRecord> page, WithdrawalRecord withdrawalRecord) {
-        return R.ok();
+        return R.ok(withdrawalRecordService.queryWithdrawalPage(page, withdrawalRecord));
     }
 
     /**
