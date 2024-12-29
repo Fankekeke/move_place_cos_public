@@ -4,12 +4,14 @@ package cc.mrbird.febs.cos.controller;
 import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.MerchantInfo;
 import cc.mrbird.febs.cos.service.IMerchantInfoService;
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * @author FanK fan1ke2ke@gmail.com
@@ -34,14 +36,34 @@ public class MerchantInfoController {
     }
 
     /**
-     * 获取ID获取审核详情
+     * 获取ID获取商家详情
      *
      * @param id 主键
      * @return 结果
      */
     @GetMapping("/{id}")
     public R detail(@PathVariable("id") Integer id) {
-        return R.ok(merchantInfoService.getById(id));
+        MerchantInfo merchantInfo = merchantInfoService.getById(id);
+        Map<String, String> weekMap = new HashMap<String, String>() {
+            {
+                put("1", "周一");
+                put("2", "周二");
+                put("3", "周三");
+                put("4", "周四");
+                put("5", "周五");
+                put("6", "周六");
+                put("7", "周日");
+            }
+        };
+        if (StrUtil.isNotEmpty(merchantInfo.getOperateDay())) {
+            List<String> operateDayList = StrUtil.splitTrim(merchantInfo.getOperateDay(), ",");
+            List<String> operateDayResult = new ArrayList<>();
+            for (String s : operateDayList) {
+                operateDayResult.add(weekMap.get(s));
+            }
+            merchantInfo.setOperateDayList(operateDayResult);
+        }
+        return R.ok(merchantInfo);
     }
 
     /**
@@ -62,6 +84,28 @@ public class MerchantInfoController {
      */
     @PostMapping
     public R save(MerchantInfo merchantInfo) {
+        Map<String, String> weekMap = new HashMap<String, String>() {
+            {
+                put("周一", "1");
+                put("周二", "2");
+                put("周三", "3");
+                put("周四", "4");
+                put("周五", "5");
+                put("周六", "6");
+                put("周日", "7");
+            }
+        };
+        merchantInfo.setCode("MER-" + System.currentTimeMillis());
+        merchantInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
+
+        if (StrUtil.isNotEmpty(merchantInfo.getOperateDay())) {
+            List<String> operateDayList = StrUtil.splitTrim(merchantInfo.getOperateDay(), ",");
+            List<String> operateDayResult = new ArrayList<>();
+            for (String s : operateDayList) {
+                operateDayResult.add(weekMap.get(s));
+            }
+            merchantInfo.setOperateDay(StrUtil.join(",", operateDayResult));
+        }
         return R.ok(merchantInfoService.save(merchantInfo));
     }
 
@@ -73,6 +117,25 @@ public class MerchantInfoController {
      */
     @PutMapping
     public R edit(MerchantInfo merchantInfo) {
+        Map<String, String> weekMap = new HashMap<String, String>() {
+            {
+                put("周一", "1");
+                put("周二", "2");
+                put("周三", "3");
+                put("周四", "4");
+                put("周五", "5");
+                put("周六", "6");
+                put("周日", "7");
+            }
+        };
+        if (StrUtil.isNotEmpty(merchantInfo.getOperateDay())) {
+            List<String> operateDayList = StrUtil.splitTrim(merchantInfo.getOperateDay(), ",");
+            List<String> operateDayResult = new ArrayList<>();
+            for (String s : operateDayList) {
+                operateDayResult.add(weekMap.get(s));
+            }
+            merchantInfo.setOperateDay(StrUtil.join(",", operateDayResult));
+        }
         return R.ok(merchantInfoService.updateById(merchantInfo));
     }
 

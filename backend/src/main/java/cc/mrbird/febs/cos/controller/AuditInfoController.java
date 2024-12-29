@@ -3,8 +3,11 @@ package cc.mrbird.febs.cos.controller;
 
 import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.AuditInfo;
+import cc.mrbird.febs.cos.entity.MerchantInfo;
 import cc.mrbird.febs.cos.service.IAuditInfoService;
+import cc.mrbird.febs.cos.service.IMerchantInfoService;
 import cn.hutool.core.date.DateUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +26,8 @@ public class AuditInfoController {
 
     private final IAuditInfoService auditInfoService;
 
+    private final IMerchantInfoService merchantInfoService;
+
     /**
      * 分页获取审核信息
      *
@@ -33,6 +38,29 @@ public class AuditInfoController {
     @GetMapping("/page")
     public R page(Page<AuditInfo> page, AuditInfo auditInfo) {
         return R.ok(auditInfoService.queryAuditPage(page, auditInfo));
+    }
+
+    /**
+     * 审核
+     *
+     * @param auditId 审核ID
+     * @param type    状态
+     * @return 结果
+     */
+    @PutMapping("/check")
+    public R check(@RequestParam Integer auditId, @RequestParam Integer type) {
+        // 更新公司审核信息
+        AuditInfo auditInfo = auditInfoService.getById(auditId);
+        MerchantInfo merchantInfo = new MerchantInfo();
+        merchantInfo.setId(auditInfo.getMerchantId());
+        auditInfo.setAuditStatus(type);
+        if (type == 1) {
+            merchantInfo.setStatus("1");
+        } else {
+            merchantInfo.setStatus("0");
+        }
+        merchantInfoService.updateById(merchantInfo);
+        return R.ok(auditInfoService.updateById(auditInfo));
     }
 
     /**
@@ -64,6 +92,10 @@ public class AuditInfoController {
      */
     @PostMapping
     public R save(AuditInfo auditInfo) {
+        MerchantInfo merchantInfo = merchantInfoService.getOne(Wrappers.<MerchantInfo>lambdaQuery().eq(MerchantInfo::getUserId, auditInfo.getMerchantId()));
+        auditInfo.setMerchantId(merchantInfo.getId());
+        auditInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
+        auditInfo.setAuditStatus(0);
         return R.ok(auditInfoService.save(auditInfo));
     }
 
