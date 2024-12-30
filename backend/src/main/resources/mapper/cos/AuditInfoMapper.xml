@@ -4,6 +4,35 @@
 
     <!-- 分页获取审核信息 -->
     <select id="queryAuditPage" resultType="java.util.LinkedHashMap">
+        select ai.id,
+        ai.merchant_id,
+        ai.images,
+        ai.create_date,
+        ai.audit_status,
+        ai.status_date,
+        ai.introduction,
+        ai.tag,
+        mi.name as merchantName,
+        mi.code as merchantCode,
+        mi.address,
+        mi.principal,
+        mi.phone
+        from audit_info ai
+        left join merchant_info mi on (mi.id = ai.merchant_id)
+        where 1 = 1
+        <if test="auditInfo.merchantCode != null and auditInfo.merchantCode != ''">
+            AND mi.code LIKE CONCAT('%',#{auditInfo.merchantCode},'%')
+        </if>
+        <if test="auditInfo.merchantName != null and auditInfo.merchantName != ''">
+            AND mi.name LIKE CONCAT('%',#{auditInfo.merchantName},'%')
+        </if>
+        <if test="auditInfo.principal != null and auditInfo.principal != ''">
+            AND mi.principal LIKE CONCAT('%',#{auditInfo.principal},'%')
+        </if>
+        <if test="auditInfo.auditStatus != null">
+            AND ai.audit_status = #{auditInfo.auditStatus}
+        </if>
+        order by ai.create_date desc
 
     </select>
 </mapper>

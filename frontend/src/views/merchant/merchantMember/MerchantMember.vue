@@ -130,7 +130,7 @@ export default {
           </a-popover>
         }
       }, {
-        title: '商家名称',
+        title: '搬家公司名称',
         dataIndex: 'merchantName',
         customRender: (text, row, index) => {
           if (text !== null) {
@@ -141,7 +141,7 @@ export default {
         },
         ellipsis: true
       }, {
-        title: '商家地址',
+        title: '搬家公司地址',
         dataIndex: 'address',
         customRender: (text, row, index) => {
           if (text !== null) {
@@ -174,7 +174,7 @@ export default {
         },
         ellipsis: true
       }, {
-        title: '商家图片',
+        title: '搬家公司图片',
         dataIndex: 'images',
         customRender: (text, record, index) => {
           if (!record.images) return <a-avatar shape="square" icon="user" />

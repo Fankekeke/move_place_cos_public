@@ -60,7 +60,7 @@
                       <a-avatar shape="square" :size="50" icon="user" :src="'http://127.0.0.1:9527/imagesWeb/' + orderData.images.split(',')[0]" />
                     </a-popover>
                   </a-col>
-                  <a-col :span="8"><b>商家编号：</b>
+                  <a-col :span="8"><b>搬家公司编号：</b>
                     {{ orderData.code }}
                   </a-col>
                   <a-col :span="8"><b>负责人：</b>
@@ -157,7 +157,7 @@
         </a-col>
       </a-row>
       <a-drawer
-        title="商家评价"
+        title="搬家公司评价"
         width="600"
         :closable="false"
         :visible="childrenDrawer"

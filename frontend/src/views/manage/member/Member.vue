@@ -7,7 +7,7 @@
           <div :class="advanced ? null: 'fold'">
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="商家编号"
+                label="搬家公司编号"
                 :labelCol="{span: 5}"
                 :wrapperCol="{span: 18, offset: 1}">
                 <a-input v-model="queryParams.code"/>
@@ -15,7 +15,7 @@
             </a-col>
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="商家名称"
+                label="搬家公司名称"
                 :labelCol="{span: 5}"
                 :wrapperCol="{span: 18, offset: 1}">
                 <a-input v-model="queryParams.name"/>
@@ -100,11 +100,11 @@ export default {
     }),
     columns () {
       return [{
-        title: '商家编号',
+        title: '搬家公司编号',
         dataIndex: 'code',
         ellipsis: true
       }, {
-        title: '商家名称',
+        title: '搬家公司名称',
         dataIndex: 'name',
         customRender: (text, row, index) => {
           if (text !== null) {
@@ -115,7 +115,7 @@ export default {
         },
         ellipsis: true
       }, {
-        title: '商家图片',
+        title: '搬家公司图片',
         dataIndex: 'images',
         customRender: (text, record, index) => {
           if (!record.images) return <a-avatar shape="square" icon="user" />

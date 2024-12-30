@@ -45,7 +45,7 @@
       </a-row>
       <br/>
       <a-row style="padding-left: 24px;padding-right: 24px;">
-        <a-col :span="8"><b>所属商家：</b>
+        <a-col :span="8"><b>所属搬家公司：</b>
           {{ dishesData.merchantName }}
         </a-col>
         <a-col :span="8"><b>联系人：</b>

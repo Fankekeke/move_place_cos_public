@@ -18,9 +18,9 @@
         images,
         create_date,
         status,
-        dishes,
         longitude,
-        community_id,
+        user_id,
+        balance,
         latitude
         from
         merchant_info

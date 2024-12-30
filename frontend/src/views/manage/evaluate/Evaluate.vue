@@ -23,7 +23,7 @@
             </a-col>
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="商家名称"
+                label="搬家公司名称"
                 :labelCol="{span: 5}"
                 :wrapperCol="{span: 18, offset: 1}">
                 <a-input v-model="queryParams.merchantName"/>
@@ -192,7 +192,7 @@ export default {
           </a-popover>
         }
       }, {
-        title: '所属商家',
+        title: '所属搬家公司',
         dataIndex: 'merchantName',
         customRender: (text, row, index) => {
           if (text !== null) {

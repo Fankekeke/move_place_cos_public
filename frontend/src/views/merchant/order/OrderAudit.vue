@@ -82,11 +82,11 @@
     <br/>
     <div style="font-size: 13px;font-family: SimHei" v-if="merchantInfo !== null">
       <a-row style="padding-left: 24px;padding-right: 24px;">
-        <a-col style="margin-bottom: 15px"><span style="font-size: 15px;font-weight: 650;color: #000c17">商家信息</span></a-col>
-        <a-col :span="6"><b>商家编号：</b>
+        <a-col style="margin-bottom: 15px"><span style="font-size: 15px;font-weight: 650;color: #000c17">搬家公司信息</span></a-col>
+        <a-col :span="6"><b>搬家公司编号：</b>
           {{ merchantInfo.code }}
         </a-col>
-        <a-col :span="6"><b>商家名称：</b>
+        <a-col :span="6"><b>搬家公司名称：</b>
           {{ merchantInfo.name ? merchantInfo.name : '- -' }}
         </a-col>
         <a-col :span="6"><b>地 址：</b>

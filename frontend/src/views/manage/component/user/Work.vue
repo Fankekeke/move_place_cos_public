@@ -10,7 +10,7 @@
               <a-col :span="16">
                 <a-row>
                   <a-col :span="18">
-                    <a-input v-model="key" placeholder="搜索商家"/>
+                    <a-input v-model="key" placeholder="搜索搬家公司"/>
                   </a-col>
                   <a-col :span="4" :offset="2">
                     <a-button type="primary" @click="fetch">
@@ -128,7 +128,7 @@ export default {
     },
     view (record) {
       // if (record.currentStatus === '0') {
-      //   this.$message.warn('此商家不在营业时间内')
+      //   this.$message.warn('此搬家公司不在营业时间内')
       //   return false
       // }
       this.orderMapView.merchantInfo = record

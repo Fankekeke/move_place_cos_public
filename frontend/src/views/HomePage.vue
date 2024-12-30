@@ -25,7 +25,7 @@
               <a-col :span="4"></a-col>
               <a-col :span="4"></a-col>
               <a-col :span="4">
-                <head-info title="商家数量" :content="titleAdminData.merchantNum" :center="false" :bordered="false"/>
+                <head-info title="搬家公司数量" :content="titleAdminData.merchantNum" :center="false" :bordered="false"/>
               </a-col>
               <a-col :span="4">
                 <head-info title="员工数量" :content="titleAdminData.staffNum" :center="false" :bordered="false"/>

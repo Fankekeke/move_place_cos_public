@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.io.Serializable;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -53,6 +54,12 @@ public class ComplaintInfo implements Serializable {
      * 状态（0.未处理 1.已处理）
      */
     private String status;
+
+    @TableField(exist = false)
+    private String userName;
+
+    @TableField(exist = false)
+    private String merchantName;
 
 
 }

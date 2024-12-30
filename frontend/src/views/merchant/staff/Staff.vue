@@ -175,7 +175,7 @@ export default {
           }
         }
       }, {
-        title: '商家编号',
+        title: '搬家公司编号',
         dataIndex: 'merchantCode',
         customRender: (text, row, index) => {
           if (text !== null) {
@@ -186,7 +186,7 @@ export default {
         },
         ellipsis: true
       }, {
-        title: '所属商家',
+        title: '所属搬家公司',
         dataIndex: 'merchantName',
         customRender: (text, row, index) => {
           if (text !== null) {

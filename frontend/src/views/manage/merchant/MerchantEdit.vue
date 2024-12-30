@@ -1,6 +1,6 @@
 <template>
   <a-drawer
-    title="修改商家"
+    title="修改搬家公司"
     :maskClosable="false"
     width=1000
     placement="right"
@@ -11,10 +11,10 @@
     <a-form :form="form" layout="vertical">
       <a-row :gutter="20">
         <a-col :span="12">
-          <a-form-item label='商家名称' v-bind="formItemLayout">
+          <a-form-item label='搬家公司名称' v-bind="formItemLayout">
             <a-input v-decorator="[
             'name',
-            { rules: [{ required: true, message: '请输入商家名称!' }] }
+            { rules: [{ required: true, message: '请输入搬家公司名称!' }] }
             ]"/>
           </a-form-item>
         </a-col>
