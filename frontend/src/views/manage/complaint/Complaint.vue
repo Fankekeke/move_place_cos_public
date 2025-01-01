@@ -7,7 +7,7 @@
           <div :class="advanced ? null: 'fold'">
             <a-col :md="6" :sm="24">
               <a-form-item
-                label=用户名称
+                label="投诉用户"
                 :labelCol="{span: 5}"
                 :wrapperCol="{span: 18, offset: 1}">
                 <a-input v-model="queryParams.userName"/>
@@ -15,14 +15,18 @@
             </a-col>
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="审核状态"
+                label="所属商家"
                 :labelCol="{span: 5}"
                 :wrapperCol="{span: 18, offset: 1}">
-                <a-select v-model="queryParams.auditStatus" allowClear>
-                  <a-select-option value="0">未审核</a-select-option>
-                  <a-select-option value="1">审核通过</a-select-option>
-                  <a-select-option value="2">驳回</a-select-option>
-                </a-select>
+                <a-input v-model="queryParams.merchantName"/>
+              </a-form-item>
+            </a-col>
+            <a-col :md="6" :sm="24">
+              <a-form-item
+                label="订单编号"
+                :labelCol="{span: 5}"
+                :wrapperCol="{span: 18, offset: 1}">
+                <a-input v-model="queryParams.orderCode"/>
               </a-form-item>
             </a-col>
           </div>
@@ -69,7 +73,7 @@
           </template>
         </template>
         <template slot="operation" slot-scope="text, record">
-          <a-icon v-if="record.auditStatus !== 1" type="reconciliation" @click="view(record)" title="审 核"></a-icon>
+          <a-icon v-if="record.status != 1" type="reconciliation" @click="view(record)" title="处 理"></a-icon>
         </template>
       </a-table>
     </div>
@@ -123,48 +127,58 @@ export default {
     }),
     columns () {
       return [{
+        title: '投诉用户',
+        ellipsis: true,
+        dataIndex: 'userName'
+      }, {
+        title: '用户头像',
+        dataIndex: 'userImages',
+        customRender: (text, record, index) => {
+          if (!record.userImages) return <a-avatar shape="square" icon="user" />
+          return <a-popover>
+            <template slot="content">
+              <a-avatar shape="square" size={132} icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.userImages } />
+            </template>
+            <a-avatar shape="square" icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.userImages } />
+          </a-popover>
+        }
+      }, {
+        title: '用户手机',
+        ellipsis: true,
+        dataIndex: 'userPhone'
+      }, {
         title: '搬家公司',
         ellipsis: true,
         dataIndex: 'merchantName'
-      }, {
-        title: '图片',
-        dataIndex: 'images',
-        customRender: (text, record, index) => {
-          if (!record.images) return <a-avatar shape="square" icon="user" />
-          return <a-popover>
-            <template slot="content">
-              <a-avatar shape="square" size={132} icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.images } />
-            </template>
-            <a-avatar shape="square" icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.images } />
-          </a-popover>
-        }
       }, {
         title: '负责人',
         ellipsis: true,
         dataIndex: 'principal'
       }, {
-        title: '申请时间',
+        title: '公司联系方式',
+        ellipsis: true,
+        dataIndex: 'merchantPhone'
+      }, {
+        title: '投诉时间',
         ellipsis: true,
         dataIndex: 'createDate'
       }, {
-        title: '审核状态',
-        dataIndex: 'auditStatus',
+        title: '处理状态',
+        dataIndex: 'status',
         customRender: (text, row, index) => {
           switch (text) {
-            case 0:
+            case '0':
               return <a-tag>未审核</a-tag>
-            case 1:
-              return <a-tag color="green">审核通过</a-tag>
-            case 2:
-              return <a-tag color="red">驳回</a-tag>
+            case '1':
+              return <a-tag color="green">已处理</a-tag>
             default:
               return '- -'
           }
         }
       }, {
-        title: '审核日期',
+        title: '所属订单',
         ellipsis: true,
-        dataIndex: 'statusDate',
+        dataIndex: 'orderCode',
         customRender: (text, row, index) => {
           if (text !== null) {
             return text
@@ -173,32 +187,9 @@ export default {
           }
         }
       }, {
-        title: '介绍',
+        title: '投诉内容',
         ellipsis: true,
-        dataIndex: 'introduction',
-        scopedSlots: { customRender: 'introductionShow' }
-      }, {
-        title: '标签',
-        dataIndex: 'tag',
-        customRender: (text, row, index) => {
-          if (text !== null) {
-            return text
-          } else {
-            return '- -'
-          }
-        }
-      }, {
-        title: '证明文件',
-        dataIndex: 'images',
-        customRender: (text, record, index) => {
-          if (!record.images) return <a-avatar shape="square" icon="user" />
-          return <a-popover>
-            <template slot="content">
-              <a-avatar shape="square" size={132} icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.images.split(',')[0] } />
-            </template>
-            <a-avatar shape="square" icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.images.split(',')[0] } />
-          </a-popover>
-        }
+        dataIndex: 'content'
       }, {
         title: '操作',
         dataIndex: 'operation',
@@ -243,7 +234,7 @@ export default {
         centered: true,
         onOk () {
           let ids = that.selectedRowKeys.join(',')
-          that.$delete('/cos/audit-info/' + ids).then(() => {
+          that.$delete('/cos/complaint-info/' + ids).then(() => {
             that.$message.success('删除成功')
             that.selectedRowKeys = []
             that.search()
@@ -316,7 +307,7 @@ export default {
       if (params.auditStatus === undefined) {
         delete params.auditStatus
       }
-      this.$get('/cos/audit-info/page', {
+      this.$get('/cos/complaint-info/page', {
         ...params
       }).then((r) => {
         let data = r.data.data

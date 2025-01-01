@@ -1,5 +1,5 @@
 <template>
-  <a-modal v-model="show" title="商铺审核" @cancel="onClose" :width="800">
+  <a-modal v-model="show" title="投诉处理" @cancel="onClose" :width="800">
     <template slot="footer">
       <a-button key="back" @click="check(2)" type="danger">
         驳回

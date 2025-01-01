@@ -130,6 +130,14 @@ export default {
     }),
     columns () {
       return [{
+        title: '所属公司',
+        dataIndex: 'merchantName',
+        ellipsis: true
+      }, {
+        title: '负责人',
+        dataIndex: 'principal',
+        ellipsis: true
+      }, {
         title: '规则编号',
         dataIndex: 'code',
         ellipsis: true

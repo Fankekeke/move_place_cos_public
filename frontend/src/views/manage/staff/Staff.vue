@@ -176,8 +176,8 @@ export default {
         },
         ellipsis: true
       }, {
-        title: '搬家公司编号',
-        dataIndex: 'merchantCode',
+        title: '负责人',
+        dataIndex: 'principal',
         customRender: (text, row, index) => {
           if (text !== null) {
             return text

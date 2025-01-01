@@ -4,6 +4,31 @@
 
     <!-- 分页获取提现记录 -->
     <select id="queryWithdrawalPage" resultType="java.util.LinkedHashMap">
-
+        select
+        wr.id,
+        wr.merchant_id,
+        wr.balance,
+        wr.create_date,
+        wr.audit_status,
+        wr.status_date,
+        mi.name as merchantName,
+        mi.principal,
+        mi.images,
+        mi.phone as merchantPhone,
+        mi.address
+        from
+        withdrawal_record wr
+        left join merchant_info mi on
+        (mi.id = wr.merchant_id)
+        where
+        1 = 1
+        <if test="withdrawalRecord.merchantName != null and withdrawalRecord.merchantName != ''">
+            AND mi.name LIKE CONCAT('%',#{withdrawalRecord.merchantName},'%')
+        </if>
+        <if test="withdrawalRecord.auditStatus != null">
+            AND wr.audit_status = #{withdrawalRecord.auditStatus}
+        </if>
+        order by
+        wr.create_date desc
     </select>
 </mapper>

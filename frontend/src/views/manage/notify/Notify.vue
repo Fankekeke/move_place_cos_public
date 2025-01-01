@@ -10,7 +10,15 @@
                 label="用户名称"
                 :labelCol="{span: 5}"
                 :wrapperCol="{span: 18, offset: 1}">
-                <a-input v-model="queryParams.name"/>
+                <a-input v-model="queryParams.userName"/>
+              </a-form-item>
+            </a-col>
+            <a-col :md="6" :sm="24">
+              <a-form-item
+                label="消息内容"
+                :labelCol="{span: 5}"
+                :wrapperCol="{span: 18, offset: 1}">
+                <a-input v-model="queryParams.content"/>
               </a-form-item>
             </a-col>
           </div>
@@ -124,7 +132,7 @@ export default {
       }, {
         title: '消息内容',
         dataIndex: 'content',
-        scopedSlots: {customRender: 'contentShow'}
+        width: 750
       }, {
         title: '发送时间',
         dataIndex: 'createDate'

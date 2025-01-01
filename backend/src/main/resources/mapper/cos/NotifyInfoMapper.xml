@@ -13,7 +13,7 @@
         ni.name,
         ui.name as userName,
         ui.phone as userPhone,
-        ui.images as userImages,
+        ui.images as userImages
         from
         notify_info ni
         left join user_info ui on

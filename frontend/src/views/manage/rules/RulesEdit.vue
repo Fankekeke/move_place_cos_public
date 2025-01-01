@@ -1,5 +1,5 @@
 <template>
-  <a-modal v-model="show" title="修改公告" @cancel="onClose" :width="650">
+  <a-modal v-model="show" title="修改公告" @cancel="onClose" :width="450">
     <template slot="footer">
       <a-button key="back" @click="onClose">
         取消
@@ -20,7 +20,7 @@
         </a-col>
         <a-col :span="24">
           <a-form-item label='单价' v-bind="formItemLayout">
-            <a-input-number v-decorator="[
+            <a-input-number style="width: 100%;" v-decorator="[
             'unitPrice',
             { rules: [{ required: true, message: '请输入单价!' }] }
             ]" :min="1" :step="1"/>

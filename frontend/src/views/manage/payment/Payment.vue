@@ -126,7 +126,7 @@ export default {
         }
       }, {
         title: '联系方式',
-        dataIndex: 'phone',
+        dataIndex: 'userPhone',
         customRender: (text, row, index) => {
           if (text !== null) {
             return text
@@ -147,6 +147,7 @@ export default {
       }, {
         title: '起始地址',
         dataIndex: 'startAddress',
+        ellipsis: true,
         customRender: (text, row, index) => {
           if (text !== null) {
             return text
@@ -157,6 +158,7 @@ export default {
       }, {
         title: '运输地址',
         dataIndex: 'endAddress',
+        ellipsis: true,
         customRender: (text, row, index) => {
           if (text !== null) {
             return text

@@ -12,9 +12,15 @@
         si.sex,
         si.status,
         si.images,
-        si.create_date
+        si.create_date,
+        si.merchant_id,
+        mi.name as merchantName,
+        mi.principal,
+        mi.phone as merchantPhone,
+        mi.address
         from
         staff_info si
+        left join merchant_info mi on (mi.id = si.merchant_id)
         where
         1 = 1
         <if test="staffInfo.code != null and staffInfo.code != ''">
