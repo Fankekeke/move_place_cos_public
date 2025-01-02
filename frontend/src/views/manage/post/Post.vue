@@ -7,6 +7,14 @@
           <div :class="advanced ? null: 'fold'">
             <a-col :md="6" :sm="24">
               <a-form-item
+                label='发帖人'
+                :labelCol="{span: 5}"
+                :wrapperCol="{span: 18, offset: 1}">
+                <a-input v-model="queryParams.userName"/>
+              </a-form-item>
+            </a-col>
+            <a-col :md="6" :sm="24">
+              <a-form-item
                 label="贴子标题"
                 :labelCol="{span: 5}"
                 :wrapperCol="{span: 18, offset: 1}">
@@ -15,20 +23,10 @@
             </a-col>
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="发布人"
+                label="内容"
                 :labelCol="{span: 5}"
                 :wrapperCol="{span: 18, offset: 1}">
-                <a-input v-model="queryParams.userName"/>
-              </a-form-item>
-            </a-col>
-            <a-col :md="6" :sm="24">
-              <a-form-item
-                label="所属模块"
-                :labelCol="{span: 5}"
-                :wrapperCol="{span: 18, offset: 1}">
-                <a-select v-model="queryParams.tagId" allowClear>
-                  <a-select-option v-for="(item, index) in tagList" :key="index" :value="item.id">{{ item.name }}</a-select-option>
-                </a-select>
+                <a-input v-model="queryParams.content"/>
               </a-form-item>
             </a-col>
           </div>
@@ -41,7 +39,7 @@
     </div>
     <div>
       <div class="operator">
-        <a-button type="primary" ghost @click="add">新增</a-button>
+        <!--        <a-button type="primary" ghost @click="add">新增</a-button>-->
         <a-button @click="batchDelete">删除</a-button>
       </div>
       <!-- 表格区域 -->
@@ -54,15 +52,13 @@
                :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
                :scroll="{ x: 900 }"
                @change="handleTableChange">
-        <template slot="titleShow" slot-scope="text, record">
+        <template slot="addressShow" slot-scope="text, record">
           <template>
-            <a-badge v-if="record.deleteFlag == 1" status="error"/>
-            <a-badge v-if="record.deleteFlag == 0" status="processing"/>
             <a-tooltip>
               <template slot="title">
-                {{ record.title }}
+                {{ record.address }}
               </template>
-              {{ record.title.slice(0, 8) }} ...
+              {{ record.address.slice(0, 10) }} ...
             </a-tooltip>
           </template>
         </template>
@@ -72,53 +68,41 @@
               <template slot="title">
                 {{ record.content }}
               </template>
-              {{ record.content.slice(0, 30) }} ...
+              {{ record.content.slice(0, 15) }} ...
             </a-tooltip>
           </template>
         </template>
         <template slot="operation" slot-scope="text, record">
-          <a-icon v-if="record.deleteFlag == 1" type="caret-up" @click="auditDelete(record)" title="up" style="margin-right: 10px"></a-icon>
-          <a-icon type="setting" theme="twoTone" twoToneColor="#4a9ff5" @click="edit(record)" title="修 改"></a-icon>
+          <a-icon type="reconciliation" @click="view(record)" title="查 看"></a-icon>
         </template>
       </a-table>
     </div>
-    <post-add
-      v-if="postAdd.visiable"
-      @close="handlepostAddClose"
-      @success="handlepostAddSuccess"
-      :postAddVisiable="postAdd.visiable"
-      :tagList="tagListData">
-    </post-add>
-    <post-edit
-      ref="postEdit"
-      @close="handlepostEditClose"
-      @success="handlepostEditSuccess"
-      :postEditVisiable="postEdit.visiable"
-      :tagList="tagListData">
-    </post-edit>
+    <post-view
+      @close="handlePostViewClose"
+      @checkClose="handlePostCheckClose"
+      :postShow="postView.visiable"
+      :postData="postView.data">
+    </post-view>
   </a-card>
 </template>
 
 <script>
 import RangeDate from '@/components/datetime/RangeDate'
-import PostAdd from './PostAdd'
-import PostEdit from './PostEdit'
 import {mapState} from 'vuex'
 import moment from 'moment'
+import PostView from './PostView'
 moment.locale('zh-cn')
 
 export default {
-  name: 'post',
-  components: {PostAdd, PostEdit, RangeDate},
+  name: 'Post',
+  components: {PostView, RangeDate},
   data () {
     return {
+      postView: {
+        visiable: false,
+        data: null
+      },
       advanced: false,
-      postAdd: {
-        visiable: false
-      },
-      postEdit: {
-        visiable: false
-      },
       queryParams: {},
       filteredInfo: null,
       sortedInfo: null,
@@ -134,8 +118,7 @@ export default {
         showSizeChanger: true,
         showTotal: (total, range) => `显示 ${range[0]} ~ ${range[1]} 条记录，共 ${total} 条记录`
       },
-      tagList: [],
-      tagListData: []
+      userList: []
     }
   },
   computed: {
@@ -144,39 +127,23 @@ export default {
     }),
     columns () {
       return [{
-        title: '发布人',
-        dataIndex: 'userName',
-        customRender: (text, row, index) => {
-          if (text !== null) {
-            return text
-          } else {
-            return '- -'
-          }
-        },
-        ellipsis: true
+        title: '发帖人',
+        dataIndex: 'userName'
       }, {
         title: '头像',
-        dataIndex: 'userImages',
+        dataIndex: 'avatar',
         customRender: (text, record, index) => {
-          if (!record.userImages) return <a-avatar shape="square" icon="user" />
+          if (!record.avatar) return <a-avatar shape="square" icon="user" />
           return <a-popover>
             <template slot="content">
-              <a-avatar shape="square" size={132} icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.userImages } />
+              <a-avatar shape="square" size={132} icon="user" src={ record.avatar } />
             </template>
-            <a-avatar shape="square" icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.userImages } />
+            <a-avatar shape="square" icon="user" src={ record.avatar } />
           </a-popover>
         }
       }, {
-        title: '标题',
+        title: '贴子标题',
         dataIndex: 'title',
-        ellipsis: true
-      }, {
-        title: '贴子内容',
-        dataIndex: 'content',
-        ellipsis: true
-      }, {
-        title: '所属模块',
-        dataIndex: 'tagName',
         customRender: (text, row, index) => {
           if (text !== null) {
             return text
@@ -185,7 +152,11 @@ export default {
           }
         }
       }, {
-        title: '发布时间',
+        title: '内容',
+        dataIndex: 'content',
+        scopedSlots: { customRender: 'contentShow' }
+      }, {
+        title: '发帖日期',
         dataIndex: 'createDate',
         customRender: (text, row, index) => {
           if (text !== null) {
@@ -193,8 +164,7 @@ export default {
           } else {
             return '- -'
           }
-        },
-        ellipsis: true
+        }
       }, {
         title: '操作',
         dataIndex: 'operation',
@@ -204,54 +174,25 @@ export default {
   },
   mounted () {
     this.fetch()
-    this.getTagList()
   },
   methods: {
-    auditDelete (row) {
-      row.deleteFlag = 0
-      this.$put('/cos/post-info', row).then((r) => {
-        this.$message.success('恢复贴子成功！')
-        this.search()
-      })
+    view (row) {
+      this.postView.data = row
+      this.postView.visiable = true
     },
-    getTagList () {
-      this.$get('/cos/tag-info/list').then((r) => {
-        this.tagList = r.data.data
-        let tagListData = []
-        r.data.data.forEach(item => {
-          tagListData.push({label: item.name, value: item.id})
-        })
-        this.tagListData = tagListData
-      })
+    handlePostViewClose () {
+      this.postView.visiable = false
+    },
+    handlePostCheckClose () {
+      this.postView.visiable = false
+      this.$message.success('审核成功')
+      this.fetch()
     },
     onSelectChange (selectedRowKeys) {
       this.selectedRowKeys = selectedRowKeys
     },
     toggleAdvanced () {
       this.advanced = !this.advanced
-    },
-    add () {
-      this.postAdd.visiable = true
-    },
-    handlepostAddClose () {
-      this.postAdd.visiable = false
-    },
-    handlepostAddSuccess () {
-      this.postAdd.visiable = false
-      this.$message.success('新增贴子成功')
-      this.search()
-    },
-    edit (record) {
-      this.$refs.postEdit.setFormValues(record)
-      this.postEdit.visiable = true
-    },
-    handlepostEditClose () {
-      this.postEdit.visiable = false
-    },
-    handlepostEditSuccess () {
-      this.postEdit.visiable = false
-      this.$message.success('修改贴子成功')
-      this.search()
     },
     handleDeptChange (value) {
       this.queryParams.deptId = value || ''
@@ -337,9 +278,6 @@ export default {
         // 如果分页信息为空，则设置为默认值
         params.size = this.pagination.defaultPageSize
         params.current = this.pagination.defaultCurrent
-      }
-      if (params.tagId === undefined) {
-        delete params.tagId
       }
       this.$get('/cos/post-info/page', {
         ...params
