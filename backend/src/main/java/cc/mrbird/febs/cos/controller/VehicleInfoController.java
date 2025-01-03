@@ -2,8 +2,11 @@ package cc.mrbird.febs.cos.controller;
 
 
 import cc.mrbird.febs.common.utils.R;
+import cc.mrbird.febs.cos.entity.MerchantInfo;
 import cc.mrbird.febs.cos.entity.VehicleInfo;
+import cc.mrbird.febs.cos.service.IMerchantInfoService;
 import cc.mrbird.febs.cos.service.IVehicleInfoService;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +23,8 @@ import java.util.List;
 public class VehicleInfoController {
 
     private final IVehicleInfoService vehicleInfoService;
+
+    private final IMerchantInfoService merchantInfoService;
 
     /**
      * 分页获取车辆信息
@@ -62,6 +67,11 @@ public class VehicleInfoController {
      */
     @PostMapping
     public R save(VehicleInfo vehicleInfo) {
+        // 设置所属搬家公司
+        MerchantInfo merchantInfo = merchantInfoService.getOne(Wrappers.<MerchantInfo>lambdaQuery().eq(MerchantInfo::getUserId, vehicleInfo.getMerchantId()));
+        if (merchantInfo != null) {
+            vehicleInfo.setMerchantId(merchantInfo.getId());
+        }
         return R.ok(vehicleInfoService.save(vehicleInfo));
     }
 

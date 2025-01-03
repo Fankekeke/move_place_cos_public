@@ -92,8 +92,11 @@ public class AuditInfoController {
      */
     @PostMapping
     public R save(AuditInfo auditInfo) {
+        // 设置所属搬家公司
         MerchantInfo merchantInfo = merchantInfoService.getOne(Wrappers.<MerchantInfo>lambdaQuery().eq(MerchantInfo::getUserId, auditInfo.getMerchantId()));
-        auditInfo.setMerchantId(merchantInfo.getId());
+        if (merchantInfo != null) {
+            auditInfo.setMerchantId(merchantInfo.getId());
+        }
         auditInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
         auditInfo.setAuditStatus(0);
         return R.ok(auditInfoService.save(auditInfo));

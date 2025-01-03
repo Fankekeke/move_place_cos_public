@@ -26,6 +26,8 @@ public class WithdrawalRecord implements Serializable {
     @TableId(value = "ID", type = IdType.AUTO)
     private Integer id;
 
+    private String code;
+
     /**
      * 所属商家
      */
@@ -35,6 +37,11 @@ public class WithdrawalRecord implements Serializable {
      * 提现金额
      */
     private BigDecimal balance;
+
+    /**
+     * 账户余额
+     */
+    private BigDecimal accountPrice;
 
     /**
      * 申请时间

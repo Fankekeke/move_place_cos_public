@@ -26,6 +26,9 @@
         <if test="priceRules.remark != null and priceRules.remark != ''">
             AND pr.remark LIKE CONCAT('%',#{priceRules.remark},'%')
         </if>
+        <if test="priceRules.merchantId != null">
+            AND mi.user_id LIKE CONCAT('%',#{priceRules.merchantId},'%')
+        </if>
         order by
         pr.create_date desc
     </select>

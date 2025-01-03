@@ -4,6 +4,35 @@
 
     <!-- 分页获取车辆信息 -->
     <select id="queryVehiclePage" resultType="java.util.LinkedHashMap">
-
+        select
+        vi.id,
+        vi.vehicle_code,
+        vi.merchant_id,
+        vi.vehicle_no,
+        vi.fule_type,
+        vi.operation_state,
+        vi.create_date,
+        vi.vehicle_brand,
+        vi.content,
+        vi.images,
+        vi.vehicle_type,
+        mi.name as merchantName,
+        mi.principal,
+        mi.phone as merchantPhone,
+        mi.address
+        from
+        vehicle_info vi
+        left join merchant_info mi on (mi.id = vi.merchant_id)
+        where 1 = 1
+        <if test="vehicleInfo.merchantName != null and vehicleInfo.merchantName != ''">
+            AND mi.name LIKE CONCAT('%',#{vehicleInfo.merchantName},'%')
+        </if>
+        <if test="vehicleInfo.vehicleNo != null and vehicleInfo.vehicleNo != ''">
+            AND vi.vehicle_no LIKE CONCAT('%',#{vehicleInfo.vehicleNo},'%')
+        </if>
+        <if test="vehicleInfo.merchantId != null">
+            AND mi.user_id LIKE CONCAT('%',#{vehicleInfo.merchantId},'%')
+        </if>
+        order by vi.create_date desc
     </select>
 </mapper>

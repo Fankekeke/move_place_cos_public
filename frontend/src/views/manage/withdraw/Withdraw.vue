@@ -7,18 +7,18 @@
           <div :class="advanced ? null: 'fold'">
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="员工编号"
+                label="公司编号"
                 :labelCol="{span: 5}"
                 :wrapperCol="{span: 18, offset: 1}">
-                <a-input v-model="queryParams.code"/>
+                <a-input v-model="queryParams.merchantCode"/>
               </a-form-item>
             </a-col>
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="员工姓名"
+                label="公司名称"
                 :labelCol="{span: 5}"
                 :wrapperCol="{span: 18, offset: 1}">
-                <a-input v-model="queryParams.staffName"/>
+                <a-input v-model="queryParams.merchantName"/>
               </a-form-item>
             </a-col>
             <a-col :md="6" :sm="24">

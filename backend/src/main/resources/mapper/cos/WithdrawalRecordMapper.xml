@@ -6,11 +6,13 @@
     <select id="queryWithdrawalPage" resultType="java.util.LinkedHashMap">
         select
         wr.id,
+        wr.code,
         wr.merchant_id,
         wr.balance,
         wr.create_date,
         wr.audit_status,
         wr.status_date,
+        wr.account_price,
         mi.name as merchantName,
         mi.principal,
         mi.images,
@@ -25,8 +27,14 @@
         <if test="withdrawalRecord.merchantName != null and withdrawalRecord.merchantName != ''">
             AND mi.name LIKE CONCAT('%',#{withdrawalRecord.merchantName},'%')
         </if>
+        <if test="withdrawalRecord.merchantCode != null and withdrawalRecord.merchantCode != ''">
+            AND mi.code LIKE CONCAT('%',#{withdrawalRecord.merchantCode},'%')
+        </if>
         <if test="withdrawalRecord.auditStatus != null">
             AND wr.audit_status = #{withdrawalRecord.auditStatus}
+        </if>
+        <if test="withdrawalRecord.merchantId != null">
+            AND mi.user_id LIKE CONCAT('%',#{withdrawalRecord.merchantId},'%')
         </if>
         order by
         wr.create_date desc

@@ -2,9 +2,12 @@ package cc.mrbird.febs.cos.controller;
 
 
 import cc.mrbird.febs.common.utils.R;
+import cc.mrbird.febs.cos.entity.MerchantInfo;
 import cc.mrbird.febs.cos.entity.StaffInfo;
+import cc.mrbird.febs.cos.service.IMerchantInfoService;
 import cc.mrbird.febs.cos.service.IStaffInfoService;
 import cn.hutool.core.date.DateUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,8 @@ import java.util.List;
 public class StaffInfoController {
 
     private final IStaffInfoService staffInfoService;
+
+    private final IMerchantInfoService merchantInfoService;
 
     /**
      * 分页获取员工信息
@@ -64,6 +69,11 @@ public class StaffInfoController {
      */
     @PostMapping
     public R save(StaffInfo staffInfo) {
+        // 设置所属搬家公司
+        MerchantInfo merchantInfo = merchantInfoService.getOne(Wrappers.<MerchantInfo>lambdaQuery().eq(MerchantInfo::getUserId, staffInfo.getMerchantId()));
+        if (merchantInfo != null) {
+            staffInfo.setMerchantId(merchantInfo.getId());
+        }
         staffInfo.setCode("ST-" + System.currentTimeMillis());
         staffInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
         return R.ok(staffInfoService.save(staffInfo));

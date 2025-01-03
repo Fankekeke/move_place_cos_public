@@ -33,6 +33,9 @@
         <if test="paymentRecord.orderCode != null and paymentRecord.orderCode != ''">
             AND pr.order_code LIKE CONCAT('%',#{paymentRecord.orderCode},'%')
         </if>
+        <if test="paymentRecord.merchantId != null">
+            AND mi.user_id LIKE CONCAT('%',#{paymentRecord.merchantId},'%')
+        </if>
         order by pr.create_date desc
     </select>
 </mapper>
