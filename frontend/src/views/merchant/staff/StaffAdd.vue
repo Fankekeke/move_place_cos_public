@@ -147,7 +147,7 @@ export default {
         })
         if (!err) {
           values.images = images.length > 0 ? images.join(',') : null
-          values.canteenId = this.currentUser.userId
+          values.merchantId = this.currentUser.userId
           this.loading = true
           this.$post('/cos/staff-info', {
             ...values
