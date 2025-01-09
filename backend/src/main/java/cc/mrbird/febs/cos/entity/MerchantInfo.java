@@ -14,7 +14,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
- * 商家管理
+ * 公司管理
  *
  * @author FanK fan1ke2ke@gmail.com
  */

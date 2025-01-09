@@ -16,6 +16,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.googlecode.aviator.AviatorEvaluator;
+import com.googlecode.aviator.Expression;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -32,11 +34,7 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
 
     private final IStaffInfoService staffInfoService;
 
-    private final IBulletinInfoService bulletinInfoService;
-
     private final UserInfoMapper userInfoMapper;
-
-    private final IPaymentRecordService paymentRecordService;
 
     private final INotifyInfoService notifyInfoService;
 
@@ -150,7 +148,7 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
         // 综合得分公式【(交付得分 + 价格得分 + 质量得分 + 准时得分 + 服务得分) / 5 】
         String expression = "(交付得分 + 价格得分 + 质量得分 + 准时得分 + 服务得分) / 5";
         Expression compiledExp = AviatorEvaluator.compile(expression);
-        Map<String, Object> env = new HashMap<>();
+        Map<String, Object> env = new HashMap<>(16);
         env.put("交付得分", evaluateInfo.getDeliverScore());
         env.put("价格得分", evaluateInfo.getPriceScore());
         env.put("质量得分", evaluateInfo.getQualityScore());

@@ -39,6 +39,18 @@ public class VehicleInfoController {
     }
 
     /**
+     * 根据公司获取车辆信息
+     *
+     * @param merchantId  公司ID
+     * @param vehicleType 车辆类型
+     * @return 结果
+     */
+    @GetMapping("/queryVehicleList")
+    public R queryVehicleList(@RequestParam(value = "merchantId") Integer merchantId, @RequestParam(value = "vehicleType", required = false) Integer vehicleType) {
+        return R.ok(vehicleInfoService.queryVehicleList(merchantId, vehicleType));
+    }
+
+    /**
      * 获取ID获取审核详情
      *
      * @param id 主键

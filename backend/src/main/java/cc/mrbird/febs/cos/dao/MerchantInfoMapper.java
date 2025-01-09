@@ -14,10 +14,10 @@ import java.util.LinkedHashMap;
 public interface MerchantInfoMapper extends BaseMapper<MerchantInfo> {
 
     /**
-     * 分页获取商家信息
+     * 分页获取公司信息
      *
      * @param page         分页对象
-     * @param merchantInfo 商家信息
+     * @param merchantInfo 公司信息
      * @return 结果
      */
     IPage<LinkedHashMap<String, Object>> queryMerchantPage(Page<MerchantInfo> page, @Param("merchantInfo") MerchantInfo merchantInfo);

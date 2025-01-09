@@ -37,7 +37,14 @@ public class OrderDistribute implements Serializable {
     /**
      * 分配时间
      */
-    private LocalDateTime createDate;
+    private String createDate;
 
+    public OrderDistribute(String orderCode, String staffCode, String createDate) {
+        this.orderCode = orderCode;
+        this.staffCode = staffCode;
+        this.createDate = createDate;
+    }
 
+    public OrderDistribute() {
+    }
 }

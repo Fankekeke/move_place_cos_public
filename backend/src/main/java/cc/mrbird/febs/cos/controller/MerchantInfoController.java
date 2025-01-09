@@ -24,10 +24,10 @@ public class MerchantInfoController {
     private final IMerchantInfoService merchantInfoService;
 
     /**
-     * 分页获取商家信息
+     * 分页获取公司信息
      *
      * @param page         分页对象
-     * @param merchantInfo 商家信息
+     * @param merchantInfo 公司信息
      * @return 结果
      */
     @GetMapping("/page")
@@ -36,7 +36,7 @@ public class MerchantInfoController {
     }
 
     /**
-     * 获取ID获取商家详情
+     * 获取ID获取公司详情
      *
      * @param id 主键
      * @return 结果
@@ -67,7 +67,7 @@ public class MerchantInfoController {
     }
 
     /**
-     * 获取商家信息列表
+     * 获取公司信息列表
      *
      * @return 结果
      */
@@ -77,9 +77,9 @@ public class MerchantInfoController {
     }
 
     /**
-     * 新增商家信息
+     * 新增公司信息
      *
-     * @param merchantInfo 商家信息
+     * @param merchantInfo 公司信息
      * @return 结果
      */
     @PostMapping
@@ -110,9 +110,9 @@ public class MerchantInfoController {
     }
 
     /**
-     * 修改商家信息
+     * 修改公司信息
      *
-     * @param merchantInfo 商家信息
+     * @param merchantInfo 公司信息
      * @return 结果
      */
     @PutMapping
@@ -140,10 +140,10 @@ public class MerchantInfoController {
     }
 
     /**
-     * 删除商家信息
+     * 删除公司信息
      *
      * @param ids ids
-     * @return 商家信息
+     * @return 公司信息
      */
     @DeleteMapping("/{ids}")
     public R deleteByIds(@PathVariable("ids") List<Integer> ids) {

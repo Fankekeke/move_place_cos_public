@@ -41,6 +41,18 @@ public class StaffInfoController {
     }
 
     /**
+     * 根据公司获取员工信息
+     *
+     * @param merchantId 公司ID
+     * @return 结果
+     */
+    @GetMapping("/queryStaffList")
+    public R queryStaffList(@RequestParam(value = "merchantId") Integer merchantId) {
+        return R.ok(staffInfoService.queryStaffList(merchantId));
+    }
+
+
+    /**
      * 获取ID获取审核详情
      *
      * @param id 主键

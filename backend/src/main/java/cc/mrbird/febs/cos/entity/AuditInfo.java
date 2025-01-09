@@ -26,7 +26,7 @@ public class AuditInfo implements Serializable {
     private Integer id;
 
     /**
-     * 所属商家
+     * 所属公司
      */
     private Integer merchantId;
 

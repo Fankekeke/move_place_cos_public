@@ -29,7 +29,7 @@ public class WithdrawalRecord implements Serializable {
     private String code;
 
     /**
-     * 所属商家
+     * 所属公司
      */
     private Integer merchantId;
 
