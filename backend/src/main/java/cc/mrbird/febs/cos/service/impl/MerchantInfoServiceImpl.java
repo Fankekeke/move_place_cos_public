@@ -46,7 +46,7 @@ public class MerchantInfoServiceImpl extends ServiceImpl<MerchantInfoMapper, Mer
     }
 
     /**
-     * 所有商家信息入库
+     * 所有公司信息入库
      */
     @Override
     public void setUpMerchant2Redis() {
@@ -65,7 +65,7 @@ public class MerchantInfoServiceImpl extends ServiceImpl<MerchantInfoMapper, Mer
     }
 
     /**
-     * 根据位置获取商家信息
+     * 根据位置获取公司信息
      *
      * @param lat 纬度
      * @param lng 经度
@@ -105,7 +105,7 @@ public class MerchantInfoServiceImpl extends ServiceImpl<MerchantInfoMapper, Mer
             index++;
         }
 
-        // 获取商家信息
+        // 获取公司信息
         List<MerchantInfo> merchantInfoList = merchantInfoService.list(Wrappers.<MerchantInfo>lambdaQuery().in(MerchantInfo::getCode, merchantCodes));
         merchantInfoList.forEach(merchant -> {
             merchant.setDistance(distanceMap.get(merchant.getCode()));

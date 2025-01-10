@@ -158,6 +158,9 @@
             LEFT JOIN order_info oi ON (
             DATE_FORMAT( oi.create_date, '%Y-%m-%d' ) = DATE_FORMAT( spo.days, '%Y-%m-%d' ))
         WHERE 1 = 1
+        <if test="merchantId != null">
+            AND oi.merchant_id = #{merchantId}
+        </if>
         GROUP BY
             days
         ORDER BY
@@ -194,8 +197,8 @@
         LEFT JOIN order_info oi ON (
         DATE_FORMAT( oi.create_date, '%Y-%m-%d' ) = DATE_FORMAT( spo.days, '%Y-%m-%d' ) AND oi.status != 0)
         WHERE 1 = 1
-        <if test="pharmacyId != null">
-            AND oi.pharmacy_id = #{pharmacyId}
+        <if test="merchantId != null">
+            AND oi.merchant_id = #{merchantId}
         </if>
         GROUP BY
         days
@@ -206,54 +209,60 @@
     <!-- 本月订单信息 -->
     <select id="selectOrderInfoByMonth" resultType="cc.mrbird.febs.cos.entity.OrderInfo">
         select
-            oi.id,
-            oi.code,
-            oi.user_id,
-            oi.vehicle_options,
-            oi.staff_options,
-            oi.start_address,
-            oi.end_address,
-            oi.start_longitude,
-            oi.start_latitude,
-            oi.end_longitude,
-            oi.end_latitude,
-            oi.distance_length,
-            oi.images,
-            oi.remark,
-            oi.status,
-            oi.create_date,
-            oi.amount
+        oi.id,
+        oi.code,
+        oi.user_id,
+        oi.vehicle_options,
+        oi.staff_options,
+        oi.start_address,
+        oi.end_address,
+        oi.start_longitude,
+        oi.start_latitude,
+        oi.end_longitude,
+        oi.end_latitude,
+        oi.distance_length,
+        oi.images,
+        oi.remark,
+        oi.status,
+        oi.create_date,
+        oi.amount
         from
-            order_info oi
+        order_info oi
         where
-            1 = 1
-          and DATE_FORMAT( oi.create_date, '%Y-%m' ) = DATE_FORMAT( CURDATE(), '%Y-%m' )
+        1 = 1
+        <if test="merchantId != null">
+            AND oi.merchant_id = #{merchantId}
+        </if>
+        and DATE_FORMAT( oi.create_date, '%Y-%m' ) = DATE_FORMAT( CURDATE(), '%Y-%m' )
     </select>
 
     <!-- 本年订单信息 -->
     <select id="selectOrderInfoByYear" resultType="cc.mrbird.febs.cos.entity.OrderInfo">
         select
-            oi.id,
-            oi.code,
-            oi.user_id,
-            oi.vehicle_options,
-            oi.staff_options,
-            oi.start_address,
-            oi.end_address,
-            oi.start_longitude,
-            oi.start_latitude,
-            oi.end_longitude,
-            oi.end_latitude,
-            oi.distance_length,
-            oi.images,
-            oi.remark,
-            oi.status,
-            oi.create_date,
-            oi.amount
+        oi.id,
+        oi.code,
+        oi.user_id,
+        oi.vehicle_options,
+        oi.staff_options,
+        oi.start_address,
+        oi.end_address,
+        oi.start_longitude,
+        oi.start_latitude,
+        oi.end_longitude,
+        oi.end_latitude,
+        oi.distance_length,
+        oi.images,
+        oi.remark,
+        oi.status,
+        oi.create_date,
+        oi.amount
         from
-            order_info oi
+        order_info oi
         where
-            1 = 1
-          and DATE_FORMAT( oi.create_date, '%Y' ) = DATE_FORMAT( CURDATE(), '%Y' )
+        1 = 1
+        <if test="merchantId != null">
+            AND oi.merchant_id = #{merchantId}
+        </if>
+        and DATE_FORMAT( oi.create_date, '%Y' ) = DATE_FORMAT( CURDATE(), '%Y' )
     </select>
 </mapper>

@@ -36,28 +36,28 @@ public interface OrderInfoMapper extends BaseMapper<OrderInfo> {
      *
      * @return 结果
      */
-    List<LinkedHashMap<String, Object>> selectOrderNumDays();
+    List<LinkedHashMap<String, Object>> selectOrderNumDays(@Param("merchantId") Integer merchantId);
 
     /**
      * 近十天内订单收益统计
      *
      * @return 结果
      */
-    List<LinkedHashMap<String, Object>> selectOrderAmountDays();
+    List<LinkedHashMap<String, Object>> selectOrderAmountDays(@Param("merchantId") Integer merchantId);
 
     /**
      * 本月订单信息
      *
      * @return 结果
      */
-    List<OrderInfo> selectOrderInfoByMonth();
+    List<OrderInfo> selectOrderInfoByMonth(@Param("merchantId") Integer merchantId);
 
     /**
      * 本年订单信息
      *
      * @return 结果
      */
-    List<OrderInfo> selectOrderInfoByYear();
+    List<OrderInfo> selectOrderInfoByYear(@Param("merchantId") Integer merchantId);
 
     /**
      * 根据状态获取订单信息
