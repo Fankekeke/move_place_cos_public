@@ -59,5 +59,8 @@ public class UserInfo implements Serializable {
      */
     private String createDate;
 
-
+    /**
+     * OPENID
+     */
+    private String openId;
 }
