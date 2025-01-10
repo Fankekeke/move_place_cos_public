@@ -44,6 +44,10 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
 
     private final IPriceRulesService priceRulesService;
 
+    private final IPaymentRecordService paymentRecordService;
+
+    private final IBulletinInfoService bulletinInfoService;
+
     /**
      * 分页获取订单信息
      *
@@ -323,6 +327,61 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
             e.put("staff", staffInfoMapper.selectStaffByOrder(e.get("code").toString()));
         });
         result.put("progress", progress);
+        return result;
+    }
+
+    /**
+     * 主页信息
+     *
+     * @param merchantId 公司ID
+     * @return 结果
+     */
+    @Override
+    public LinkedHashMap<String, Object> homeData(Integer merchantId) {
+        LinkedHashMap<String, Object> result = new LinkedHashMap<>();
+        // 查询员工信息
+        List<StaffInfo> staffInfoList = staffInfoService.list(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getStatus, 1));
+        Map<Integer, List<StaffInfo>> staffMap = staffInfoList.stream().collect(Collectors.groupingBy(StaffInfo::getType));
+        // 司机
+        Integer driverNum = CollectionUtil.isEmpty(staffMap.get(1)) ? 0 : staffMap.get(1).size();
+        // 搬运工
+        Integer staffMoveNum = CollectionUtil.isEmpty(staffMap.get(2)) ? 0 : staffMap.get(2).size();
+        // 总订单数量
+        Integer orderNum = this.count();
+        // 总收益
+        List<PaymentRecord> paymentRecordList = paymentRecordService.list();
+        BigDecimal amount = CollectionUtil.isEmpty(paymentRecordList) ? BigDecimal.ZERO : paymentRecordList.stream().map(PaymentRecord::getAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+        List<OrderInfo> orderListMonth = baseMapper.selectOrderInfoByMonth();
+        List<OrderInfo> orderListYear = baseMapper.selectOrderInfoByYear();
+        // 本月订单量
+        Integer orderNumMonth = orderListMonth.size();
+        // 本月收益
+        BigDecimal orderAmountMonth = orderListMonth.stream().filter(e -> e.getStatus() != 0).map(OrderInfo::getAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+        // 本年订单量
+        Integer orderNumYear = orderListYear.size();
+        // 本年收益
+        BigDecimal orderAmountYear = orderListYear.stream().filter(e -> e.getStatus() != 0).map(OrderInfo::getAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+        // 近十天内订单数量统计
+        List<LinkedHashMap<String, Object>> orderNumDays = baseMapper.selectOrderNumDays();
+        // 近十天内订单收益统计
+        List<LinkedHashMap<String, Object>> orderAmountDays = baseMapper.selectOrderAmountDays();
+        // 公告
+        List<BulletinInfo> bulletinInfoList = bulletinInfoService.list(Wrappers.<BulletinInfo>lambdaQuery().eq(BulletinInfo::getRackUp, 1));
+        // 通知
+        List<NotifyInfo> notifyInfoList = notifyInfoService.list(Wrappers.<NotifyInfo>lambdaQuery().eq(NotifyInfo::getUserCode, userCode));
+        result.put("orderNumMonth", orderNumMonth);
+        result.put("orderAmountMonth", orderAmountMonth);
+        result.put("orderNumYear", orderNumYear);
+        result.put("orderAmountYear", orderAmountYear);
+
+        result.put("driverNum", driverNum);
+        result.put("staffMoveNum", staffMoveNum);
+        result.put("orderNum", orderNum);
+        result.put("amount", amount);
+        result.put("orderNumDays", orderNumDays);
+        result.put("orderAmountDays", orderAmountDays);
+        result.put("bulletinInfoList", bulletinInfoList);
+        result.put("notifyInfoList", notifyInfoList);
         return result;
     }
 }

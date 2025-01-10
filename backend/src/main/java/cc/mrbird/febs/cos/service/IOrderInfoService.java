@@ -90,4 +90,12 @@ public interface IOrderInfoService extends IService<OrderInfo> {
      * @return 结果
      */
     LinkedHashMap<String, Object> selectOrderByStatus();
+
+    /**
+     * 主页信息
+     *
+     * @param merchantId 公司ID
+     * @return 结果
+     */
+    LinkedHashMap<String, Object> homeData(Integer merchantId);
 }
