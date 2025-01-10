@@ -40,6 +40,31 @@
             AND ui.user_id = #{discountInfo.userId}
         </if>
         order by di.create_date desc
+    </select>
 
+    <!-- 根据用户ID获取优惠券信息 -->
+    <select id="queryDiscountByUserId" resultType="java.util.LinkedHashMap">
+        select
+        di.id,
+        di.code,
+        di.discount_price,
+        di.threshold,
+        di.user_id,
+        di.coupon_name,
+        di.`type`,
+        di.`status`,
+        di.create_date,
+        di.rebate,
+        di.content,
+        ui.name as userName,
+        ui.mail,
+        ui.phone,
+        ui.images
+        from
+        discount_info di
+        left join user_info ui on (ui.id = di.user_id)
+        where 1 = 1
+          AND ui.user_id = #{userId}
+        order by di.create_date desc
     </select>
 </mapper>

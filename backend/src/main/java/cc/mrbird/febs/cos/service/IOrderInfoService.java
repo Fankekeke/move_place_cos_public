@@ -10,6 +10,7 @@ import org.apache.ibatis.annotations.Param;
 import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author FanK fan1ke2ke@gmail.com
@@ -24,6 +25,14 @@ public interface IOrderInfoService extends IService<OrderInfo> {
      * @return 结果
      */
     IPage<LinkedHashMap<String, Object>> queryOrderPage(Page<OrderInfo> page, OrderInfo orderInfo);
+
+    /**
+     * 根据用户获取订单信息
+     *
+     * @param userId 用户ID
+     * @return 结果
+     */
+    List<LinkedHashMap<String, Object>> queryOrderByUserId(Integer userId);
 
     /**
      * 设置订单状态

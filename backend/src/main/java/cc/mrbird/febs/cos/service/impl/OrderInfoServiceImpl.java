@@ -61,6 +61,18 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
     }
 
     /**
+     * 根据用户获取订单信息
+     *
+     * @param userId 用户ID
+     * @return 结果
+     */
+    @Override
+    public List<LinkedHashMap<String, Object>> queryOrderByUserId(Integer userId) {
+        // 获取订单信息
+        return baseMapper.queryOrderByUserId(userId);
+    }
+
+    /**
      * 设置订单状态
      *
      * @param orderCode 订单编号

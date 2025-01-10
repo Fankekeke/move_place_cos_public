@@ -10,17 +10,16 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.springframework.data.geo.Circle;
-import org.springframework.data.geo.Distance;
-import org.springframework.data.geo.GeoResults;
-import org.springframework.data.geo.Point;
+import org.springframework.data.geo.*;
 import org.springframework.data.redis.connection.RedisGeoCommands;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author FanK fan1ke2ke@gmail.com
@@ -30,6 +29,9 @@ public class MerchantInfoServiceImpl extends ServiceImpl<MerchantInfoMapper, Mer
 
     @Resource
     private RedisTemplate<Object, Object> redisTemplate;
+
+    @Resource
+    private IMerchantInfoService merchantInfoService;
 
     /**
      * 分页获取公司信息
@@ -70,7 +72,7 @@ public class MerchantInfoServiceImpl extends ServiceImpl<MerchantInfoMapper, Mer
      * @return 结果
      */
     @Override
-    public MerchantInfo queryMerchantByPosition(Double lat, Double lng) {
+    public List<MerchantInfo> queryMerchantByPosition(Double lat, Double lng) {
         // 判断是否为合法的经纬度
         if (!(lng > 0 && lng < 180 && lat > 0 && lat < 180)) {
             return null;
@@ -84,8 +86,30 @@ public class MerchantInfoServiceImpl extends ServiceImpl<MerchantInfoMapper, Mer
             return null;
         }
 
-        Distance distance = geoResults.getContent().get(0).getDistance();
-        RedisGeoCommands.GeoLocation<Object> geoLocation = geoResults.getContent().get(0).getContent();
-        return null;
+        List<String> merchantCodes = new ArrayList<>();
+        Map<String, Double> distanceMap = new LinkedHashMap<>();
+
+        // 只取前10个
+        int index = 0;
+        for (GeoResult<RedisGeoCommands.GeoLocation<Object>> geo : geoResults.getContent()) {
+            if (index >= 10) {
+                continue;
+            }
+            RedisGeoCommands.GeoLocation<Object> geoLocation = geoResults.getContent().get(0).getContent();
+            String merchantCode = (String) geoLocation.getName();
+            merchantCodes.add(merchantCode);
+
+            // 计算距离
+            Distance distance = geo.getDistance();
+            distanceMap.put(merchantCode, distance.getValue());
+            index++;
+        }
+
+        // 获取商家信息
+        List<MerchantInfo> merchantInfoList = merchantInfoService.list(Wrappers.<MerchantInfo>lambdaQuery().in(MerchantInfo::getCode, merchantCodes));
+        merchantInfoList.forEach(merchant -> {
+            merchant.setDistance(distanceMap.get(merchant.getCode()));
+        });
+        return merchantInfoList;
     }
 }

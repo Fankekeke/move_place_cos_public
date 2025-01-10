@@ -119,4 +119,10 @@ public class MerchantInfo implements Serializable {
      */
     @TableField(exist = false)
     private String currentStatus;
+
+    /**
+     * 距离
+     */
+    @TableField(exist = false)
+    private Double distance;
 }
