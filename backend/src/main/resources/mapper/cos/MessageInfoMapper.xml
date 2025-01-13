@@ -10,10 +10,10 @@
         mi.take_user AS takeUser,
         mi.content,
         mi.create_date AS createDate,
-        ui1.user_name AS sendUserName,
-        ui1.avatar AS sendUserAvatar,
-        ui2.user_name AS takeUserName,
-        ui2.avatar AS takeUserAvatar
+        ui1.name AS sendUserName,
+        ui1.images AS sendUserAvatar,
+        ui2.name AS takeUserName,
+        ui2.images AS takeUserAvatar
         FROM
         message_info mi
         LEFT JOIN user_info ui1 ON ( ui1.id = mi.send_user )
@@ -21,10 +21,10 @@
         WHERE
         1 = 1
         <if test="messageInfo.sendUserName != null and messageInfo.sendUserName != ''">
-            AND ui1.user_name LIKE CONCAT('%',#{messageInfo.sendUserName},'%')
+            AND ui1.name LIKE CONCAT('%',#{messageInfo.sendUserName},'%')
         </if>
         <if test="messageInfo.takeUserName != null and messageInfo.takeUserName != ''">
-            AND ui2.user_name LIKE CONCAT('%',#{messageInfo.takeUserName},'%')
+            AND ui2.name LIKE CONCAT('%',#{messageInfo.takeUserName},'%')
         </if>
         ORDER BY
         mi.create_date DESC
@@ -36,10 +36,10 @@
                mi.take_user   AS takeUser,
                mi.content,
                mi.create_date AS createDate,
-               ui1.user_name  AS sendUserName,
-               ui1.avatar     AS sendUserAvatar,
-               ui2.user_name  AS takeUserName,
-               ui2.avatar     AS takeUserAvatar
+               ui1.name  AS sendUserName,
+               ui1.images     AS sendUserAvatar,
+               ui2.name  AS takeUserName,
+               ui2.images     AS takeUserAvatar
         FROM (SELECT *
               FROM message_info
               WHERE create_date IN (SELECT MAX(create_date)
@@ -64,10 +64,10 @@
                mi.take_user   AS takeUser,
                mi.content,
                mi.create_date AS createDate,
-               ui1.user_name  AS sendUserName,
-               ui1.avatar     AS sendUserAvatar,
-               ui2.user_name  AS takeUserName,
-               ui2.avatar     AS takeUserAvatar
+               ui1.name  AS sendUserName,
+               ui1.images     AS sendUserAvatar,
+               ui2.name  AS takeUserName,
+               ui2.images     AS takeUserAvatar
         FROM (SELECT *
               FROM message_info
               WHERE send_user = #{ sendUser }

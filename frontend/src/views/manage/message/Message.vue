@@ -7,7 +7,7 @@
           <div :class="advanced ? null: 'fold'">
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="求职者名称"
+                label="用户名称"
                 :labelCol="{span: 5}"
                 :wrapperCol="{span: 18, offset: 1}">
                 <a-input v-model="queryParams.expertName"/>
@@ -15,7 +15,7 @@
             </a-col>
              <a-col :md="6" :sm="24">
               <a-form-item
-                label="企业名称"
+                label="公司名称"
                 :labelCol="{span: 5}"
                 :wrapperCol="{span: 18, offset: 1}">
                 <a-input v-model="queryParams.enterpriseName"/>
@@ -114,13 +114,13 @@ export default {
         title: '',
         dataIndex: 'content'
       }, {
-        title: '求职者名称',
+        title: '用户名称',
         dataIndex: 'expertName'
       }, {
-        title: '企业名称',
+        title: '公司名称',
         dataIndex: 'enterpriseName'
       }, {
-        title: '求职者头像',
+        title: '用户头像',
         dataIndex: 'expertImages',
         customRender: (text, record, index) => {
           if (!record.expertImages) return <a-avatar shape="square" icon="user" />
@@ -132,7 +132,7 @@ export default {
           </a-popover>
         }
       }, {
-        title: '企业头像',
+        title: '公司头像',
         dataIndex: 'enterpriseImages',
         customRender: (text, record, index) => {
           if (!record.enterpriseImages) return <a-avatar shape="square" icon="user" />
@@ -149,9 +149,9 @@ export default {
         customRender: (text, row, index) => {
           switch (text) {
             case 1:
-              return <a-tag>求职者</a-tag>
+              return <a-tag>用户</a-tag>
             case 2:
-              return <a-tag>企业</a-tag>
+              return <a-tag>公司</a-tag>
             default:
               return '- -'
           }

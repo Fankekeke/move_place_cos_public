@@ -61,5 +61,8 @@ public class WithdrawalRecord implements Serializable {
     @TableField(exist = false)
     private String merchantName;
 
+    @TableField(exist = false)
+    private String merchantCode;
+
 
 }

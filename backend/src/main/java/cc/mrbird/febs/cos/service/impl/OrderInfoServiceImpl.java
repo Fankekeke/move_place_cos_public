@@ -399,7 +399,6 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
         result.put("orderNumDays", orderNumDays);
         result.put("orderAmountDays", orderAmountDays);
         result.put("bulletinInfoList", bulletinInfoList);
-        result.put("notifyInfoList", notifyInfoList);
         return result;
     }
 }
