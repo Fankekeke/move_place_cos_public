@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.io.Serializable;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -42,7 +43,7 @@ public class VehicleInfo implements Serializable {
     /**
      * 燃油类型
      */
-    private Integer fuleType;
+    private Integer fuelType;
 
     /**
      * 运营状态（0.未运营 1.运营中）
@@ -73,6 +74,14 @@ public class VehicleInfo implements Serializable {
      * 车辆类型（1.大型车 2.中型车 3.小型车）
      */
     private Integer vehicleType;
+
+
+    private String name;
+    private String engineNo;
+    private String emissionStandard;
+
+    @TableField(exist = false)
+    private String merchantName;
 
 
 }
