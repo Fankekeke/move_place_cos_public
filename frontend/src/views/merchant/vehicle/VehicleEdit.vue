@@ -13,7 +13,7 @@
         <a-col :span="6">
           <a-form-item label='车牌号' v-bind="formItemLayout">
             <a-input v-decorator="[
-            'vehicleNumber',
+            'vehicleNo',
             { rules: [{ required: true, message: '请输入车牌号!' }] }
             ]"/>
           </a-form-item>
@@ -48,6 +48,13 @@
           </a-form-item>
         </a-col>
         <a-col :span="6">
+          <a-form-item label='车辆品牌' v-bind="formItemLayout">
+            <a-input v-decorator="[
+            'vehicleBrand'
+            ]"/>
+          </a-form-item>
+        </a-col>
+        <a-col :span="6">
           <a-form-item label='燃料类型' v-bind="formItemLayout">
             <a-select v-decorator="[
               'fuelType',
@@ -61,12 +68,25 @@
           </a-form-item>
         </a-col>
         <a-col :span="6">
-          <a-form-item label='所属用户' v-bind="formItemLayout">
+          <a-form-item label='运营状态' v-bind="formItemLayout">
             <a-select v-decorator="[
-              'userId',
-              { rules: [{ required: true, message: '请输入所属用户!' }] }
+              'operationState',
+              { rules: [{ required: true, message: '请输入运营状态!' }] }
               ]">
-              <a-select-option :value="item.id" v-for="(item, index) in shopList" :key="index">{{ item.name }}</a-select-option>
+              <a-select-option value="0">未运营</a-select-option>
+              <a-select-option value="1">运营中</a-select-option>
+            </a-select>
+          </a-form-item>
+        </a-col>
+        <a-col :span="6">
+          <a-form-item label='车辆状态' v-bind="formItemLayout">
+            <a-select v-decorator="[
+              'vehicleType',
+              { rules: [{ required: true, message: '请输入车辆状态!' }] }
+              ]">
+              <a-select-option value="1">大型车</a-select-option>
+              <a-select-option value="2">中型车</a-select-option>
+              <a-select-option value="3">小型车</a-select-option>
             </a-select>
           </a-form-item>
         </a-col>
@@ -159,7 +179,7 @@ export default {
   },
   methods: {
     selectShopList () {
-      this.$get(`/cos/user-info/list`).then((r) => {
+      this.$get(`/cos/merchant-info/list`).then((r) => {
         this.shopList = r.data.data
       })
     },
@@ -202,11 +222,11 @@ export default {
     },
     setFormValues ({...vehicle}) {
       this.rowId = vehicle.id
-      let fields = ['vehicleNo', 'vehicleNumber', 'vehicleColor', 'name', 'engineNo', 'carryPassengers', 'principal', 'brand', 'phone', 'userId', 'factoryDate', 'useType', 'emissionStandard', 'fuelType', 'content', 'shopId', 'dayPrice']
+      let fields = ['vehicleNo', 'vehicleNumber', 'vehicleColor', 'name', 'engineNo', 'carryPassengers', 'vehicleBrand', 'vehicleType', 'phone', 'merchantId', 'factoryDate', 'operationState', 'emissionStandard', 'fuelType', 'content', 'shopId', 'dayPrice']
       let obj = {}
       Object.keys(vehicle).forEach((key) => {
         setTimeout(() => {
-          if (key === 'userId') {
+          if (key === 'merchantId') {
             vehicle[key] = vehicle[key].toString()
           }
         }, 200)

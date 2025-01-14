@@ -138,6 +138,21 @@ export default {
         title: '车辆名称',
         dataIndex: 'name'
       }, {
+        title: '车辆类型',
+        dataIndex: 'vehicleType',
+        customRender: (text, row, index) => {
+          switch (text) {
+            case '1':
+              return <a-tag>大型车</a-tag>
+            case '2':
+              return <a-tag>中型车</a-tag>
+            case '3':
+              return <a-tag>小型车</a-tag>
+            default:
+              return '- -'
+          }
+        }
+      }, {
         title: '发动机编号',
         dataIndex: 'engineNo',
         customRender: (text, row, index) => {
@@ -177,7 +192,7 @@ export default {
           }
         }
       }, {
-        title: '所属用户',
+        title: '所属公司',
         dataIndex: 'userName',
         customRender: (text, row, index) => {
           if (text !== null) {
@@ -187,13 +202,16 @@ export default {
           }
         }
       }, {
-        title: '联系电话',
-        dataIndex: 'phone',
+        title: '运营状态',
+        dataIndex: 'operationState',
         customRender: (text, row, index) => {
-          if (text !== null) {
-            return text
-          } else {
-            return '- -'
+          switch (text) {
+            case '0':
+              return <a-tag>未运营</a-tag>
+            case '1':
+              return <a-tag>运营中</a-tag>
+            default:
+              return '- -'
           }
         }
       }, {

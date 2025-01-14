@@ -12,7 +12,7 @@
           {{ vehicleData.vehicleNo }}
         </a-col>
         <a-col :span="6"><b>车牌号：</b>
-          {{ vehicleData.vehicleNumber ? vehicleData.vehicleNumber : '- -' }}
+          {{ vehicleData.vehicleNo ? vehicleData.vehicleNo : '- -' }}
         </a-col>
         <a-col :span="6"><b>车辆颜色：</b>
           {{ vehicleData.vehicleColor ? vehicleData.vehicleColor : '- -' }}
@@ -29,11 +29,11 @@
         <a-col :span="6"><b>发动机号码：</b>
           {{ vehicleData.engineNo }}
         </a-col>
-        <a-col :span="6"><b>联系电话：</b>
-          {{ vehicleData.phone }}
+        <a-col :span="6"><b>车辆品牌：</b>
+          {{ vehicleData.vehicleBrand }}
         </a-col>
-        <a-col :span="6"><b>所属用户：</b>
-          {{ vehicleData.userName }}
+        <a-col :span="6"><b>所属公司：</b>
+          {{ vehicleData.merchantName }}
         </a-col>
       </a-row>
       <br/>

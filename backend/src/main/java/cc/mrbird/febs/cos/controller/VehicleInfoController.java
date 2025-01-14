@@ -79,6 +79,17 @@ public class VehicleInfoController {
      */
     @PostMapping
     public R save(VehicleInfo vehicleInfo) {
+        return R.ok(vehicleInfoService.save(vehicleInfo));
+    }
+
+    /**
+     * 新增车辆信息
+     *
+     * @param vehicleInfo 车辆信息
+     * @return 结果
+     */
+    @PostMapping("/user")
+    public R saveByMerchant(VehicleInfo vehicleInfo) {
         // 设置所属搬家公司
         MerchantInfo merchantInfo = merchantInfoService.getOne(Wrappers.<MerchantInfo>lambdaQuery().eq(MerchantInfo::getUserId, vehicleInfo.getMerchantId()));
         if (merchantInfo != null) {
