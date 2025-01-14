@@ -159,6 +159,14 @@ public class LoginController {
         this.userService.regist(username, password);
     }
 
+    @PostMapping("/regist/merchant")
+    public void registMerchant(
+            @NotBlank(message = "{required}") String username,
+            @NotBlank(message = "{required}") String password,
+            @NotBlank(message = "{required}") String name) throws Exception {
+        this.userService.registMerchant(username, password, name);
+    }
+
     private String saveTokenToRedis(User user, JWTToken token, HttpServletRequest request) throws Exception {
         String ip = IPUtil.getIpAddr(request);
 

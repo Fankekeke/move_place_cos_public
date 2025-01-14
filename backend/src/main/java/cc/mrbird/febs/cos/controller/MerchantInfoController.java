@@ -6,6 +6,7 @@ import cc.mrbird.febs.cos.entity.MerchantInfo;
 import cc.mrbird.febs.cos.service.IMerchantInfoService;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,21 @@ public class MerchantInfoController {
     @GetMapping("/page")
     public R page(Page<MerchantInfo> page, MerchantInfo merchantInfo) {
         return R.ok(merchantInfoService.queryMerchantPage(page, merchantInfo));
+    }
+
+    /**
+     * 根据用户ID获取公司信息
+     *
+     * @param userId 用户ID
+     * @return 结果
+     */
+    @GetMapping("/getMerchantByUser")
+    public R getMerchantByUser(@RequestParam("userId") Integer userId) {
+        MerchantInfo merchantInfo = merchantInfoService.getOne(Wrappers.<MerchantInfo>lambdaQuery().eq(MerchantInfo::getUserId, userId));
+        if (merchantInfo == null) {
+            return R.ok();
+        }
+        return R.ok(merchantInfo);
     }
 
     /**

@@ -5,6 +5,8 @@ import cc.mrbird.febs.common.domain.QueryRequest;
 import cc.mrbird.febs.common.service.CacheService;
 import cc.mrbird.febs.common.utils.SortUtil;
 import cc.mrbird.febs.common.utils.MD5Util;
+import cc.mrbird.febs.cos.entity.MerchantInfo;
+import cc.mrbird.febs.cos.service.IMerchantInfoService;
 import cc.mrbird.febs.system.dao.UserMapper;
 import cc.mrbird.febs.system.dao.UserRoleMapper;
 import cc.mrbird.febs.system.domain.User;
@@ -13,6 +15,7 @@ import cc.mrbird.febs.system.manager.UserManager;
 import cc.mrbird.febs.system.service.UserConfigService;
 import cc.mrbird.febs.system.service.UserRoleService;
 import cc.mrbird.febs.system.service.UserService;
+import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
@@ -43,6 +46,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private UserRoleService userRoleService;
     @Autowired
     private UserManager userManager;
+    @Autowired
+    private IMerchantInfoService merchantInfoService;
 
 
     @Override
@@ -183,6 +188,44 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         // 将用户相关信息保存到 Redis中
         userManager.loadUserRedisCache(user);
 
+    }
+
+    /**
+     * 注册用户
+     *
+     * @param username 用户名
+     * @param password 密码
+     * @param name     公司名称
+     */
+    @Override
+    @Transactional
+    public void registMerchant(String username, String password, String name) throws Exception {
+        User user = new User();
+        user.setPassword(MD5Util.encrypt(username, password));
+        user.setUsername(username);
+        user.setCreateTime(new Date());
+        user.setStatus(User.STATUS_VALID);
+        user.setSsex(User.SEX_UNKNOW);
+        user.setAvatar(User.DEFAULT_AVATAR);
+        user.setDescription("注册用户");
+        this.save(user);
+
+        UserRole ur = new UserRole();
+        ur.setUserId(user.getUserId());
+        ur.setRoleId(75L); // 注册用户角色 ID
+        this.userRoleMapper.insert(ur);
+
+        MerchantInfo merchantInfo = new MerchantInfo();
+        merchantInfo.setName(name);
+        merchantInfo.setCode("MER-" + System.currentTimeMillis());
+        merchantInfo.setUserId(Math.toIntExact(user.getUserId()));
+        merchantInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
+        merchantInfoService.save(merchantInfo);
+
+        // 创建用户默认的个性化配置
+        userConfigService.initDefaultUserConfig(String.valueOf(user.getUserId()));
+        // 将用户相关信息保存到 Redis中
+        userManager.loadUserRedisCache(user);
     }
 
 //    @Override

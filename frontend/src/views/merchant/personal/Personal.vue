@@ -249,6 +249,8 @@ export default {
             this.form.getFieldDecorator('address')
             let obj = {}
             obj['address'] = this.stayAddress
+            obj['longitude'] = localPoint.lng
+            obj['latitude'] = localPoint.lat
             this.form.setFieldsValue(obj)
           }
         })

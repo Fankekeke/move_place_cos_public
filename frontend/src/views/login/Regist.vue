@@ -3,20 +3,10 @@
     <div class="user-layout-register">
       <a-form ref="formRegister" :autoFormCreate="(form)=>{this.form = form}" id="formRegister">
         <a-divider orientation="left"><span style="font-size: 12px">账户注册</span></a-divider>
-        <a-form-item>
-          <a-radio-group default-value="1" v-model="registType" button-style="solid">
-            <a-radio-button value="2">
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;搬家公司&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            </a-radio-button>
-            <a-radio-button value="3">
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            </a-radio-button>
-          </a-radio-group>
-        </a-form-item>
         <a-form-item
           fieldDecoratorId="clientName"
-          :fieldDecoratorOptions="{rules: [{ required: true, message: '请输入名称' }]}">
-          <a-input type="text" v-model="clientName" placeholder="名称"></a-input>
+          :fieldDecoratorOptions="{rules: [{ required: true, message: '请输入公司名称' }]}">
+          <a-input type="text" v-model="clientName" placeholder="公司名称"></a-input>
         </a-form-item>
         <a-form-item
           fieldDecoratorId="email"
@@ -196,12 +186,7 @@ export default {
     handleSubmit () {
       this.form.validateFields((err, values) => {
         if (!err) {
-          let url = ''
-          if (this.registType === '2') {
-            url = 'regist/merchant'
-          } else {
-            url = 'regist/user'
-          }
+          let url = 'regist/merchant'
           this.$post(url, {
             username: this.username,
             password: this.password,

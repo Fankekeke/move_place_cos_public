@@ -19,7 +19,7 @@ public interface UserService extends IService<User> {
     /**
      * 查询用户详情，包括基本信息，用户角色，用户部门
      *
-     * @param user user
+     * @param user         user
      * @param queryRequest queryRequest
      * @return IPage
      */
@@ -83,6 +83,15 @@ public interface UserService extends IService<User> {
      * @param password 密码
      */
     void regist(String username, String password) throws Exception;
+
+    /**
+     * 注册用户
+     *
+     * @param username 用户名
+     * @param password 密码
+     * @param name     公司名称
+     */
+    void registMerchant(String username, String password, String name) throws Exception;
 
 //    /**
 //     * 注册用户
