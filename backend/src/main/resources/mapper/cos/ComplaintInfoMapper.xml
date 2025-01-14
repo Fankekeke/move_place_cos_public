@@ -41,7 +41,7 @@
             AND ci.order_code LIKE CONCAT('%',#{complaintInfo.orderCode},'%')
         </if>
         <if test="complaintInfo.merchantId != null">
-            AND mi.user_id LIKE CONCAT('%',#{complaintInfo.merchantId},'%')
+            AND mi.user_id = #{complaintInfo.merchantId}
         </if>
         order by
         ci.create_date desc

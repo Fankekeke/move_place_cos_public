@@ -24,8 +24,6 @@ public class PriceRulesController {
 
     private final IPriceRulesService priceRulesService;
 
-    private final IMerchantInfoService merchantInfoService;
-
     /**
      * 分页获取价格规则信息
      *
@@ -67,11 +65,6 @@ public class PriceRulesController {
      */
     @PostMapping
     public R save(PriceRules priceRules) {
-        // 设置所属搬家公司
-        MerchantInfo merchantInfo = merchantInfoService.getOne(Wrappers.<MerchantInfo>lambdaQuery().eq(MerchantInfo::getUserId, priceRules.getMerchantId()));
-        if (merchantInfo != null) {
-            priceRules.setMerchantId(merchantInfo.getId());
-        }
         return R.ok(priceRulesService.save(priceRules));
     }
 

@@ -35,7 +35,7 @@
             AND vi.vehicle_no LIKE CONCAT('%',#{vehicleInfo.vehicleNo},'%')
         </if>
         <if test="vehicleInfo.merchantId != null">
-            AND mi.user_id LIKE CONCAT('%',#{vehicleInfo.merchantId},'%')
+            AND mi.user_id = #{vehicleInfo.merchantId}
         </if>
         order by vi.create_date desc
     </select>

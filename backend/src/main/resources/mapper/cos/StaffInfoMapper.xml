@@ -33,7 +33,7 @@
             AND si.`type` = #{staffInfo.name}
         </if>
         <if test="staffInfo.merchantId != null">
-            AND mi.user_id LIKE CONCAT('%',#{staffInfo.merchantId},'%')
+            AND mi.user_id = #{staffInfo.merchantId}
         </if>
         order by
         si.create_date desc

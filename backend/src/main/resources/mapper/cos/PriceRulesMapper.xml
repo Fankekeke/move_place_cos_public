@@ -10,14 +10,9 @@
         pr.code,
         pr.remark,
         pr.create_date,
-        pr.merchant_id,
-        mi.name as merchantName,
-        mi.principal,
-        mi.phone as merchantPhone,
-        mi.address
+        pr.merchant_id
         from
         price_rules pr
-        left join merchant_info mi on (mi.id = pr.merchant_id)
         where
         1 = 1
         <if test="priceRules.code != null and priceRules.code != ''">

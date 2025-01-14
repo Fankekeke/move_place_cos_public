@@ -44,7 +44,7 @@
             AND ci.order_code LIKE CONCAT('%',#{evaluateInfo.orderCode},'%')
         </if>
         <if test="evaluateInfo.merchantId != null">
-            AND mi.user_id LIKE CONCAT('%',#{evaluateInfo.merchantId},'%')
+            AND mi.user_id = #{evaluateInfo.merchantId}
         </if>
         order by ei.create_date desc
     </select>
