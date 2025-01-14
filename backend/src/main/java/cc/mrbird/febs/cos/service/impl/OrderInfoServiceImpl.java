@@ -297,6 +297,9 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
         }
         List<StaffInfo> staffInfoList = staffInfoService.list(Wrappers.<StaffInfo>lambdaQuery().in(CollectionUtil.isNotEmpty(staffCodes), StaffInfo::getCode, staffCodes));
         result.put("staff", CollectionUtil.isEmpty(staffCodes) ? Collections.emptyList() : staffInfoList);
+        // 公司
+        MerchantInfo merchantInfo = merchantInfoService.getById(orderInfo.getMerchantId());
+        result.put("merchant", merchantInfo);
         // 评价
         EvaluateInfo evaluate = evaluateInfoService.getOne(Wrappers.<EvaluateInfo>lambdaQuery().eq(EvaluateInfo::getOrderCode, orderCode));
         result.put("evaluate", evaluate);
