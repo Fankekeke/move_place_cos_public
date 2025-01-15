@@ -42,7 +42,7 @@
     </div>
     <div>
       <div class="operator">
-<!--        <a-button type="primary" ghost @click="add">新增</a-button>-->
+        <a-button type="primary" ghost @click="add">新增</a-button>
         <a-button @click="batchDelete">删除</a-button>
       </div>
       <!-- 表格区域 -->
@@ -173,11 +173,10 @@ export default {
             default:
               return '- -'
           }
-        },
-        ellipsis: true
+        }
       }, {
-        title: '负责人',
-        dataIndex: 'principal',
+        title: '搬家公司编号',
+        dataIndex: 'merchantCode',
         customRender: (text, row, index) => {
           if (text !== null) {
             return text
@@ -197,6 +196,19 @@ export default {
           }
         },
         ellipsis: true
+      }, {
+        title: '员工类型',
+        dataIndex: 'type',
+        customRender: (text, row, index) => {
+          switch (text) {
+            case 1:
+              return <a-tag>司机</a-tag>
+            case 2:
+              return <a-tag>搬运工</a-tag>
+            default:
+              return '- -'
+          }
+        }
       }, {
         title: '创建时间',
         dataIndex: 'createDate',

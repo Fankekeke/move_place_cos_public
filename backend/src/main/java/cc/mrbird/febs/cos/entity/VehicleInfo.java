@@ -73,12 +73,13 @@ public class VehicleInfo implements Serializable {
     /**
      * 车辆类型（1.大型车 2.中型车 3.小型车）
      */
-    private Integer vehicleType;
+    private String vehicleType;
 
 
     private String name;
     private String engineNo;
     private String emissionStandard;
+    private String vehicleColor;
 
     @TableField(exist = false)
     private String merchantName;

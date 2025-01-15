@@ -44,6 +44,21 @@
             </a-radio-group>
           </a-form-item>
         </a-col>
+        <a-col :span="12">
+          <a-form-item label='员工类型' v-bind="formItemLayout">
+            <a-radio-group button-style="solid" v-decorator="[
+              'type',
+              { rules: [{ required: true, message: '请输入员工类型!' }] }
+              ]">
+              <a-radio-button value="1">
+                司机
+              </a-radio-button>
+              <a-radio-button value="2">
+                搬运工
+              </a-radio-button>
+            </a-radio-group>
+          </a-form-item>
+        </a-col>
         <a-col :span="24">
           <a-form-item label='照片' v-bind="formItemLayout">
             <a-upload
@@ -147,7 +162,7 @@ export default {
         })
         if (!err) {
           values.images = images.length > 0 ? images.join(',') : null
-          values.pharmacyId = this.currentUser.userId
+          values.merchantId = this.currentUser.userId
           this.loading = true
           this.$post('/cos/staff-info', {
             ...values

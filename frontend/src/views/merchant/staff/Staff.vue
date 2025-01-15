@@ -197,6 +197,19 @@ export default {
         },
         ellipsis: true
       }, {
+        title: '员工类型',
+        dataIndex: 'type',
+        customRender: (text, row, index) => {
+          switch (text) {
+            case 1:
+              return <a-tag>司机</a-tag>
+            case 2:
+              return <a-tag>搬运工</a-tag>
+            default:
+              return '- -'
+          }
+        }
+      }, {
         title: '创建时间',
         dataIndex: 'createDate',
         customRender: (text, row, index) => {

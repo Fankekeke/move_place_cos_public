@@ -18,6 +18,7 @@
         vi.vehicle_color,
         vi.name,
         vi.engine_no,
+        vi.vehicle_color,
         vi.emission_standard,
         vi.vehicle_type,
         mi.name as merchantName,
