@@ -32,6 +32,9 @@
         <if test="auditInfo.auditStatus != null">
             AND ai.audit_status = #{auditInfo.auditStatus}
         </if>
+        <if test="auditInfo.merchantId != null">
+            AND mi.user_id = #{auditInfo.merchantId}
+        </if>
         order by ai.create_date desc
 
     </select>
