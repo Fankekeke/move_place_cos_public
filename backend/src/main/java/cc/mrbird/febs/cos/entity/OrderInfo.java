@@ -119,5 +119,18 @@ public class OrderInfo implements Serializable {
      */
     private Integer merchantId;
 
+    /**
+     * 优惠券编号
+     */
+    private String discountCode;
 
+    /**
+     * 车辆编号
+     */
+    private String vehicleCode;
+
+    /**
+     * 折后价格
+     */
+    private BigDecimal afterAmount;
 }
