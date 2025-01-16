@@ -10,15 +10,15 @@
                 label="车牌号码"
                 :labelCol="{span: 5}"
                 :wrapperCol="{span: 18, offset: 1}">
-                <a-input v-model="queryParams.vehicleNumber"/>
+                <a-input v-model="queryParams.vehicleNo"/>
               </a-form-item>
             </a-col>
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="所属用户"
+                label="所属公司"
                 :labelCol="{span: 5}"
                 :wrapperCol="{span: 18, offset: 1}">
-                <a-input v-model="queryParams.userName"/>
+                <a-input v-model="queryParams.merchantName"/>
               </a-form-item>
             </a-col>
           </div>
@@ -130,13 +130,16 @@ export default {
     columns () {
       return [{
         title: '车辆编号',
-        dataIndex: 'vehicleNo'
+        dataIndex: 'vehicleCode',
+        ellipsis: true
       }, {
         title: '车牌号码',
-        dataIndex: 'vehicleNumber'
+        dataIndex: 'vehicleNo',
+        ellipsis: true
       }, {
         title: '车辆名称',
-        dataIndex: 'name'
+        dataIndex: 'name',
+        ellipsis: true
       }, {
         title: '车辆类型',
         dataIndex: 'vehicleType',
@@ -161,7 +164,8 @@ export default {
           } else {
             return '- -'
           }
-        }
+        },
+        ellipsis: true
       }, {
         title: '照片',
         dataIndex: 'images',
@@ -193,14 +197,15 @@ export default {
         }
       }, {
         title: '所属公司',
-        dataIndex: 'userName',
+        dataIndex: 'merchantName',
         customRender: (text, row, index) => {
           if (text !== null) {
             return text
           } else {
             return '- -'
           }
-        }
+        },
+        ellipsis: true
       }, {
         title: '运营状态',
         dataIndex: 'operationState',
@@ -223,7 +228,8 @@ export default {
           } else {
             return '- -'
           }
-        }
+        },
+        ellipsis: true
       }, {
         title: '操作',
         dataIndex: 'operation',
@@ -370,6 +376,7 @@ export default {
       if (params.brand === undefined) {
         delete params.brand
       }
+      params.merchantId = this.currentUser.userId
       this.$get('/cos/vehicle-info/page', {
         ...params
       }).then((r) => {

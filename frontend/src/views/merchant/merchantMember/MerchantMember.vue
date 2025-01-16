@@ -130,7 +130,7 @@ export default {
           </a-popover>
         }
       }, {
-        title: '搬家公司名称',
+        title: '搬家公司',
         dataIndex: 'merchantName',
         customRender: (text, row, index) => {
           if (text !== null) {

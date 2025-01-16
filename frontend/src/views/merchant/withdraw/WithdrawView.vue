@@ -1,78 +1,53 @@
 <template>
-  <a-modal v-model="show" title="搬家公司详情" @cancel="onClose" :width="1000">
+  <a-modal v-model="show" title="提现记录详情" @cancel="onClose" :width="1000">
     <template slot="footer">
       <a-button key="back" @click="onClose" type="danger">
         关闭
       </a-button>
     </template>
-    <div style="font-size: 13px;font-family: SimHei" v-if="merchantData !== null">
+    <div style="font-size: 13px;font-family: SimHei" v-if="withdrawData !== null">
       <a-row style="padding-left: 24px;padding-right: 24px;">
         <a-col style="margin-bottom: 15px"><span style="font-size: 15px;font-weight: 650;color: #000c17">基础信息</span></a-col>
-        <a-col :span="8"><b>搬家公司编号：</b>
-          {{ merchantData.code }}
+        <a-col :span="8"><b>员工编号：</b>
+          {{ withdrawData.code }}
         </a-col>
-        <a-col :span="8"><b>搬家公司：</b>
-          {{ merchantData.name ? merchantData.name : '- -' }}
+        <a-col :span="8"><b>员工姓名：</b>
+          {{ withdrawData.name ? withdrawData.name : '- -' }}
         </a-col>
-        <a-col :span="8"><b>负责人：</b>
-          {{ merchantData.principal ? merchantData.principal : '- -' }}
-        </a-col>
-      </a-row>
-      <br/>
-      <a-row style="padding-left: 24px;padding-right: 24px;">
         <a-col :span="8"><b>联系方式：</b>
-          {{ merchantData.phone }}
-        </a-col>
-        <a-col :span="16"><b>详细地址：</b>
-          {{ merchantData.address }}
+          {{ withdrawData.phone ? withdrawData.phone : '- -' }}
         </a-col>
       </a-row>
       <br/>
       <a-row style="padding-left: 24px;padding-right: 24px;">
-        <a-col :span="8"><b>经度：</b>
-          {{ merchantData.longitude }}
+        <a-col :span="8"><b>提现金额：</b>
+          {{ withdrawData.withdrawPrice }} 元
         </a-col>
-        <a-col :span="8"><b>纬度：</b>
-          {{ merchantData.latitude }}
+        <a-col :span="8"><b>提现后余额：</b>
+          {{ withdrawData.accountPrice }} 元
         </a-col>
-      </a-row>
-      <br/>
-      <a-row style="padding-left: 24px;padding-right: 24px;">
-        <a-col :span="16"><b>搬家公司信息：</b>
-          {{ merchantData.content }}
-        </a-col>
-        <a-col :span="8"><b>创建时间：</b>
-          {{ merchantData.createDate }}
+        <a-col :span="8"><b>申请时间：</b>
+          {{ withdrawData.createDate }}
         </a-col>
       </a-row>
       <br/>
       <a-row style="padding-left: 24px;padding-right: 24px;">
-        <a-col :span="8"><b>创建时间：</b>
-          {{ merchantData.createDate }}
+        <a-col style="margin-bottom: 15px"><span style="font-size: 15px;font-weight: 650;color: #000c17">图册</span></a-col>
+        <a-col :span="24">
+          <a-upload
+            name="avatar"
+            action="http://127.0.0.1:9527/file/fileUpload/"
+            list-type="picture-card"
+            :file-list="fileList"
+            @preview="handlePreview"
+            @change="picHandleChange"
+          >
+          </a-upload>
+          <a-modal :visible="previewVisible" :footer="null" @cancel="handleCancel">
+            <img alt="example" style="width: 100%" :src="previewImage" />
+          </a-modal>
         </a-col>
       </a-row>
-      <br/>
-      <a-row style="padding-left: 24px;padding-right: 24px;">
-        <a-col :span="8"><b>营业星期：</b>
-          {{ merchantData.operateDay }}
-        </a-col>
-        <a-col :span="8"><b>开始营业时间：</b>
-          {{ merchantData.operateStartTime }}
-        </a-col>
-        <a-col :span="8"><b>营业结束时间：</b>
-          {{ merchantData.operateEndTime }}
-        </a-col>
-      </a-row>
-      <br/>
-      <br/>
-       <a-row style="padding-left: 24px;padding-right: 24px;">
-        <a-col style="margin-bottom: 5px"><span style="font-size: 15px;font-weight: 650;color: #000c17">地址位置</span></a-col>
-      </a-row>
-      <div>
-        <a-card :bordered="false" style="height: 500px">
-          <div id="areas" style="width: 100%;height: 450px;box-shadow: 3px 3px 3px rgba(0, 0, 0, .2);background:#ec9e3c;color:#fff"></div>
-        </a-card>
-      </div>
     </div>
   </a-modal>
 </template>
@@ -90,20 +65,20 @@ function getBase64 (file) {
   })
 }
 export default {
-  name: 'merchantView',
+  name: 'withdrawView',
   props: {
-    merchantShow: {
+    withdrawShow: {
       type: Boolean,
       default: false
     },
-    merchantData: {
+    withdrawData: {
       type: Object
     }
   },
   computed: {
     show: {
       get: function () {
-        return this.merchantShow
+        return this.withdrawShow
       },
       set: function () {
       }
@@ -123,24 +98,18 @@ export default {
     }
   },
   watch: {
-    merchantShow: function (value) {
+    withdrawShow: function (value) {
       if (value) {
-        this.imagesInit(this.merchantData.images)
-        setTimeout(() => {
-          baiduMap.initMap('areas')
-          setTimeout(() => {
-            this.local(this.merchantData)
-          }, 500)
-        }, 200)
+        this.imagesInit(this.withdrawData.images)
       }
     }
   },
   methods: {
-    local (merchantData) {
+    local (withdrawData) {
       baiduMap.clearOverlays()
       baiduMap.rMap().enableScrollWheelZoom(true)
       // eslint-disable-next-line no-undef
-      let point = new BMap.Point(merchantData.longitude, merchantData.latitude)
+      let point = new BMap.Point(withdrawData.longitude, withdrawData.latitude)
       baiduMap.pointAdd(point)
       baiduMap.findPoint(point, 16)
       // let driving = new BMap.DrivingRoute(baiduMap.rMap(), {renderOptions:{map: baiduMap.rMap(), autoViewport: true}});

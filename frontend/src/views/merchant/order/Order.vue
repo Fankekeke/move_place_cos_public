@@ -23,7 +23,7 @@
             </a-col>
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="搬家公司名称"
+                label="搬家公司"
                 :labelCol="{span: 5}"
                 :wrapperCol="{span: 18, offset: 1}">
                 <a-input v-model="queryParams.merchantName"/>
@@ -66,7 +66,7 @@
           <a-icon type="file-search" @click="orderViewOpen(record)" title="详 情"></a-icon>
           <a-icon v-if="record.status == 1 && record.type == 0" type="check" @click="orderComplete(record)" title="订单完成" style="margin-left: 15px"></a-icon>
           <a-icon v-if="record.addressId != null && (record.status == 1 || record.status == 2)" type="setting" theme="twoTone" twoToneColor="#4a9ff5" @click="orderAuditOpen(record)" title="修 改" style="margin-left: 15px"></a-icon>
-          <a-icon v-if="record.type == 1" type="cluster" @click="orderMapOpen(record)" title="地 图" style="margin-left: 15px"></a-icon>
+          <a-icon type="cluster" @click="orderMapOpen(record)" title="地 图" style="margin-left: 15px"></a-icon>
         </template>
       </a-table>
     </div>
@@ -190,7 +190,7 @@ export default {
           </a-popover>
         }
       }, {
-        title: '所属搬家公司',
+        title: '搬家公司',
         dataIndex: 'merchantName',
         customRender: (text, row, index) => {
           if (text !== null) {
@@ -214,7 +214,7 @@ export default {
         }
       }, {
         title: '订单价格（元）',
-        dataIndex: 'orderPrice',
+        dataIndex: 'amount',
         customRender: (text, row, index) => {
           if (text !== null) {
             return text + '元'
@@ -224,7 +224,7 @@ export default {
         }
       }, {
         title: '折后价格（元）',
-        dataIndex: 'afterOrderPrice',
+        dataIndex: 'afterAmount',
         customRender: (text, row, index) => {
           if (text !== null) {
             return text + '元'
@@ -240,28 +240,19 @@ export default {
             case '0':
               return <a-tag color="red">未支付</a-tag>
             case '1':
-              return <a-tag>已支付</a-tag>
+              return <a-tag>等待分配</a-tag>
             case '2':
-              return <a-tag>配送中</a-tag>
+              return <a-tag>正在赶往</a-tag>
             case '3':
-              return <a-tag>已收货</a-tag>
+              return <a-tag>运输完成</a-tag>
             default:
               return '- -'
           }
         }
       }, {
-        title: '订单类型',
-        dataIndex: 'type',
-        customRender: (text, row, index) => {
-          switch (text) {
-            case '0':
-              return <a-tag>店内购买</a-tag>
-            case '1':
-              return <a-tag>配送</a-tag>
-            default:
-              return '- -'
-          }
-        }
+        title: '备注',
+        dataIndex: 'remark',
+        ellipsis: true
       }, {
         title: '下单时间',
         dataIndex: 'createDate',

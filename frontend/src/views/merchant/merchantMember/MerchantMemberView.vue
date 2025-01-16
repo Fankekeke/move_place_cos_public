@@ -14,7 +14,7 @@
         <a-col :span="8"><b>会员名称：</b>
           {{ exchangeData.userName ? exchangeData.userName : '- -' }}
         </a-col>
-        <a-col :span="8"><b>搬家公司名称：</b>
+        <a-col :span="8"><b>搬家公司：</b>
           {{ exchangeData.merchantName ? exchangeData.merchantName : '- -' }}
         </a-col>
       </a-row>

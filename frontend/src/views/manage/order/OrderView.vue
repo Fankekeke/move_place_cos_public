@@ -83,7 +83,7 @@
         <a-col :span="6"><b>搬家公司编号：</b>
           {{ merchantInfo.code }}
         </a-col>
-        <a-col :span="6"><b>搬家公司名称：</b>
+        <a-col :span="6"><b>搬家公司：</b>
           {{ merchantInfo.name ? merchantInfo.name : '- -' }}
         </a-col>
         <a-col :span="6"><b>地 址：</b>

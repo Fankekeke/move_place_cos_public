@@ -1,18 +1,10 @@
 <template>
   <a-modal v-model="show" title="商铺审核" @cancel="onClose" :width="800">
-    <template slot="footer">
-      <a-button key="back" @click="check(2)" type="danger">
-        驳回
-      </a-button>
-      <a-button key="check" @click="check(1)">
-        通过
-      </a-button>
-    </template>
     <div style="font-size: 13px" v-if="auditData !== null">
       <a-row style="padding-left: 24px;padding-right: 24px;">
         <a-col style="margin-bottom: 15px"><span style="font-size: 15px;font-weight: 650;color: #000c17">基础信息</span></a-col>
-        <a-col :span="8"><b>申请人：</b>
-          {{ auditData.userName }}
+        <a-col :span="8"><b>申请公司：</b>
+          {{ auditData.merchantName }}
         </a-col>
         <a-col :span="8"><b>申请时间：</b>
           {{ auditData.createDate }}

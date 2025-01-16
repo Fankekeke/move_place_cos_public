@@ -1,5 +1,5 @@
-\<template>
-  <a-modal v-model="show" title="添加审核申请" @cancel="onClose" :width="600">
+<template>
+  <a-modal v-model="show" title="新增提现记录" @cancel="onClose" :width="800">
     <template slot="footer">
       <a-button key="back" @click="onClose">
         取消
@@ -10,42 +10,20 @@
     </template>
     <a-form :form="form" layout="vertical">
       <a-row :gutter="20">
-        <a-col :span="24">
-          <a-form-item label='审核标题' v-bind="formItemLayout">
-            <a-input v-decorator="[
-            'tag',
-            { rules: [{ required: true, message: '请输入审核标题!' }] }
-            ]"/>
+        <a-col :span="12">
+          <a-form-item label='账户余额' v-bind="formItemLayout">
+            <a-input-number style="width: 100%" v-decorator="[
+            'accountPrice',
+            { rules: [{ required: true, message: '请输入价格!' }] }
+            ]" :min="0.1" :step="0.1"/>
           </a-form-item>
         </a-col>
-        <a-col :span="24">
-          <a-form-item label='审核介绍' v-bind="formItemLayout">
-            <a-textarea :rows="4" v-decorator="[
-            'introduction',
-             { rules: [{ required: true, message: '请输入审核介绍!' }] }
-            ]"/>
-          </a-form-item>
-        </a-col>
-        <a-col :span="24">
-          <a-form-item label='证明文件' v-bind="formItemLayout">
-            <a-upload
-              name="avatar"
-              action="http://127.0.0.1:9527/file/fileUpload/"
-              list-type="picture-card"
-              :file-list="fileList"
-              @preview="handlePreview"
-              @change="picHandleChange"
-            >
-              <div v-if="fileList.length < 8">
-                <a-icon type="plus" />
-                <div class="ant-upload-text">
-                  Upload
-                </div>
-              </div>
-            </a-upload>
-            <a-modal :visible="previewVisible" :footer="null" @cancel="handleCancel">
-              <img alt="example" style="width: 100%" :src="previewImage" />
-            </a-modal>
+        <a-col :span="12">
+          <a-form-item label='提现金额' v-bind="formItemLayout">
+            <a-input-number style="width: 100%" v-decorator="[
+            'unitPrice',
+            { rules: [{ required: true, message: '请输入价格!' }] }
+            ]" :min="0.1" :step="0.1"/>
           </a-form-item>
         </a-col>
       </a-row>
@@ -55,7 +33,6 @@
 
 <script>
 import {mapState} from 'vuex'
-import AuditAdd from './AuditAdd.vue'
 function getBase64 (file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()
@@ -69,20 +46,19 @@ const formItemLayout = {
   wrapperCol: { span: 24 }
 }
 export default {
-  name: 'BulletinAdd',
+  name: 'withdrawAdd',
   props: {
-    commodityAddVisiable: {
+    withdrawAddVisiable: {
       default: false
     }
   },
-  components: {AuditAdd},
   computed: {
     ...mapState({
       currentUser: state => state.account.user
     }),
     show: {
       get: function () {
-        return this.commodityAddVisiable
+        return this.withdrawAddVisiable
       },
       set: function () {
       }
@@ -95,10 +71,20 @@ export default {
       loading: false,
       fileList: [],
       previewVisible: false,
-      previewImage: ''
+      previewImage: '',
+      staffInfo: null
     }
   },
+  mounted () {
+    this.getStaff()
+  },
   methods: {
+    getStaff () {
+      this.$get(`/cos/staff-info/detail/${this.currentUser.userId}`).then((r) => {
+        this.staffInfo = r.data.data
+        this.form.setFieldsValue({'accountPrice': this.staffInfo.price})
+      })
+    },
     handleCancel () {
       this.previewVisible = false
     },
@@ -127,11 +113,12 @@ export default {
         images.push(image.response)
       })
       this.form.validateFields((err, values) => {
-        values.images = images.length > 0 ? images.join(',') : null
         values.merchantId = this.currentUser.userId
+        values.images = images.length > 0 ? images.join(',') : null
         if (!err) {
           this.loading = true
-          this.$post('/cos/audit-info/', {
+          values.staffId = this.currentUser.userId
+          this.$post('/cos/withdraw-info', {
             ...values
           }).then((r) => {
             this.reset()

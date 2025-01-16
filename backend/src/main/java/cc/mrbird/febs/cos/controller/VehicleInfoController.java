@@ -6,12 +6,14 @@ import cc.mrbird.febs.cos.entity.MerchantInfo;
 import cc.mrbird.febs.cos.entity.VehicleInfo;
 import cc.mrbird.febs.cos.service.IMerchantInfoService;
 import cc.mrbird.febs.cos.service.IVehicleInfoService;
+import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -79,6 +81,8 @@ public class VehicleInfoController {
      */
     @PostMapping
     public R save(VehicleInfo vehicleInfo) {
+        vehicleInfo.setVehicleCode("VEH-" + System.currentTimeMillis());
+        vehicleInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
         return R.ok(vehicleInfoService.save(vehicleInfo));
     }
 
@@ -90,11 +94,13 @@ public class VehicleInfoController {
      */
     @PostMapping("/user")
     public R saveByMerchant(VehicleInfo vehicleInfo) {
+        vehicleInfo.setVehicleCode("VEH-" + System.currentTimeMillis());
         // 设置所属搬家公司
         MerchantInfo merchantInfo = merchantInfoService.getOne(Wrappers.<MerchantInfo>lambdaQuery().eq(MerchantInfo::getUserId, vehicleInfo.getMerchantId()));
         if (merchantInfo != null) {
             vehicleInfo.setMerchantId(merchantInfo.getId());
         }
+        vehicleInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
         return R.ok(vehicleInfoService.save(vehicleInfo));
     }
 

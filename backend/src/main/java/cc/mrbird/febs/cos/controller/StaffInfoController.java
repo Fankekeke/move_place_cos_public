@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -49,6 +50,21 @@ public class StaffInfoController {
     @GetMapping("/queryStaffList")
     public R queryStaffList(@RequestParam(value = "merchantId") Integer merchantId) {
         return R.ok(staffInfoService.queryStaffList(merchantId));
+    }
+
+    /**
+     * 根据公司获取员工列表
+     *
+     * @param userId 商家ID
+     * @return 结果
+     */
+    @GetMapping("/selectStaffByMerchant/{userId}")
+    public R selectStaffByMerchant(@PathVariable(value = "userId") Integer userId) {
+        MerchantInfo merchantInfo = merchantInfoService.getOne(Wrappers.<MerchantInfo>lambdaQuery().eq(MerchantInfo::getUserId, userId));
+        if (merchantInfo == null) {
+            return R.ok(Collections.emptyList());
+        }
+        return R.ok(staffInfoService.list(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getMerchantId, merchantInfo.getId())));
     }
 
 

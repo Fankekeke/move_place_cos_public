@@ -15,7 +15,7 @@
             </a-col>
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="搬家公司名称"
+                label="搬家公司"
                 :labelCol="{span: 5}"
                 :wrapperCol="{span: 18, offset: 1}">
                 <a-input v-model="queryParams.name"/>
@@ -104,7 +104,7 @@ export default {
         dataIndex: 'code',
         ellipsis: true
       }, {
-        title: '搬家公司名称',
+        title: '搬家公司',
         dataIndex: 'name',
         customRender: (text, row, index) => {
           if (text !== null) {

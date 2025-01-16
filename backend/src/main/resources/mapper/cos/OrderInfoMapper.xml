@@ -32,16 +32,24 @@
         vi.vehicle_no,
         vi.images as vehicleImages,
         vi.vehicle_type,
+        mi.name AS merchantName,
+        mi.images AS merchantImages,
+        mi.code AS merchantCode,
+        mi.address AS address,
+        mi.principal AS principal
         from
         order_info oi
-        left join user_info ui on
-        (ui.id = oi.user_id)
+        left join user_info ui on (ui.id = oi.user_id)
         left join evaluate_info ei on (ei.order_code = oi.code)
-        left join vehicle_info vi on (vi.code = oi.vehicle_code)
+        left join vehicle_info vi on (vi.vehicle_code = oi.vehicle_code)
+        left join merchant_info mi on (mi.id = oi.merchant_id)
         where
         1 = 1
         <if test="orderInfo.userName != null and orderInfo.userName != ''">
             AND ui.name LIKE CONCAT('%',#{orderInfo.userName},'%')
+        </if>
+        <if test="orderInfo.merchantName != null and orderInfo.merchantName != ''">
+            AND ui.name LIKE CONCAT('%',#{orderInfo.merchantName},'%')
         </if>
         <if test="orderInfo.code != null and orderInfo.code != ''">
             AND oi.code LIKE CONCAT('%',#{orderInfo.code},'%')

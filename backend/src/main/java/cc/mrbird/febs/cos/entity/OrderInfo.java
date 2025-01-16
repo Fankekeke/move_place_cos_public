@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.io.Serializable;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -37,12 +38,12 @@ public class OrderInfo implements Serializable {
     /**
      * 是否需要车辆（1.大型车 2.中型车 3.小型车）
      */
-    private Integer vehicleOptions;
+    private String vehicleOptions;
 
     /**
      * 是否需要搬运工（0.不需要 1.一个 2.两个 3.三个）
      */
-    private Integer staffOptions;
+    private String staffOptions;
 
     /**
      * 起始地址
@@ -87,7 +88,7 @@ public class OrderInfo implements Serializable {
     /**
      * 订单状态（1.等待分配 2.正在赶往 3.运输完成）
      */
-    private Integer status;
+    private String status;
 
     /**
      * 创建时间
@@ -107,7 +108,7 @@ public class OrderInfo implements Serializable {
     /**
      * 是否有电梯（0：无 1：有）
      */
-    private Integer hasElevator;
+    private String hasElevator;
 
     /**
      * 司机编码
@@ -133,4 +134,10 @@ public class OrderInfo implements Serializable {
      * 折后价格
      */
     private BigDecimal afterAmount;
+
+    @TableField(exist = false)
+    private String merchantName;
+
+    @TableField(exist = false)
+    private String userName;
 }
