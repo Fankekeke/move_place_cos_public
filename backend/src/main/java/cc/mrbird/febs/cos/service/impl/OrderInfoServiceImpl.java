@@ -191,13 +191,13 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
         Map<String, BigDecimal> rulesMap = priceRules.stream().collect(Collectors.toMap(PriceRules::getCode, PriceRules::getUnitPrice));
         BigDecimal vehiclePrice = BigDecimal.ZERO;
         switch (orderInfo.getVehicleOptions()) {
-            case 1:
+            case "1":
                 vehiclePrice = rulesMap.get("LARGE_VEHICLE");
                 break;
-            case 2:
+            case "2":
                 vehiclePrice = rulesMap.get("MEDIUM_VEHICLE");
                 break;
-            case 3:
+            case "3":
                 vehiclePrice = rulesMap.get("SMALL_VEHICLE");
                 break;
             default:
@@ -230,13 +230,13 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
         Map<String, BigDecimal> rulesMap = priceRules.stream().collect(Collectors.toMap(PriceRules::getCode, PriceRules::getUnitPrice));
         BigDecimal vehiclePrice = BigDecimal.ZERO;
         switch (orderInfo.getVehicleOptions()) {
-            case 1:
+            case "1":
                 vehiclePrice = rulesMap.get("LARGE_VEHICLE");
                 break;
-            case 2:
+            case "2":
                 vehiclePrice = rulesMap.get("MEDIUM_VEHICLE");
                 break;
-            case 3:
+            case "3":
                 vehiclePrice = rulesMap.get("SMALL_VEHICLE");
                 break;
             default:
@@ -379,11 +379,11 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
         // 本月订单量
         Integer orderNumMonth = orderListMonth.size();
         // 本月收益
-        BigDecimal orderAmountMonth = orderListMonth.stream().filter(e -> e.getStatus() != 0).map(OrderInfo::getAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal orderAmountMonth = orderListMonth.stream().filter(e -> "0".equals(e.getStatus())).map(OrderInfo::getAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
         // 本年订单量
         Integer orderNumYear = orderListYear.size();
         // 本年收益
-        BigDecimal orderAmountYear = orderListYear.stream().filter(e -> e.getStatus() != 0).map(OrderInfo::getAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal orderAmountYear = orderListYear.stream().filter(e -> "0".equals(e.getStatus())).map(OrderInfo::getAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
         // 近十天内订单数量统计
         List<LinkedHashMap<String, Object>> orderNumDays = baseMapper.selectOrderNumDays(merchantId);
         // 近十天内订单收益统计
