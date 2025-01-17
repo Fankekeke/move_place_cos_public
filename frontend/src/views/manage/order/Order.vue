@@ -15,7 +15,7 @@
             </a-col>
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="用户名称"
+                label="客户名称"
                 :labelCol="{span: 5}"
                 :wrapperCol="{span: 18, offset: 1}">
                 <a-input v-model="queryParams.userName"/>
@@ -23,10 +23,10 @@
             </a-col>
             <a-col :md="6" :sm="24">
               <a-form-item
-                label="搬家公司"
+                label="订单状态"
                 :labelCol="{span: 5}"
                 :wrapperCol="{span: 18, offset: 1}">
-                <a-input v-model="queryParams.merchantName"/>
+                <a-input v-model="queryParams.pharmacyName"/>
               </a-form-item>
             </a-col>
           </div>
@@ -64,9 +64,9 @@
         </template>
         <template slot="operation" slot-scope="text, record">
           <a-icon type="file-search" @click="orderViewOpen(record)" title="详 情"></a-icon>
-<!--          <a-icon v-if="record.status == 2" type="setting" theme="twoTone" twoToneColor="#4a9ff5" @click="orderComplete(record)" title="订单完成" style="margin-left: 15px"></a-icon>-->
-<!--          <a-icon v-if="record.taskShop == null && record.returnShop == null" type="setting" theme="twoTone" twoToneColor="#4a9ff5" @click="orderAuditOpen(record)" title="修 改" style="margin-left: 15px"></a-icon>-->
-          <a-icon v-if="record.type == 1" type="cluster" @click="orderMapOpen(record)" title="地 图" style="margin-left: 15px"></a-icon>
+          <a-icon v-if="record.status == 2" type="setting" theme="twoTone" twoToneColor="#4a9ff5" @click="orderComplete(record)" title="订单完成" style="margin-left: 15px"></a-icon>
+          <a-icon v-if="record.status == 1" type="setting" theme="twoTone" twoToneColor="#4a9ff5" @click="orderAuditOpen(record)" title="修 改" style="margin-left: 15px"></a-icon>
+          <a-icon type="cluster" @click="orderMapOpen(record)" title="地 图" style="margin-left: 15px"></a-icon>
         </template>
       </a-table>
     </div>
@@ -108,7 +108,7 @@ import OrderAdd from './OrderAdd'
 import OrderAudit from './OrderAudit'
 import OrderView from './OrderView'
 import OrderStatus from './OrderStatus.vue'
-import MapView from '../map/Map.vue'
+import MapView from './Map.vue'
 moment.locale('zh-cn')
 
 export default {
@@ -164,21 +164,19 @@ export default {
     columns () {
       return [{
         title: '订单编号',
-        dataIndex: 'code',
-        ellipsis: true
+        dataIndex: 'code'
       }, {
-        title: '下单用户',
+        title: '客户名称',
         dataIndex: 'userName',
         customRender: (text, row, index) => {
           if (text !== null) {
             return text
           } else {
-            return '- -'
+            return <a-tag>平台内下单</a-tag>
           }
-        },
-        ellipsis: true
+        }
       }, {
-        title: '用户头像',
+        title: '头像',
         dataIndex: 'userImages',
         customRender: (text, record, index) => {
           if (!record.userImages) return <a-avatar shape="square" icon="user" />
@@ -190,76 +188,58 @@ export default {
           </a-popover>
         }
       }, {
-        title: '所属搬家公司',
-        dataIndex: 'merchantName',
+        title: '联系方式',
+        dataIndex: 'phone',
         customRender: (text, row, index) => {
           if (text !== null) {
             return text
           } else {
             return '- -'
           }
-        },
-        ellipsis: true
-      }, {
-        title: '搬家公司图片',
-        dataIndex: 'merchantImages',
-        customRender: (text, record, index) => {
-          if (!record.merchantImages) return <a-avatar shape="square" icon="user" />
-          return <a-popover>
-            <template slot="content">
-              <a-avatar shape="square" size={132} icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.merchantImages.split(',')[0] } />
-            </template>
-            <a-avatar shape="square" icon="user" src={ 'http://127.0.0.1:9527/imagesWeb/' + record.merchantImages.split(',')[0] } />
-          </a-popover>
         }
       }, {
-        title: '订单价格（元）',
-        dataIndex: 'orderPrice',
+        title: '订单总额',
+        dataIndex: 'amount',
         customRender: (text, row, index) => {
           if (text !== null) {
             return text + '元'
           } else {
             return '- -'
           }
-        },
-        ellipsis: true
+        }
       }, {
-        title: '折后价格（元）',
-        dataIndex: 'afterOrderPrice',
+        title: '初始地址',
+        dataIndex: 'startAddress',
         customRender: (text, row, index) => {
           if (text !== null) {
-            return text + '元'
+            return text
           } else {
             return '- -'
           }
-        },
-        ellipsis: true
+        }
+      }, {
+        title: '运货地址',
+        dataIndex: 'endAddress',
+        customRender: (text, row, index) => {
+          if (text !== null) {
+            return text
+          } else {
+            return '- -'
+          }
+        }
       }, {
         title: '订单状态',
         dataIndex: 'status',
         customRender: (text, row, index) => {
           switch (text) {
-            case '0':
-              return <a-tag color="red">未支付</a-tag>
-            case '1':
-              return <a-tag>已支付</a-tag>
-            case '2':
-              return <a-tag>配送中</a-tag>
-            case '3':
-              return <a-tag>已收货</a-tag>
-            default:
-              return '- -'
-          }
-        }
-      }, {
-        title: '订单类型',
-        dataIndex: 'type',
-        customRender: (text, row, index) => {
-          switch (text) {
-            case '0':
-              return <a-tag>店内购买</a-tag>
-            case '1':
-              return <a-tag>配送</a-tag>
+            case 0:
+              return <a-tag>待付款</a-tag>
+            case 1:
+              return <a-tag>正在分配</a-tag>
+            case 2:
+              return <a-tag>运输中</a-tag>
+            case 3:
+              return <a-tag>运输完成</a-tag>
             default:
               return '- -'
           }
@@ -273,8 +253,7 @@ export default {
           } else {
             return '- -'
           }
-        },
-        ellipsis: true
+        }
       }, {
         title: '操作',
         dataIndex: 'operation',
@@ -330,7 +309,7 @@ export default {
     },
     handleorderAuditViewSuccess () {
       this.orderAuditView.visiable = false
-      this.$message.success('设置成功')
+      this.$message.success('分配成功')
       this.fetch()
     },
     onSelectChange (selectedRowKeys) {
@@ -359,7 +338,7 @@ export default {
     },
     handleorderEditSuccess () {
       this.orderEdit.visiable = false
-      this.$message.success('修改成功')
+      this.$message.success('修改产品成功')
       this.search()
     },
     handleDeptChange (value) {
