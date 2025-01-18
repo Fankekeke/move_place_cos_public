@@ -50,6 +50,8 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
 
     private final IMerchantInfoService merchantInfoService;
 
+    private final IVehicleInfoService vehicleInfoService;
+
     /**
      * 分页获取订单信息
      *
@@ -303,6 +305,11 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
         // 评价
         EvaluateInfo evaluate = evaluateInfoService.getOne(Wrappers.<EvaluateInfo>lambdaQuery().eq(EvaluateInfo::getOrderCode, orderCode));
         result.put("evaluate", evaluate);
+        // 车辆信息
+        if (StrUtil.isNotEmpty(orderInfo.getVehicleCode())) {
+            VehicleInfo vehicleInfo = vehicleInfoService.getOne(Wrappers.<VehicleInfo>lambdaQuery().eq(VehicleInfo::getVehicleCode, orderInfo.getVehicleCode()));
+            result.put("vehicle", vehicleInfo);
+        }
         // 用户信息
         UserInfo userInfo = userInfoMapper.selectById(orderInfo.getUserId());
         result.put("user", userInfo);

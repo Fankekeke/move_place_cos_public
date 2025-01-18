@@ -32,10 +32,10 @@
       <br/>
       <a-row style="padding-left: 24px;padding-right: 24px;">
         <a-col :span="8"><b>当前状态：</b>
-          <span v-if="orderData.orderStatus == 0">待付款</span>
-          <span v-if="orderData.orderStatus == 1">正在分配</span>
-          <span v-if="orderData.orderStatus == 2">运输中</span>
-          <span v-if="orderData.orderStatus == 3">运输完成</span>
+          <span v-if="orderData.status == '0'">待付款</span>
+          <span v-if="orderData.status == '1'">正在分配</span>
+          <span v-if="orderData.status == '2'">运输中</span>
+          <span v-if="orderData.status == '3'">运输完成</span>
         </a-col>
         <a-col :span="8"><b>订单金额：</b>
           {{ orderData.amount }} 元

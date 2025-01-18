@@ -32,16 +32,25 @@
       <br/>
       <a-row style="padding-left: 24px;padding-right: 24px;">
         <a-col :span="8"><b>当前状态：</b>
-          <span v-if="orderData.orderStatus == 0">待付款</span>
-          <span v-if="orderData.orderStatus == 1">正在分配</span>
-          <span v-if="orderData.orderStatus == 2">运输中</span>
-          <span v-if="orderData.orderStatus == 3">运输完成</span>
+          <span v-if="orderData.status == '0'">待付款</span>
+          <span v-if="orderData.status == '1'">正在分配</span>
+          <span v-if="orderData.status == '2'">运输中</span>
+          <span v-if="orderData.status == '3'">运输完成</span>
         </a-col>
         <a-col :span="8"><b>订单金额：</b>
           {{ orderData.amount }} 元
         </a-col>
         <a-col :span="8"><b>下单时间：</b>
           {{ orderData.createDate }}
+        </a-col>
+      </a-row>
+      <br/>
+      <a-row style="padding-left: 24px;padding-right: 24px;">
+        <a-col :span="8"><b>实际价格：</b>
+          {{ orderData.afterAmount }} 元
+        </a-col>
+        <a-col :span="16"><b>备注：</b>
+          {{ orderData.remark }}
         </a-col>
       </a-row>
       <br/>
@@ -63,13 +72,17 @@
       </a-row>
       <br/>
       <a-row style="padding-left: 24px;padding-right: 24px;">
-        <a-col :span="8"><b>起始地址：</b>
+        <a-col :span="24"><b>起始地址：</b>
           {{ orderData.startAddress }}
         </a-col>
-        <a-col :span="8"><b>运输地址：</b>
+        <br/>
+        <br/>
+        <a-col :span="24"><b>运输地址：</b>
           {{ orderData.endAddress }}
         </a-col>
-        <a-col :span="8"><b>总距离：</b>
+        <br/>
+        <br/>
+        <a-col :span="24"><b>总距离：</b>
           {{ orderData.distanceLength }} 千米
         </a-col>
       </a-row>
@@ -92,6 +105,41 @@
         </a-col>
       </a-row>
       <br/>
+      <br/>
+      <a-row style="padding-left: 24px;padding-right: 24px;" v-if="userInfo !== null">
+        <a-col style="margin-bottom: 15px"><span style="font-size: 15px;font-weight: 650;color: #000c17">用户信息</span></a-col>
+        <a-col :span="8"><b>客户编号：</b>
+          {{ userInfo.code ? userInfo.code : '- -' }}
+        </a-col>
+        <a-col :span="8"><b>客户名称：</b>
+          {{ userInfo.name ? userInfo.name : '- -' }}
+        </a-col>
+        <a-col :span="8"><b>联系方式：</b>
+          {{ userInfo.phone ? userInfo.phone : '- -' }}
+        </a-col>
+      </a-row>
+      <br/>
+      <a-row style="padding-left: 24px;padding-right: 24px;" v-if="merchantInfo !== null">
+        <a-col style="margin-bottom: 15px"><span style="font-size: 15px;font-weight: 650;color: #000c17">搬家公司</span></a-col>
+        <a-col :span="8"><b>公司编号：</b>
+          {{ merchantInfo.code ? merchantInfo.code : '- -' }}
+        </a-col>
+        <a-col :span="8"><b>公司名称：</b>
+          {{ merchantInfo.name ? merchantInfo.name : '- -' }}
+        </a-col>
+        <a-col :span="8"><b>负责人：</b>
+          {{ merchantInfo.principal ? merchantInfo.principal : '- -' }}
+        </a-col>
+        <br/>
+        <br/>
+        <a-col :span="8"><b>联系方式：</b>
+          {{ merchantInfo.phone ? merchantInfo.phone : '- -' }}
+        </a-col>
+        <a-col :span="16"><b>详细地址：</b>
+          {{ merchantInfo.address ? merchantInfo.address : '- -' }}
+        </a-col>
+      </a-row>
+      <br/>
       <a-row :gutter="15" style="padding-left: 24px;padding-right: 24px;">
         <a-col :span="12">
           <a-form-item label='选择司机'>
@@ -100,9 +148,6 @@
             </a-select>
           </a-form-item>
         </a-col>
-      </a-row>
-      <br/>
-      <a-row :gutter="15" style="padding-left: 24px;padding-right: 24px;">
         <a-col :span="12">
           <a-form-item label='选择搬运工'>
             <a-select style="width: 100%" mode="multiple" v-model="staffCheck">
@@ -111,6 +156,7 @@
           </a-form-item>
         </a-col>
       </a-row>
+      <br/>
     </div>
   </a-modal>
 </template>
@@ -158,6 +204,8 @@ export default {
     'orderShow': function (value) {
       if (value) {
         this.current = this.orderData.status
+        this.imagesInit(this.orderData.images)
+        this.dataInit(this.orderData.code)
       }
     }
   },
@@ -175,13 +223,23 @@ export default {
       driverCheck: [],
       staffCheck: [],
       driverList: [],
-      current: 0
+      current: 0,
+      userInfo: null,
+      vehicleInfo: null,
+      merchantInfo: null
     }
   },
   mounted () {
     this.selectStaff()
   },
   methods: {
+    dataInit (orderCode) {
+      this.$get(`/cos/order-info/detail/${orderCode}`).then((r) => {
+        this.userInfo = r.data.user
+        this.merchantInfo = r.data.merchant
+        this.vehicleInfo = r.data.vehicle
+      })
+    },
     moment,
     selectStaff () {
       this.$get(`/cos/staff-info/staff/type`).then((r) => {

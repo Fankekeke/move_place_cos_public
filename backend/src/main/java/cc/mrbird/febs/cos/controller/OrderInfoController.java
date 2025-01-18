@@ -50,6 +50,17 @@ public class OrderInfoController {
      * @param code 订单编号
      * @return 结果
      */
+    @GetMapping("/detail/{code}")
+    public R queryDetail(@PathVariable("code") String code) {
+        return R.ok(orderInfoService.selectDetailByCode(code));
+    }
+
+    /**
+     * 获取订单详情
+     *
+     * @param code 订单编号
+     * @return 结果
+     */
     @GetMapping("/queryOrderDetail/{code}")
     public R queryOrderDetail(@PathVariable("code") String code) {
         return R.ok(orderInfoService.selectDetailByCode(code));

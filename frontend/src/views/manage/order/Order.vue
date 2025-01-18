@@ -26,7 +26,12 @@
                 label="订单状态"
                 :labelCol="{span: 5}"
                 :wrapperCol="{span: 18, offset: 1}">
-                <a-input v-model="queryParams.pharmacyName"/>
+                <a-select v-model="queryParams.status" allowClear>
+                  <a-select-option value="0">待付款</a-select-option>
+                  <a-select-option value="1">正在分配</a-select-option>
+                  <a-select-option value="2">运输中</a-select-option>
+                  <a-select-option value="3">运输完成</a-select-option>
+                </a-select>
               </a-form-item>
             </a-col>
           </div>
@@ -164,7 +169,8 @@ export default {
     columns () {
       return [{
         title: '订单编号',
-        dataIndex: 'code'
+        dataIndex: 'code',
+        ellipsis: true
       }, {
         title: '客户名称',
         dataIndex: 'userName',
@@ -174,7 +180,8 @@ export default {
           } else {
             return <a-tag>平台内下单</a-tag>
           }
-        }
+        },
+        ellipsis: true
       }, {
         title: '头像',
         dataIndex: 'userImages',
@@ -188,6 +195,10 @@ export default {
           </a-popover>
         }
       }, {
+        title: '搬家公司',
+        dataIndex: 'merchantName',
+        ellipsis: true
+      }, {
         title: '联系方式',
         dataIndex: 'phone',
         customRender: (text, row, index) => {
@@ -196,7 +207,8 @@ export default {
           } else {
             return '- -'
           }
-        }
+        },
+        ellipsis: true
       }, {
         title: '订单总额',
         dataIndex: 'amount',
@@ -216,7 +228,8 @@ export default {
           } else {
             return '- -'
           }
-        }
+        },
+        ellipsis: true
       }, {
         title: '运货地址',
         dataIndex: 'endAddress',
@@ -226,19 +239,20 @@ export default {
           } else {
             return '- -'
           }
-        }
+        },
+        ellipsis: true
       }, {
         title: '订单状态',
         dataIndex: 'status',
         customRender: (text, row, index) => {
           switch (text) {
-            case 0:
+            case '0':
               return <a-tag>待付款</a-tag>
-            case 1:
+            case '1':
               return <a-tag>正在分配</a-tag>
-            case 2:
+            case '2':
               return <a-tag>运输中</a-tag>
-            case 3:
+            case '3':
               return <a-tag>运输完成</a-tag>
             default:
               return '- -'
@@ -253,7 +267,8 @@ export default {
           } else {
             return '- -'
           }
-        }
+        },
+        ellipsis: true
       }, {
         title: '操作',
         dataIndex: 'operation',

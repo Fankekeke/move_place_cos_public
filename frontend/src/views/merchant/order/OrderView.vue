@@ -29,16 +29,25 @@
       <br/>
       <a-row style="padding-left: 24px;padding-right: 24px;">
         <a-col :span="8"><b>当前状态：</b>
-          <span v-if="orderData.orderStatus == 0">待付款</span>
-          <span v-if="orderData.orderStatus == 1">正在分配</span>
-          <span v-if="orderData.orderStatus == 2">运输中</span>
-          <span v-if="orderData.orderStatus == 3">运输完成</span>
+          <span v-if="orderData.status == '0'">待付款</span>
+          <span v-if="orderData.status == '1'">正在分配</span>
+          <span v-if="orderData.status == '2'">运输中</span>
+          <span v-if="orderData.status == '3'">运输完成</span>
         </a-col>
         <a-col :span="8"><b>订单金额：</b>
           {{ orderData.amount }} 元
         </a-col>
         <a-col :span="8"><b>下单时间：</b>
           {{ orderData.createDate }}
+        </a-col>
+      </a-row>
+      <br/>
+      <a-row style="padding-left: 24px;padding-right: 24px;">
+        <a-col :span="8"><b>实际价格：</b>
+          {{ orderData.afterAmount }} 元
+        </a-col>
+        <a-col :span="16"><b>备注：</b>
+          {{ orderData.remark }}
         </a-col>
       </a-row>
       <br/>
@@ -60,13 +69,17 @@
       </a-row>
       <br/>
       <a-row style="padding-left: 24px;padding-right: 24px;">
-        <a-col :span="8"><b>起始地址：</b>
+        <a-col :span="24"><b>起始地址：</b>
           {{ orderData.startAddress }}
         </a-col>
-        <a-col :span="8"><b>运输地址：</b>
+        <br/>
+        <br/>
+        <a-col :span="24"><b>运输地址：</b>
           {{ orderData.endAddress }}
         </a-col>
-        <a-col :span="8"><b>总距离：</b>
+        <br/>
+        <br/>
+        <a-col :span="24"><b>总距离：</b>
           {{ orderData.distanceLength }} 千米
         </a-col>
       </a-row>
@@ -92,13 +105,57 @@
       <a-row style="padding-left: 24px;padding-right: 24px;" v-if="userInfo !== null">
         <a-col style="margin-bottom: 15px"><span style="font-size: 15px;font-weight: 650;color: #000c17">用户信息</span></a-col>
         <a-col :span="8"><b>客户编号：</b>
-          {{ userInfo.code }}
+          {{ userInfo.code ? userInfo.code : '- -' }}
         </a-col>
         <a-col :span="8"><b>客户名称：</b>
-          {{ userInfo.name }}
+          {{ userInfo.name ? userInfo.name : '- -' }}
         </a-col>
         <a-col :span="8"><b>联系方式：</b>
-          {{ userInfo.phone }}
+          {{ userInfo.phone ? userInfo.phone : '- -' }}
+        </a-col>
+      </a-row>
+      <br/>
+      <a-row style="padding-left: 24px;padding-right: 24px;" v-if="merchantInfo !== null">
+        <a-col style="margin-bottom: 15px"><span style="font-size: 15px;font-weight: 650;color: #000c17">搬家公司</span></a-col>
+        <a-col :span="8"><b>公司编号：</b>
+          {{ merchantInfo.code ? merchantInfo.code : '- -' }}
+        </a-col>
+        <a-col :span="8"><b>公司名称：</b>
+          {{ merchantInfo.name ? merchantInfo.name : '- -' }}
+        </a-col>
+        <a-col :span="8"><b>负责人：</b>
+          {{ merchantInfo.principal ? merchantInfo.principal : '- -' }}
+        </a-col>
+        <br/>
+        <br/>
+        <a-col :span="8"><b>联系方式：</b>
+          {{ merchantInfo.phone ? merchantInfo.phone : '- -' }}
+        </a-col>
+        <a-col :span="16"><b>详细地址：</b>
+          {{ merchantInfo.address ? merchantInfo.address : '- -' }}
+        </a-col>
+      </a-row>
+      <br/>
+      <a-row style="padding-left: 24px;padding-right: 24px;" v-if="vehicleInfo && vehicleInfo !== null">
+        <a-col style="margin-bottom: 15px"><span style="font-size: 15px;font-weight: 650;color: #000c17">车辆信息</span></a-col>
+        <a-col :span="8"><b>车辆编号：</b>
+          {{ vehicleInfo.vehicleCode ? vehicleInfo.vehicleCode : '- -' }}
+        </a-col>
+        <a-col :span="8"><b>车牌号码：</b>
+          {{ vehicleInfo.vehicleNo ? vehicleInfo.vehicleNo : '- -' }}
+        </a-col>
+        <a-col :span="8"><b>车辆品牌：</b>
+          {{ vehicleInfo.vehicleBrand ? vehicleInfo.vehicleBrand : '- -' }}
+        </a-col>
+        <br/>
+        <br/>
+        <a-col :span="8"><b>联系方式：</b>
+          <span v-if="vehicleInfo.vehicleType == '1'">大型车</span>
+          <span v-if="vehicleInfo.vehicleType == '2'">中型车</span>
+          <span v-if="vehicleInfo.vehicleType == '3'">小型车</span>
+        </a-col>
+        <a-col :span="16"><b>车辆颜色：</b>
+          {{ vehicleInfo.vehicleColor ? vehicleInfo.vehicleColor : '- -' }}
         </a-col>
       </a-row>
     </div>
@@ -147,7 +204,10 @@ export default {
       durgList: [],
       logisticsList: [],
       current: 0,
-      userInfo: null
+      userInfo: null,
+      vehicleInfo: null,
+      staffList: [],
+      merchantInfo: null
     }
   },
   watch: {
@@ -163,6 +223,9 @@ export default {
     dataInit (orderCode) {
       this.$get(`/cos/order-info/detail/${orderCode}`).then((r) => {
         this.userInfo = r.data.user
+        this.staffList = r.data.staff
+        this.merchantInfo = r.data.merchant
+        this.vehicleInfo = r.data.vehicle
       })
     },
     imagesInit (images) {

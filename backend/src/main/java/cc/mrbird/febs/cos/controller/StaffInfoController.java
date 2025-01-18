@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -39,6 +40,19 @@ public class StaffInfoController {
     @GetMapping("/page")
     public R page(Page<StaffInfo> page, StaffInfo staffInfo) {
         return R.ok(staffInfoService.queryStaffPage(page, staffInfo));
+    }
+
+    /**
+     * 获取员工信息
+     *
+     * @return 结果
+     */
+    @GetMapping("/staff/type")
+    public R selectStaffByType() {
+        LinkedHashMap<String, Object> result = new LinkedHashMap<>();
+        result.put("driver", staffInfoService.list(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getType, 1).eq(StaffInfo::getStatus, 1)));
+        result.put("staff", staffInfoService.list(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getType, 2).eq(StaffInfo::getStatus, 1)));
+        return R.ok(result);
     }
 
     /**
