@@ -140,4 +140,22 @@ public class OrderInfo implements Serializable {
 
     @TableField(exist = false)
     private String userName;
+
+    /**
+     * 年份
+     */
+    @TableField(exist = false)
+    private Integer year;
+
+    /**
+     * 月份
+     */
+    @TableField(exist = false)
+    private Integer month;
+
+    /**
+     * 天
+     */
+    @TableField(exist = false)
+    private Integer day;
 }

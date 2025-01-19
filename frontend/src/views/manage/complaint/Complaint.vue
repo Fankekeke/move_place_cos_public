@@ -73,7 +73,7 @@
           </template>
         </template>
         <template slot="operation" slot-scope="text, record">
-          <a-icon v-if="record.status != 1" type="reconciliation" @click="view(record)" title="处 理"></a-icon>
+          <a-icon v-if="record.status != 1" type="caret-down" @click="view(record)" title="处 理"></a-icon>
         </template>
       </a-table>
     </div>
@@ -202,8 +202,11 @@ export default {
   },
   methods: {
     view (row) {
-      this.auditView.data = row
-      this.auditView.visiable = true
+      row.status = 1
+      this.$put('/cos/complaint-info', row).then((r) => {
+        this.$message.success('处理完成')
+        this.search()
+      })
     },
     handleAuditViewClose () {
       this.auditView.visiable = false

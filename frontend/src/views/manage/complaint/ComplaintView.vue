@@ -28,8 +28,7 @@
       <a-row style="padding-left: 24px;padding-right: 24px;">
         <a-col style="margin-bottom: 15px"><span style="font-size: 15px;font-weight: 650;color: #000c17">标签</span></a-col>
         <a-col :span="24">
-          <a-tag v-if="auditData.tag !== null" v-for="(item, index) in auditData.tag.split(',')" :key="index">{{ item }}</a-tag>
-          <span v-else>暂无标签</span>
+          <span>暂无标签</span>
         </a-col>
       </a-row>
       <br/>

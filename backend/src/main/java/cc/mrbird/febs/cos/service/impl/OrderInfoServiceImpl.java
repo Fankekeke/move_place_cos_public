@@ -386,11 +386,11 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
         // 本月订单量
         Integer orderNumMonth = orderListMonth.size();
         // 本月收益
-        BigDecimal orderAmountMonth = orderListMonth.stream().filter(e -> "0".equals(e.getStatus())).map(OrderInfo::getAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal orderAmountMonth = orderListMonth.stream().filter(e -> !"0".equals(e.getStatus())).map(OrderInfo::getAfterAmount).filter(Objects::nonNull).reduce(BigDecimal.ZERO, BigDecimal::add);
         // 本年订单量
         Integer orderNumYear = orderListYear.size();
         // 本年收益
-        BigDecimal orderAmountYear = orderListYear.stream().filter(e -> "0".equals(e.getStatus())).map(OrderInfo::getAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal orderAmountYear = orderListYear.stream().filter(e -> !"0".equals(e.getStatus())).map(OrderInfo::getAfterAmount).filter(Objects::nonNull).reduce(BigDecimal.ZERO, BigDecimal::add);
         // 近十天内订单数量统计
         List<LinkedHashMap<String, Object>> orderNumDays = baseMapper.selectOrderNumDays(merchantId);
         // 近十天内订单收益统计
@@ -423,108 +423,73 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
         // 返回数据
         LinkedHashMap<String, Object> result = new LinkedHashMap<>();
 
-//        int year =  DateUtil.year(new Date());
-//        if (StrUtil.isNotEmpty(date)) {
-//            year = Integer.parseInt(date);
-//        }
-//
-//        List<OrderOutInfo> orderOutList = orderOutInfoMapper.selectOrderOutListByDate(year, null);
-//        Map<Integer, List<OrderOutInfo>> orderOutMonthMap = orderOutList.stream().collect(Collectors.groupingBy(OrderOutInfo::getMonth));
-//        List<OrderPutInfo> orderPutList = orderPutInfoMapper.selectOrderPutListByDate(year, null);
-//        Map<Integer, List<OrderPutInfo>> orderPutMonthMap = orderPutList.stream().collect(Collectors.groupingBy(OrderPutInfo::getMonth));
-//
-//        // 本年订单量
-//        result.put("orderNum", orderOutList.size());
-//        // 本年总收益
-//        BigDecimal totalPrice = orderOutList.stream().map(OrderOutInfo::getTotalPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
-//        result.put("totalPrice", totalPrice);
-//        // 本年入库单量
-//        result.put("putNum", orderPutList.size());
-//        // 本年总支出
-//        BigDecimal outlayPrice = orderPutList.stream().map(OrderPutInfo::getTotalPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
-//        result.put("outlayPrice", outlayPrice);
-//
-//        List<Integer> orderNumList = new ArrayList<>();
-//        List<BigDecimal> orderPriceList = new ArrayList<>();
-//        List<Integer> outlayNumList = new ArrayList<>();
-//        List<BigDecimal> outlayPriceList = new ArrayList<>();
-//        for (int i = 1; i <= 12; i++) {
-//
-//            // 本月出库
-//            List<OrderOutInfo> currentMonthOutList = orderOutMonthMap.get(i);
-//            if (CollectionUtil.isEmpty(currentMonthOutList)) {
-//                orderNumList.add(0);
-//                orderPriceList.add(BigDecimal.ZERO);
-//            } else {
-//                orderNumList.add(currentMonthOutList.size());
-//                BigDecimal currentMonthOutPrice = currentMonthOutList.stream().map(OrderOutInfo::getTotalPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
-//                orderPriceList.add(currentMonthOutPrice);
-//            }
-//
-//            // 本月入库
-//            List<OrderPutInfo> currentMonthPutList = orderPutMonthMap.get(i);
-//            if (CollectionUtil.isEmpty(currentMonthPutList)) {
-//                outlayNumList.add(0);
-//                outlayPriceList.add(BigDecimal.ZERO);
-//            } else {
-//                outlayNumList.add(currentMonthPutList.size());
-//                BigDecimal currentMonthPutPrice = currentMonthPutList.stream().map(OrderPutInfo::getTotalPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
-//                outlayPriceList.add(currentMonthPutPrice);
-//            }
-//
-//        }
-//        // 12月内订单收益统计
-//        result.put("orderPriceList", orderPriceList);
-//        // 12月内订单量统计
-//        result.put("orderNumList", orderNumList);
-//        // 12月内入库成本统计
-//        result.put("outlayPriceList", outlayPriceList);
-//        // 12月内入库量统计
-//        result.put("outlayNumList", outlayNumList);
-//
-//        // 商品销量排行
-//        List<LinkedHashMap<String, Object>> saleRank = new ArrayList<>();
-//        List<LinkedHashMap<String, Object>> salePriceRank = new ArrayList<>();
-//        LinkedHashMap<Integer, Integer> saleTypeRankMap = new LinkedHashMap<>();
-//
-//        List<String> orderCodes = orderOutList.stream().map(OrderOutInfo::getCode).collect(Collectors.toList());
-//        List<StoreRecordInfo> recordInfoList = CollectionUtil.isNotEmpty(orderCodes) ? storeRecordInfoMapper.selectList(Wrappers.<StoreRecordInfo>lambdaQuery().in(StoreRecordInfo::getOrderNumber, orderCodes)) : Collections.emptyList();
-//        Map<String, List<StoreRecordInfo>> recordInfoMap = recordInfoList.stream().collect(Collectors.groupingBy(StoreRecordInfo::getCommodityCode));
-//
-//        // 商品信息
-//        Set<String> commodityCodeList = recordInfoMap.keySet();
-//        List<CommodityInfo> commodityInfoList = commodityInfoService.list(Wrappers.<CommodityInfo>lambdaQuery().in(CollectionUtil.isNotEmpty(commodityCodeList), CommodityInfo::getCode, commodityCodeList));
-//        Map<String, CommodityInfo> commodityMap = commodityInfoList.stream().collect(Collectors.toMap(CommodityInfo::getCode, e -> e));
-//
-//        recordInfoMap.forEach((key, value) -> {
-//            CommodityInfo commodity = commodityMap.get(key);
-//            if (commodity != null) {
-//                saleRank.add(new LinkedHashMap<String, Object>() {
-//                    {
-//                        put("name", commodity.getName());
-//                        put("num", value.stream().mapToInt(StoreRecordInfo::getNum).sum());
-//                    }
-//                });
-//                salePriceRank.add(new LinkedHashMap<String, Object>() {
-//                    {
-//                        put("name", commodity.getName());
-//                        put("num", value.stream().map(StoreRecordInfo::getTotalPrice).reduce(BigDecimal.ZERO, BigDecimal::add));
-//                    }
-//                });
-//
-//                saleTypeRankMap.merge(commodity.getTypeId(), value.size(), Integer::sum);
-//            }
-//        });
-//        result.put("saleRank", saleRank);
-//        result.put("salePriceRank", salePriceRank);
-//        // 销售商品分类
-//        LinkedHashMap<String, Integer> saleTypeRankMapCopy = new LinkedHashMap<>();
-//        List<CommodityType> commodityTypeList = commodityTypeService.list();
-//        Map<Integer, String> commodityTypeMap = commodityTypeList.stream().collect(Collectors.toMap(CommodityType::getId, CommodityType::getName));
-//        commodityTypeMap.forEach((key, value) -> {
-//            saleTypeRankMapCopy.put(value, saleTypeRankMap.get(key) == null ? 0 : saleTypeRankMap.get(key));
-//        });
-//        result.put("saleTypeRankMapCopy", saleTypeRankMapCopy);
+        int year =  DateUtil.year(new Date());
+        if (StrUtil.isNotEmpty(date)) {
+            year = Integer.parseInt(date);
+        }
+
+        List<OrderInfo> orderOutList = baseMapper.selectOrderOutListByDate(year, null);
+        Map<Integer, List<OrderInfo>> orderOutMonthMap = orderOutList.stream().collect(Collectors.groupingBy(OrderInfo::getMonth));
+        List<OrderInfo> orderPutList = baseMapper.selectOrderPutListByDate(year, null);
+        Map<Integer, List<OrderInfo>> orderPutMonthMap = orderPutList.stream().collect(Collectors.groupingBy(OrderInfo::getMonth));
+
+        // 本年订单量
+        result.put("orderNum", orderOutList.size());
+        // 本年总收益
+        BigDecimal totalPrice = orderOutList.stream().map(OrderInfo::getAfterAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+        result.put("totalPrice", totalPrice);
+        // 本年入库单量
+        result.put("putNum", orderPutList.size());
+        // 本年总支出
+        BigDecimal outlayPrice = orderPutList.stream().map(OrderInfo::getAfterAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+        result.put("outlayPrice", outlayPrice);
+
+        List<Integer> orderNumList = new ArrayList<>();
+        List<BigDecimal> orderPriceList = new ArrayList<>();
+        List<Integer> outlayNumList = new ArrayList<>();
+        List<BigDecimal> outlayPriceList = new ArrayList<>();
+        for (int i = 1; i <= 12; i++) {
+
+            // 本月出库
+            List<OrderInfo> currentMonthOutList = orderOutMonthMap.get(i);
+            if (CollectionUtil.isEmpty(currentMonthOutList)) {
+                orderNumList.add(0);
+                orderPriceList.add(BigDecimal.ZERO);
+            } else {
+                orderNumList.add(currentMonthOutList.size());
+                BigDecimal currentMonthOutPrice = currentMonthOutList.stream().map(OrderInfo::getAfterAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+                orderPriceList.add(currentMonthOutPrice);
+            }
+
+            // 本月入库
+            List<OrderInfo> currentMonthPutList = orderPutMonthMap.get(i);
+            if (CollectionUtil.isEmpty(currentMonthPutList)) {
+                outlayNumList.add(0);
+                outlayPriceList.add(BigDecimal.ZERO);
+            } else {
+                outlayNumList.add(currentMonthPutList.size());
+                BigDecimal currentMonthPutPrice = currentMonthPutList.stream().map(OrderInfo::getAfterAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+                outlayPriceList.add(currentMonthPutPrice);
+            }
+
+        }
+        // 12月内订单收益统计
+        result.put("orderPriceList", orderPriceList);
+        // 12月内订单量统计
+        result.put("orderNumList", orderNumList);
+        // 12月内入库成本统计
+        result.put("outlayPriceList", outlayPriceList);
+        // 12月内入库量统计
+        result.put("outlayNumList", outlayNumList);
+
+        // 商品销量排行
+        List<LinkedHashMap<String, Object>> saleRank = new ArrayList<>();
+        List<LinkedHashMap<String, Object>> salePriceRank = new ArrayList<>();
+        LinkedHashMap<Integer, Integer> saleTypeRankMap = new LinkedHashMap<>();
+
+
+        result.put("saleRank", saleRank);
+        result.put("salePriceRank", salePriceRank);
         return result;
     }
 
@@ -540,116 +505,84 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
         // 返回数据
         LinkedHashMap<String, Object> result = new LinkedHashMap<>();
 
-//        int year =  DateUtil.year(new Date());
-//        int month =  DateUtil.month(new Date()) + 1;
-//        if (StrUtil.isNotEmpty(date)) {
-//            year = DateUtil.year(DateUtil.parseDate(date));
-//            month = DateUtil.month(DateUtil.parseDate(date)) + 1;
-//        }
-//
-//        List<OrderOutInfo> orderOutList = orderOutInfoMapper.selectOrderOutListByDate(year, month);
-//        Map<Integer, List<OrderOutInfo>> orderOutDayMap = orderOutList.stream().collect(Collectors.groupingBy(OrderOutInfo::getDay));
-//        List<OrderPutInfo> orderPutList = orderPutInfoMapper.selectOrderPutListByDate(year, month);
-//        Map<Integer, List<OrderPutInfo>> orderPutDayMap = orderPutList.stream().collect(Collectors.groupingBy(OrderPutInfo::getDay));
-//
-//        // 本月订单量
-//        result.put("orderNum", orderOutList.size());
-//        // 本月总收益
-//        BigDecimal totalPrice = orderOutList.stream().map(OrderOutInfo::getTotalPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
-//        result.put("totalPrice", totalPrice);
-//        // 本月入库单量
-//        result.put("putNum", orderPutList.size());
-//        // 本月总支出
-//        BigDecimal outlayPrice = orderPutList.stream().map(OrderPutInfo::getTotalPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
-//        result.put("outlayPrice", outlayPrice);
-//
-//        List<Integer> orderNumList = new ArrayList<>();
-//        List<BigDecimal> orderPriceList = new ArrayList<>();
-//        List<Integer> outlayNumList = new ArrayList<>();
-//        List<BigDecimal> outlayPriceList = new ArrayList<>();
-//        int days = DateUtil.getLastDayOfMonth(DateUtil.parseDate(date));
-//
-//        // 本月日期
-//        List<String> dateTimeList = new ArrayList<>();
-//
-//        for (int i = 1; i <= days; i++) {
-//            dateTimeList.add(month + "月" + i + "日");
-//            // 本天出库
-//            List<OrderOutInfo> currentDayOutList = orderOutDayMap.get(i);
-//            if (CollectionUtil.isEmpty(currentDayOutList)) {
-//                orderNumList.add(0);
-//                orderPriceList.add(BigDecimal.ZERO);
-//            } else {
-//                orderNumList.add(currentDayOutList.size());
-//                BigDecimal currentDayOutPrice = currentDayOutList.stream().map(OrderOutInfo::getTotalPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
-//                orderPriceList.add(currentDayOutPrice);
-//            }
-//
-//            // 本天入库
-//            List<OrderPutInfo> currentDayPutList = orderPutDayMap.get(i);
-//            if (CollectionUtil.isEmpty(currentDayPutList)) {
-//                outlayNumList.add(0);
-//                outlayPriceList.add(BigDecimal.ZERO);
-//            } else {
-//                outlayNumList.add(currentDayPutList.size());
-//                BigDecimal currentDayPutPrice = currentDayPutList.stream().map(OrderPutInfo::getTotalPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
-//                outlayPriceList.add(currentDayPutPrice);
-//            }
-//
-//        }
-//        // 本月内订单收益统计
-//        result.put("orderPriceList", orderPriceList);
-//        // 本月内订单量统计
-//        result.put("orderNumList", orderNumList);
-//        // 本月内入库成本统计
-//        result.put("outlayPriceList", outlayPriceList);
-//        // 本月内入库量统计
-//        result.put("outlayNumList", outlayNumList);
-//
-//        result.put("dateList", dateTimeList);
-//        // 商品销量排行
-//        List<LinkedHashMap<String, Object>> saleRank = new ArrayList<>();
-//        List<LinkedHashMap<String, Object>> salePriceRank = new ArrayList<>();
-//        LinkedHashMap<Integer, Integer> saleTypeRankMap = new LinkedHashMap<>();
-//
-//        List<String> orderCodes = orderOutList.stream().map(OrderOutInfo::getCode).collect(Collectors.toList());
-//        List<StoreRecordInfo> recordInfoList = CollectionUtil.isNotEmpty(orderCodes) ? storeRecordInfoMapper.selectList(Wrappers.<StoreRecordInfo>lambdaQuery().in(StoreRecordInfo::getOrderNumber, orderCodes)) : Collections.emptyList();
-//        Map<String, List<StoreRecordInfo>> recordInfoMap = recordInfoList.stream().collect(Collectors.groupingBy(StoreRecordInfo::getCommodityCode));
-//
-//        // 商品信息
-//        Set<String> commodityCodeList = recordInfoMap.keySet();
-//        List<CommodityInfo> commodityInfoList = commodityInfoService.list(Wrappers.<CommodityInfo>lambdaQuery().in(CollectionUtil.isNotEmpty(commodityCodeList), CommodityInfo::getCode, commodityCodeList));
-//        Map<String, CommodityInfo> commodityMap = commodityInfoList.stream().collect(Collectors.toMap(CommodityInfo::getCode, e -> e));
-//
-//        recordInfoMap.forEach((key, value) -> {
-//            CommodityInfo commodity = commodityMap.get(key);
-//            if (commodity != null) {
-//                saleRank.add(new LinkedHashMap<String, Object>() {
-//                    {
-//                        put("name", commodity.getName());
-//                        put("num", value.stream().mapToInt(StoreRecordInfo::getNum).sum());
-//                    }
-//                });
-//                salePriceRank.add(new LinkedHashMap<String, Object>() {
-//                    {
-//                        put("name", commodity.getName());
-//                        put("num", value.stream().map(StoreRecordInfo::getTotalPrice).reduce(BigDecimal.ZERO, BigDecimal::add));
-//                    }
-//                });
-//
-//                saleTypeRankMap.merge(commodity.getTypeId(), value.size(), Integer::sum);
-//            }
-//        });
-//        result.put("saleRank", saleRank);
-//        result.put("salePriceRank", salePriceRank);
-//        // 销售商品分类
-//        LinkedHashMap<String, Integer> saleTypeRankMapCopy = new LinkedHashMap<>();
-//        List<CommodityType> commodityTypeList = commodityTypeService.list();
-//        Map<Integer, String> commodityTypeMap = commodityTypeList.stream().collect(Collectors.toMap(CommodityType::getId, CommodityType::getName));
-//        commodityTypeMap.forEach((key, value) -> {
-//            saleTypeRankMapCopy.put(value, saleTypeRankMap.get(key) == null ? 0 : saleTypeRankMap.get(key));
-//        });
-//        result.put("saleTypeRankMapCopy", saleTypeRankMapCopy);
+        int year =  DateUtil.year(new Date());
+        int month =  DateUtil.month(new Date()) + 1;
+        if (StrUtil.isNotEmpty(date)) {
+            year = DateUtil.year(DateUtil.parseDate(date));
+            month = DateUtil.month(DateUtil.parseDate(date)) + 1;
+        }
+
+        List<OrderInfo> orderOutList = baseMapper.selectOrderOutListByDate(year, month);
+        Map<Integer, List<OrderInfo>> orderOutDayMap = orderOutList.stream().collect(Collectors.groupingBy(OrderInfo::getDay));
+        List<OrderInfo> orderPutList = baseMapper.selectOrderPutListByDate(year, month);
+        Map<Integer, List<OrderInfo>> orderPutDayMap = orderPutList.stream().collect(Collectors.groupingBy(OrderInfo::getDay));
+
+        // 本月订单量
+        result.put("orderNum", orderOutList.size());
+        // 本月总收益
+        BigDecimal totalPrice = orderOutList.stream().map(OrderInfo::getAfterAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+        result.put("totalPrice", totalPrice);
+        // 本月入库单量
+        result.put("putNum", orderPutList.size());
+        // 本月总支出
+        BigDecimal outlayPrice = orderPutList.stream().map(OrderInfo::getAfterAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+        result.put("outlayPrice", outlayPrice);
+
+        List<Integer> orderNumList = new ArrayList<>();
+        List<BigDecimal> orderPriceList = new ArrayList<>();
+        List<Integer> outlayNumList = new ArrayList<>();
+        List<BigDecimal> outlayPriceList = new ArrayList<>();
+        int days = DateUtil.getLastDayOfMonth(DateUtil.parseDate(date));
+
+        // 本月日期
+        List<String> dateTimeList = new ArrayList<>();
+
+        for (int i = 1; i <= days; i++) {
+            dateTimeList.add(month + "月" + i + "日");
+            // 本天出库
+            List<OrderInfo> currentDayOutList = orderOutDayMap.get(i);
+            if (CollectionUtil.isEmpty(currentDayOutList)) {
+                orderNumList.add(0);
+                orderPriceList.add(BigDecimal.ZERO);
+            } else {
+                orderNumList.add(currentDayOutList.size());
+                BigDecimal currentDayOutPrice = currentDayOutList.stream().map(OrderInfo::getAfterAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+                orderPriceList.add(currentDayOutPrice);
+            }
+
+            // 本天入库
+            List<OrderInfo> currentDayPutList = orderPutDayMap.get(i);
+            if (CollectionUtil.isEmpty(currentDayPutList)) {
+                outlayNumList.add(0);
+                outlayPriceList.add(BigDecimal.ZERO);
+            } else {
+                outlayNumList.add(currentDayPutList.size());
+                BigDecimal currentDayPutPrice = currentDayPutList.stream().map(OrderInfo::getAfterAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+                outlayPriceList.add(currentDayPutPrice);
+            }
+
+        }
+        // 本月内订单收益统计
+        result.put("orderPriceList", orderPriceList);
+        // 本月内订单量统计
+        result.put("orderNumList", orderNumList);
+        // 本月内入库成本统计
+        result.put("outlayPriceList", outlayPriceList);
+        // 本月内入库量统计
+        result.put("outlayNumList", outlayNumList);
+
+        result.put("dateList", dateTimeList);
+        // 商品销量排行
+        List<LinkedHashMap<String, Object>> saleRank = new ArrayList<>();
+        List<LinkedHashMap<String, Object>> salePriceRank = new ArrayList<>();
+        LinkedHashMap<Integer, Integer> saleTypeRankMap = new LinkedHashMap<>();
+
+
+        result.put("saleRank", saleRank);
+        result.put("salePriceRank", salePriceRank);
+        // 销售商品分类
+        LinkedHashMap<String, Integer> saleTypeRankMapCopy = new LinkedHashMap<>();
+        result.put("saleTypeRankMapCopy", saleTypeRankMapCopy);
         return result;
     }
 }

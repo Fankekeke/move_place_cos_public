@@ -32,9 +32,11 @@
                 </a-row>
                 <br/>
                 <a-row style="padding-left: 24px;padding-right: 24px;" v-if="userInfo != null">
-                  <a-col :span="8"><b>客户编号：</b>
+                  <a-col :span="24"><b>客户编号：</b>
                     {{ userInfo.code !== null ? userInfo.code : '- -' }}
                   </a-col>
+                  <br/>
+                  <br/>
                   <a-col :span="8"><b>客户名称：</b>
                     {{ userInfo.name !== null ? userInfo.name : '- -' }}
                   </a-col>

@@ -280,4 +280,46 @@
         </if>
         and DATE_FORMAT( oi.create_date, '%Y' ) = DATE_FORMAT( CURDATE(), '%Y' )
     </select>
+
+    <!-- 根据时间获取订单信息 -->
+    <select id="selectOrderOutListByDate" resultType="cc.mrbird.febs.cos.entity.OrderInfo">
+        select
+        ooi.*,
+        DATE_FORMAT( ooi.create_date, '%Y' ) as `year`,
+        DATE_FORMAT( ooi.create_date, '%m' ) as `month`,
+        DATE_FORMAT( ooi.create_date, '%d' ) as `day`
+        from
+        order_info ooi
+        where
+        1 = 1
+        <if test="year != null and year != ''">
+            and DATE_FORMAT( ooi.create_date, '%Y' ) = #{year}
+        </if>
+        <if test="month != null and month != ''">
+            and DATE_FORMAT( ooi.create_date, '%m' ) = #{month}
+        </if>
+        order by
+        ooi.create_date desc
+    </select>
+
+    <!-- 根据时间获取订单信息 -->
+    <select id="selectOrderPutListByDate" resultType="cc.mrbird.febs.cos.entity.OrderInfo">
+        select
+        ooi.*,
+        DATE_FORMAT( ooi.create_date, '%Y' ) as `year`,
+        DATE_FORMAT( ooi.create_date, '%m' ) as `month`,
+        DATE_FORMAT( ooi.create_date, '%d' ) as `day`
+        from
+        order_info ooi
+        where
+        1 = 1
+        <if test="year != null and year != ''">
+            and DATE_FORMAT( ooi.create_date, '%Y' ) = #{year}
+        </if>
+        <if test="month != null and month != ''">
+            and DATE_FORMAT( ooi.create_date, '%m' ) = #{month}
+        </if>
+        order by
+        ooi.create_date desc
+    </select>
 </mapper>

@@ -28,7 +28,7 @@
           </div>
         </a-col>
         <a-col :span="12">
-          <a-row :gutter="30" style="margin-top: 30px">
+          <a-row :gutter="30" style="margin-top: 100px">
             <a-col :span="12" style="margin-top: 70px">
               <a-card hoverable>
                 <a-row>
@@ -53,30 +53,30 @@
                 </a-row>
               </a-card>
             </a-col>
-            <a-col :span="12" style="margin-top: 70px">
-              <a-card hoverable>
-                <a-row>
-                  <a-col :span="24" style="font-size: 13px;margin-bottom: 8px;font-family: SimHei">本年入库单量</a-col>
-                  <a-col :span="4"><a-icon type="arrow-up" style="font-size: 30px;margin-top: 3px"/></a-col>
-                  <a-col :span="18" style="font-size: 28px;font-weight: 500;font-family: SimHei">
-                    {{ titleData.putNum }}
-                    <span style="font-size: 20px;margin-top: 3px">单</span>
-                  </a-col>
-                </a-row>
-              </a-card>
-            </a-col>
-            <a-col :span="12" style="margin-top: 70px">
-              <a-card hoverable>
-                <a-row>
-                  <a-col :span="24" style="font-size: 13px;margin-bottom: 8px;font-family: SimHei">本年总支出</a-col>
-                  <a-col :span="4"><a-icon type="arrow-up" style="font-size: 30px;margin-top: 3px"/></a-col>
-                  <a-col :span="18" style="font-size: 28px;font-weight: 500;font-family: SimHei">
-                    {{ titleData.outlayPrice }}
-                    <span style="font-size: 20px;margin-top: 3px">元</span>
-                  </a-col>
-                </a-row>
-              </a-card>
-            </a-col>
+<!--            <a-col :span="12" style="margin-top: 70px">-->
+<!--              <a-card hoverable>-->
+<!--                <a-row>-->
+<!--                  <a-col :span="24" style="font-size: 13px;margin-bottom: 8px;font-family: SimHei">本年入库单量</a-col>-->
+<!--                  <a-col :span="4"><a-icon type="arrow-up" style="font-size: 30px;margin-top: 3px"/></a-col>-->
+<!--                  <a-col :span="18" style="font-size: 28px;font-weight: 500;font-family: SimHei">-->
+<!--                    {{ titleData.putNum }}-->
+<!--                    <span style="font-size: 20px;margin-top: 3px">单</span>-->
+<!--                  </a-col>-->
+<!--                </a-row>-->
+<!--              </a-card>-->
+<!--            </a-col>-->
+<!--            <a-col :span="12" style="margin-top: 70px">-->
+<!--              <a-card hoverable>-->
+<!--                <a-row>-->
+<!--                  <a-col :span="24" style="font-size: 13px;margin-bottom: 8px;font-family: SimHei">本年总支出</a-col>-->
+<!--                  <a-col :span="4"><a-icon type="arrow-up" style="font-size: 30px;margin-top: 3px"/></a-col>-->
+<!--                  <a-col :span="18" style="font-size: 28px;font-weight: 500;font-family: SimHei">-->
+<!--                    {{ titleData.outlayPrice }}-->
+<!--                    <span style="font-size: 20px;margin-top: 3px">元</span>-->
+<!--                  </a-col>-->
+<!--                </a-row>-->
+<!--              </a-card>-->
+<!--            </a-col>-->
           </a-row>
         </a-col>
         <a-col :span="12">
@@ -86,48 +86,48 @@
             <apexchart v-if="!chartLoading" type="radar" height="450" :options="chartOptions3" :series="series3"></apexchart>
           </div>
         </a-col>
-        <a-col :span="8">
-          <div hoverable :bordered="false" style="width: 100%">
-            <a-skeleton active v-if="chartLoading" />
-            <p v-if="!chartLoading" style="font-weight: 650;font-size: 15px;margin-bottom: 8px;font-family: SimHei">商品销量排行</p>
-            <apexchart v-if="!chartLoading" type="pie" height="350" :options="chartOptions4" :series="series4"></apexchart>
-          </div>
-        </a-col>
-        <a-col :span="8">
-          <div hoverable :bordered="false" style="width: 100%">
-            <a-skeleton active v-if="chartLoading" />
-            <p v-if="!chartLoading" style="font-weight: 650;font-size: 15px;margin-bottom: 8px;font-family: SimHei">商品销售排行</p>
-            <apexchart v-if="!chartLoading" type="radialBar" height="350" :options="chartOptions5" :series="series5"></apexchart>
-          </div>
-        </a-col>
-        <a-col :span="8">
-          <div hoverable :bordered="false" style="width: 100%">
-            <a-skeleton active v-if="chartLoading" />
-            <p v-if="!chartLoading" style="font-weight: 650;font-size: 15px;margin-bottom: 8px;font-family: SimHei">销售商品分类</p>
-            <apexchart v-if="!chartLoading" type="pie" height="350" :options="chartOptions6" :series="series6"></apexchart>
-          </div>
-        </a-col>
-        <a-col :span="24">
+<!--        <a-col :span="8">-->
+<!--          <div hoverable :bordered="false" style="width: 100%">-->
+<!--            <a-skeleton active v-if="chartLoading" />-->
+<!--            <p v-if="!chartLoading" style="font-weight: 650;font-size: 15px;margin-bottom: 8px;font-family: SimHei">排行1</p>-->
+<!--            <apexchart v-if="!chartLoading" type="pie" height="350" :options="chartOptions4" :series="series4"></apexchart>-->
+<!--          </div>-->
+<!--        </a-col>-->
+<!--        <a-col :span="8">-->
+<!--          <div hoverable :bordered="false" style="width: 100%">-->
+<!--            <a-skeleton active v-if="chartLoading" />-->
+<!--            <p v-if="!chartLoading" style="font-weight: 650;font-size: 15px;margin-bottom: 8px;font-family: SimHei">排行2</p>-->
+<!--            <apexchart v-if="!chartLoading" type="radialBar" height="350" :options="chartOptions5" :series="series5"></apexchart>-->
+<!--          </div>-->
+<!--        </a-col>-->
+<!--        <a-col :span="8">-->
+<!--          <div hoverable :bordered="false" style="width: 100%">-->
+<!--            <a-skeleton active v-if="chartLoading" />-->
+<!--            <p v-if="!chartLoading" style="font-weight: 650;font-size: 15px;margin-bottom: 8px;font-family: SimHei">分类</p>-->
+<!--            <apexchart v-if="!chartLoading" type="pie" height="350" :options="chartOptions6" :series="series6"></apexchart>-->
+<!--          </div>-->
+<!--        </a-col>-->
+        <a-col :span="12">
           <a-card hoverable :bordered="false" style="width: 100%">
             <a-skeleton active v-if="chartLoading" />
             <p v-if="!chartLoading" style="font-weight: 650;font-size: 15px;margin-bottom: 8px;font-family: SimHei">12月内订单收益统计</p>
             <apexchart v-if="!chartLoading" type="line" height="350" :options="chartOptions" :series="series"></apexchart>
           </a-card>
         </a-col>
-        <a-col :span="24">
+        <a-col :span="12">
           <a-card hoverable :bordered="false" style="width: 100%">
             <a-skeleton active v-if="chartLoading" />
             <p v-if="!chartLoading" style="font-weight: 650;font-size: 15px;margin-bottom: 8px;font-family: SimHei">12月内订单量统计</p>
             <apexchart v-if="!chartLoading" type="area" height="350" :options="chartOptions1" :series="series1"></apexchart>
           </a-card>
         </a-col>
-        <a-col :span="24">
-          <a-card hoverable :bordered="false" style="width: 100%">
-            <a-skeleton active v-if="chartLoading" />
-            <p v-if="!chartLoading" style="font-weight: 650;font-size: 15px;margin-bottom: 8px;font-family: SimHei">12月内入库成本统计</p>
-            <apexchart v-if="!chartLoading" type="bar" height="350" :options="chartOptions2" :series="series2"></apexchart>
-          </a-card>
-        </a-col>
+<!--        <a-col :span="24">-->
+<!--          <a-card hoverable :bordered="false" style="width: 100%">-->
+<!--            <a-skeleton active v-if="chartLoading" />-->
+<!--            <p v-if="!chartLoading" style="font-weight: 650;font-size: 15px;margin-bottom: 8px;font-family: SimHei">12月内入库成本统计</p>-->
+<!--            <apexchart v-if="!chartLoading" type="bar" height="350" :options="chartOptions2" :series="series2"></apexchart>-->
+<!--          </a-card>-->
+<!--        </a-col>-->
       </a-row>
     </a-row>
   </div>
@@ -378,7 +378,7 @@ export default {
           show: false
         }
       },
-      queryDate: '2024'
+      queryDate: '2025'
     }
   },
   watch: {

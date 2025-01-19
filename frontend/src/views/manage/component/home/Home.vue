@@ -271,7 +271,7 @@ export default {
     selectHomeData () {
       if (this.user.roleId === '74') {
         this.$get('/cos/order-info/homeData').then((r) => {
-          let titleData = { merchantNum: r.data.merchantNum, staffNum: r.data.staffNum, totalPrice: r.data.orderPrice, totalNum: r.data.orderNum }
+          let titleData = { merchantNum: r.data.merchantNum, staffNum: r.data.staffNum, totalPrice: r.data.totalPrice, totalNum: r.data.orderNum }
           this.$emit('setAdminTitle', titleData)
           this.titleData.monthOrderNum = r.data.orderNumMonth
           this.titleData.monthOrderTotal = r.data.orderAmountMonth
@@ -293,7 +293,7 @@ export default {
       }
       if (this.user.roleId === '75') {
         this.$get('/cos/order-info/homeData', {userId: this.user.userId}).then((r) => {
-          let titleData = { merchantNum: r.data.merchantNum, staffNum: r.data.staffNum, totalPrice: r.data.orderPrice, totalNum: r.data.orderNum }
+          let titleData = { merchantNum: r.data.merchantNum, staffNum: r.data.staffNum, totalPrice: r.data.totalPrice, totalNum: r.data.orderNum }
           this.$emit('setTitle', titleData)
           this.titleData.monthOrderNum = r.data.orderNumMonth
           this.titleData.monthOrderTotal = r.data.orderAmountMonth
