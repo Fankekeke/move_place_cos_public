@@ -47,11 +47,17 @@ public class StaffInfoController {
      *
      * @return 结果
      */
-    @GetMapping("/staff/type")
-    public R selectStaffByType() {
+    @GetMapping("/staff/type/{merchantId}")
+    public R selectStaffByType(@PathVariable(value = "merchantId", required = false) Integer merchantId) {
+        if (merchantId != null) {
+            MerchantInfo merchantInfo = merchantInfoService.getOne(Wrappers.<MerchantInfo>lambdaQuery().eq(MerchantInfo::getUserId, merchantId));
+            if (merchantInfo != null) {
+                merchantId = merchantInfo.getId();
+            }
+        }
         LinkedHashMap<String, Object> result = new LinkedHashMap<>();
-        result.put("driver", staffInfoService.list(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getType, 1).eq(StaffInfo::getStatus, 1)));
-        result.put("staff", staffInfoService.list(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getType, 2).eq(StaffInfo::getStatus, 1)));
+        result.put("driver", staffInfoService.list(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getType, 1).eq(StaffInfo::getStatus, 1).eq(merchantId != null, StaffInfo::getMerchantId, merchantId)));
+        result.put("staff", staffInfoService.list(Wrappers.<StaffInfo>lambdaQuery().eq(StaffInfo::getType, 2).eq(StaffInfo::getStatus, 1).eq(merchantId != null, StaffInfo::getMerchantId, merchantId)));
         return R.ok(result);
     }
 

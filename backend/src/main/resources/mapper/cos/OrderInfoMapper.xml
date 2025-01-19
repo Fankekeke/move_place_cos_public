@@ -144,40 +144,41 @@
     <!-- 近十天内订单数量统计 -->
     <select id="selectOrderNumDays" resultType="java.util.LinkedHashMap">
         SELECT
-            DATE_FORMAT( spo.days, '%m-%d' ) AS days,
-            IFNULL(COUNT(oi.id), 0) AS count
+        DATE_FORMAT( spo.days, '%m-%d' ) AS days,
+        IFNULL(COUNT(oi.id), 0) AS count
         FROM
-            (
-            SELECT
-            DATE_SUB( curdate(), INTERVAL + 0 DAY ) days UNION
-            SELECT
-            DATE_SUB( curdate(), INTERVAL + 1 DAY ) UNION
-            SELECT
-            DATE_SUB( curdate(), INTERVAL + 2 DAY ) UNION
-            SELECT
-            DATE_SUB( curdate(), INTERVAL + 3 DAY ) UNION
-            SELECT
-            DATE_SUB( curdate(), INTERVAL + 4 DAY ) UNION
-            SELECT
-            DATE_SUB( curdate(), INTERVAL + 5 DAY ) UNION
-            SELECT
-            DATE_SUB( curdate(), INTERVAL + 6 DAY ) UNION
-            SELECT
-            DATE_SUB( curdate(), INTERVAL + 7 DAY ) UNION
-            SELECT
-            DATE_SUB( curdate(), INTERVAL + 8 DAY ) UNION
-            SELECT
-            DATE_SUB( curdate(), INTERVAL + 9 DAY )) spo
-            LEFT JOIN order_info oi ON (
-            DATE_FORMAT( oi.create_date, '%Y-%m-%d' ) = DATE_FORMAT( spo.days, '%Y-%m-%d' ))
-        WHERE 1 = 1
+        (
+        SELECT
+        DATE_SUB( curdate(), INTERVAL + 0 DAY ) days UNION
+        SELECT
+        DATE_SUB( curdate(), INTERVAL + 1 DAY ) UNION
+        SELECT
+        DATE_SUB( curdate(), INTERVAL + 2 DAY ) UNION
+        SELECT
+        DATE_SUB( curdate(), INTERVAL + 3 DAY ) UNION
+        SELECT
+        DATE_SUB( curdate(), INTERVAL + 4 DAY ) UNION
+        SELECT
+        DATE_SUB( curdate(), INTERVAL + 5 DAY ) UNION
+        SELECT
+        DATE_SUB( curdate(), INTERVAL + 6 DAY ) UNION
+        SELECT
+        DATE_SUB( curdate(), INTERVAL + 7 DAY ) UNION
+        SELECT
+        DATE_SUB( curdate(), INTERVAL + 8 DAY ) UNION
+        SELECT
+        DATE_SUB( curdate(), INTERVAL + 9 DAY )) spo
+        LEFT JOIN order_info oi ON (
+        DATE_FORMAT( oi.create_date, '%Y-%m-%d' ) = DATE_FORMAT( spo.days, '%Y-%m-%d' )
         <if test="merchantId != null">
             AND oi.merchant_id = #{merchantId}
         </if>
+        )
+        WHERE 1 = 1
         GROUP BY
-            days
+        days
         ORDER BY
-            days ASC
+        days ASC
     </select>
 
     <!-- 近十天内订单收益统计 -->
@@ -208,11 +209,12 @@
         SELECT
         DATE_SUB( curdate(), INTERVAL + 9 DAY )) spo
         LEFT JOIN order_info oi ON (
-        DATE_FORMAT( oi.create_date, '%Y-%m-%d' ) = DATE_FORMAT( spo.days, '%Y-%m-%d' ) AND oi.status != 0)
-        WHERE 1 = 1
+        DATE_FORMAT( oi.create_date, '%Y-%m-%d' ) = DATE_FORMAT( spo.days, '%Y-%m-%d' ) AND oi.status != 0
         <if test="merchantId != null">
             AND oi.merchant_id = #{merchantId}
         </if>
+        )
+        WHERE 1 = 1
         GROUP BY
         days
         ORDER BY

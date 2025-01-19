@@ -110,6 +110,18 @@ public class OrderInfoController {
     }
 
     /**
+     * 首页统计
+     *
+     * @param userId 账户ID
+     * @return 结果
+     */
+    @GetMapping("/homeData")
+    public R queryHomeData(@RequestParam(value = "userId", required = false) Integer userId) {
+        return R.ok(orderInfoService.homeData(userId));
+    }
+
+
+    /**
      * 年统计订单及收益
      *
      * @param date 年份

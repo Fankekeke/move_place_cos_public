@@ -16,9 +16,9 @@
             <div class="head-info-time">上次登录时间：{{user.lastLoginTime ? user.lastLoginTime : '第一次访问系统'}}</div>
           </div>
         </a-col>
-        <a-col :span="24" v-if="user.roleId == 76">
-          <work></work>
-        </a-col>
+<!--        <a-col :span="24" v-if="user.roleId == 76">-->
+<!--          <work></work>-->
+<!--        </a-col>-->
         <a-col :span="12">
           <div>
             <a-row class="more-info" v-if="user.roleId == 74">
@@ -41,16 +41,13 @@
               <a-col :span="4"></a-col>
               <a-col :span="4"></a-col>
               <a-col :span="4">
-                <head-info title="会员数量" :content="titleData.memberNum" :center="false" :bordered="false"/>
+                <head-info title="员工数量" :content="titleAdminData.staffNum" :center="false" :bordered="false"/>
               </a-col>
               <a-col :span="4">
-                <head-info title="员工数量" :content="titleData.staffNum" :center="false" :bordered="false"/>
+                <head-info title="总收益" :content="titleAdminData.totalPrice" :center="false" :bordered="false"/>
               </a-col>
               <a-col :span="4">
-                <head-info title="总收益" :content="titleData.totalPrice" :center="false" :bordered="false"/>
-              </a-col>
-              <a-col :span="4">
-                <head-info title="总订单数" :content="titleData.totalNum" :center="false"/>
+                <head-info title="总订单数" :content="titleAdminData.totalNum" :center="false"/>
               </a-col>
             </a-row>
           </div>

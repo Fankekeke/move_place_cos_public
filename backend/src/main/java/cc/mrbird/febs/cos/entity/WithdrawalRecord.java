@@ -51,7 +51,7 @@ public class WithdrawalRecord implements Serializable {
     /**
      * 审核状态 0.未审核 1.审核通过 2.驳回
      */
-    private Integer auditStatus;
+    private String auditStatus;
 
     /**
      * 状态时间

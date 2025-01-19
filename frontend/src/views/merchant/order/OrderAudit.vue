@@ -242,7 +242,7 @@ export default {
     },
     moment,
     selectStaff () {
-      this.$get(`/cos/staff-info/staff/type`).then((r) => {
+      this.$get(`/cos/staff-info/staff/type/${this.currentUser.userId}`).then((r) => {
         console.log(JSON.stringify(r.data))
         this.staffList = r.data.staff
         this.driverList = r.data.driver

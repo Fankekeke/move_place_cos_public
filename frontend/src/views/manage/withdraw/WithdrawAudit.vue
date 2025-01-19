@@ -18,23 +18,20 @@
       </div>
       <a-row style="padding-left: 24px;padding-right: 24px;">
         <a-col style="margin-bottom: 15px"><span style="font-size: 15px;font-weight: 650;color: #000c17">基础信息</span></a-col>
-        <a-col :span="8"><b>员工编号：</b>
+        <a-col :span="8"><b>公司编号：</b>
           {{ withdrawData.code }}
         </a-col>
-        <a-col :span="8"><b>员工姓名：</b>
-          {{ withdrawData.name ? withdrawData.name : '- -' }}
+        <a-col :span="8"><b>公司名称：</b>
+          {{ withdrawData.merchantName ? withdrawData.merchantName : '- -' }}
         </a-col>
         <a-col :span="8"><b>联系方式：</b>
-          {{ withdrawData.phone ? withdrawData.phone : '- -' }}
+          {{ withdrawData.principal ? withdrawData.principal : '- -' }}
         </a-col>
       </a-row>
       <br/>
       <a-row style="padding-left: 24px;padding-right: 24px;">
         <a-col :span="8"><b>提现金额：</b>
-          {{ withdrawData.withdrawPrice }} 元
-        </a-col>
-        <a-col :span="8"><b>提现后余额：</b>
-          {{ withdrawData.accountPrice }} 元
+          {{ withdrawData.balance }} 元
         </a-col>
         <a-col :span="8"><b>申请时间：</b>
           {{ withdrawData.createDate }}
@@ -130,8 +127,8 @@ export default {
   methods: {
     audit (status) {
       let data = this.withdrawData
-      data.status = status
-      this.$post(`/cos/order-info/auditWithdraw`, data).then((r) => {
+      data.auditStatus = status
+      this.$post(`/cos/withdrawal-record/auditWithdraw`, data).then((r) => {
         this.$emit('auditSuccess')
       })
     },

@@ -402,10 +402,10 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
         result.put("orderNumYear", orderNumYear);
         result.put("orderAmountYear", orderAmountYear);
 
-        result.put("driverNum", driverNum);
-        result.put("staffMoveNum", staffMoveNum);
+        result.put("merchantNum", merchantInfoService.count(Wrappers.<MerchantInfo>lambdaQuery().eq(MerchantInfo::getStatus, 1)));
+        result.put("staffNum", staffMoveNum + driverNum);
         result.put("orderNum", orderNum);
-        result.put("amount", amount);
+        result.put("totalPrice", amount);
         result.put("orderNumDays", orderNumDays);
         result.put("orderAmountDays", orderAmountDays);
         result.put("bulletinInfoList", bulletinInfoList);

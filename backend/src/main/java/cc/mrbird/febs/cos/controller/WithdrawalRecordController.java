@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -71,8 +72,23 @@ public class WithdrawalRecordController {
         if (merchantInfo != null) {
             withdrawInfo.setMerchantId(merchantInfo.getId());
         }
+        withdrawInfo.setAuditStatus("0");
         withdrawInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
         return R.ok(withdrawalRecordService.save(withdrawInfo));
+    }
+
+    /**
+     * 提现审核
+     *
+     * @param withdrawInfo 提现记录
+     * @return 结果
+     */
+    @PostMapping("/auditWithdraw")
+    public R auditWithdraw(WithdrawalRecord withdrawInfo) {
+        if ("1".equals(withdrawInfo.getAuditStatus())) {
+            merchantInfoService.update(Wrappers.<MerchantInfo>lambdaUpdate().set(MerchantInfo::getBalance, BigDecimal.ZERO).eq(MerchantInfo::getId, withdrawInfo.getMerchantId()));
+        }
+        return R.ok(withdrawalRecordService.updateById(withdrawInfo));
     }
 
     /**
