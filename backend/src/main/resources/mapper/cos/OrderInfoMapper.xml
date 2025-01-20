@@ -98,7 +98,7 @@
         where
         1 = 1
         <if test="userId != null">
-            AND oi.user_id = #{orderInfo.userId}
+            AND oi.user_id = #{userId}
         </if>
         order by
         oi.create_date desc

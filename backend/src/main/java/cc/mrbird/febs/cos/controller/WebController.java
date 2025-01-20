@@ -220,6 +220,29 @@ public class WebController {
         String result = HttpUtil.post(url, JSONUtil.toJsonStr(subscription));
         return R.ok(result);
     }
+
+    /**
+     * 获取用户信息
+     *
+     * @param userId 用户id
+     * @return 结果
+     */
+    @GetMapping("/selectUserInfo")
+    public R selectUserInfo(@RequestParam("userId") Integer userId) {
+        return R.ok(userInfoService.getById(userId));
+    }
+
+    /**
+     * 用户信息更新
+     *
+     * @param userInfo 用户信息
+     * @return 结果
+     */
+    @PostMapping("/editUserInfo")
+    public R editUserInfo(@RequestBody UserInfo userInfo) {
+        return R.ok(userInfoService.updateById(userInfo));
+    }
+
 //
 //    /**
 //     * 进入小程序主页信息
@@ -331,102 +354,102 @@ public class WebController {
 //        return R.ok(addressInfoService.removeById(addressId));
 //    }
 //
-//    /**
-//     * 获取贴子信息
-//     *
-//     * @return 结果
-//     */
-//    @GetMapping("/getPostList")
-//    public R getPostList() {
-//        return R.ok(postInfoService.getPostList());
-//    }
-//
-//    /**
-//     * 根据贴子编号获取详细信息
-//     *
-//     * @param postId
-//     * @return 结果
-//     */
-//    @GetMapping("/getPostInfoById")
-//    public R getPostInfoById(@RequestParam Integer postId) {
-//        return R.ok(postInfoService.getPostInfoById(postId));
-//    }
-//
-//    /**
-//     * 贴子回复
-//     *
-//     * @return 结果
-//     */
-//    @PostMapping("/replyPost")
-//    public R replyPost(@RequestBody ReplyInfo replyInfo) {
-//        replyInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
-//        return R.ok(replyInfoService.save(replyInfo));
-//    }
-//
-//    /**
-//     * 添加贴子
-//     *
-//     * @param postInfo
-//     * @return 结果
-//     */
-//    @PostMapping("/postAdd")
-//    public R postAdd(@RequestBody PostInfo postInfo) {
-//        postInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
-//        return R.ok(postInfoService.save(postInfo));
-//    }
-//
-//    /**
-//     * 获取公告信息
-//     *
-//     * @return 结果
-//     */
-//    @GetMapping("/getBulletinList")
-//    public R getBulletinList() {
-//        return R.ok(bulletinInfoService.list());
-//    }
-//
-//    /**
-//     * 查询消息信息
-//     *
-//     * @param userId
-//     * @return 结果
-//     */
-//    @GetMapping("/messageListById")
-//    public R messageListById(@RequestParam Integer userId) {
-//        return R.ok(messageInfoService.messageListById(userId));
-//    }
-//
-//    /**
-//     * 查找聊天记录
-//     *
-//     * @param takeUser
-//     * @param sendUser
-//     * @return 结果
-//     */
-//    @GetMapping("/getMessageDetail")
-//    public R getMessageDetail(@RequestParam(value = "takeUser") Integer takeUser, @RequestParam(value = "sendUser") Integer sendUser, @RequestParam(value = "userId") Integer userId) {
-//        if (takeUser.equals(userId)) {
-//            messageInfoService.update(Wrappers.<MessageInfo>lambdaUpdate().set(MessageInfo::getTaskStatus, 1)
-//                    .eq(MessageInfo::getTakeUser, takeUser).eq(MessageInfo::getSendUser, sendUser));
-//        } else {
-//            messageInfoService.update(Wrappers.<MessageInfo>lambdaUpdate().set(MessageInfo::getTaskStatus, 1)
-//                    .eq(MessageInfo::getTakeUser, sendUser).eq(MessageInfo::getSendUser, takeUser));
-//        }
-//        return R.ok(messageInfoService.getMessageDetail(takeUser, sendUser));
-//    }
-//
-//    /**
-//     * 消息回复
-//     *
-//     * @param messageInfo
-//     * @return 结果
-//     */
-//    @PostMapping("/messageReply")
-//    public R messageReply(@RequestBody MessageInfo messageInfo) {
-//        messageInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
-//        messageInfo.setTaskStatus(0);
-//        return R.ok(messageInfoService.save(messageInfo));
-//    }
+    /**
+     * 获取贴子信息
+     *
+     * @return 结果
+     */
+    @GetMapping("/getPostList")
+    public R getPostList() {
+        return R.ok(postInfoService.getPostList());
+    }
+
+    /**
+     * 根据贴子编号获取详细信息
+     *
+     * @param postId
+     * @return 结果
+     */
+    @GetMapping("/getPostInfoById")
+    public R getPostInfoById(@RequestParam Integer postId) {
+        return R.ok(postInfoService.getPostInfoById(postId));
+    }
+
+    /**
+     * 贴子回复
+     *
+     * @return 结果
+     */
+    @PostMapping("/replyPost")
+    public R replyPost(@RequestBody ReplyInfo replyInfo) {
+        replyInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
+        return R.ok(replyInfoService.save(replyInfo));
+    }
+
+    /**
+     * 添加贴子
+     *
+     * @param postInfo
+     * @return 结果
+     */
+    @PostMapping("/postAdd")
+    public R postAdd(@RequestBody PostInfo postInfo) {
+        postInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
+        return R.ok(postInfoService.save(postInfo));
+    }
+
+    /**
+     * 获取公告信息
+     *
+     * @return 结果
+     */
+    @GetMapping("/getBulletinList")
+    public R getBulletinList() {
+        return R.ok(bulletinInfoService.list());
+    }
+
+    /**
+     * 查询消息信息
+     *
+     * @param userId
+     * @return 结果
+     */
+    @GetMapping("/messageListById")
+    public R messageListById(@RequestParam Integer userId) {
+        return R.ok(messageInfoService.messageListById(userId));
+    }
+
+    /**
+     * 查找聊天记录
+     *
+     * @param takeUser
+     * @param sendUser
+     * @return 结果
+     */
+    @GetMapping("/getMessageDetail")
+    public R getMessageDetail(@RequestParam(value = "takeUser") Integer takeUser, @RequestParam(value = "sendUser") Integer sendUser, @RequestParam(value = "userId") Integer userId) {
+        if (takeUser.equals(userId)) {
+            messageInfoService.update(Wrappers.<MessageInfo>lambdaUpdate().set(MessageInfo::getTaskStatus, 1)
+                    .eq(MessageInfo::getTakeUser, takeUser).eq(MessageInfo::getSendUser, sendUser));
+        } else {
+            messageInfoService.update(Wrappers.<MessageInfo>lambdaUpdate().set(MessageInfo::getTaskStatus, 1)
+                    .eq(MessageInfo::getTakeUser, sendUser).eq(MessageInfo::getSendUser, takeUser));
+        }
+        return R.ok(messageInfoService.getMessageDetail(takeUser, sendUser));
+    }
+
+    /**
+     * 消息回复
+     *
+     * @param messageInfo
+     * @return 结果
+     */
+    @PostMapping("/messageReply")
+    public R messageReply(@RequestBody MessageInfo messageInfo) {
+        messageInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
+        messageInfo.setTaskStatus(0);
+        return R.ok(messageInfoService.save(messageInfo));
+    }
 //
 //    /**
 //     * 商品详情
@@ -585,16 +608,16 @@ public class WebController {
 //        return R.ok(commodityInfoService.getGoodsFuzzy(key));
 //    }
 //
-//    /**
-//     * 获取用户所有订单
-//     *
-//     * @param userId
-//     * @return 结果
-//     */
-//    @GetMapping("/getOrderListByUserId")
-//    public R getOrderListByUserId(Integer userId) {
-//        return R.ok(orderInfoService.getOrderListByUserId(userId));
-//    }
+    /**
+     * 获取用户所有订单
+     *
+     * @param userId
+     * @return 结果
+     */
+    @GetMapping("/getOrderListByUserId")
+    public R getOrderListByUserId(Integer userId) {
+        return R.ok(orderInfoService.queryOrderByUserId(userId));
+    }
 //
 //    /**
 //     * 订单收货

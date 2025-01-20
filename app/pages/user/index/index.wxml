@@ -33,13 +33,19 @@
         </navigator>
     </view>
     <view class="cu-item arrow">
+        <navigator class='content' open-type="navigate" hover-class='none' url="/pages/user/post/index">
+            <text class='icon-send text-cyan'></text>
+            <text class='text-grey'>我的贴子</text>
+        </navigator>
+    </view>
+    <view class="cu-item arrow">
         <navigator class='content' open-type="navigate" hover-class='none' url="/pages/user/address/index">
             <text class='icon-location text-orange'></text>
             <text class='text-grey'>投诉管理</text>
         </navigator>
     </view>
     <view class="cu-item arrow">
-        <navigator class='content' open-type="navigate" hover-class='none' url="/pages/user/goods/index">
+        <navigator class='content' open-type="navigate" hover-class='none' url="/pages/address/edit/index">
             <text class='icon-vipcard text-green'></text>
             <text class='text-grey'>我的信息</text>
         </navigator>
