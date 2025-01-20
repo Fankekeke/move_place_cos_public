@@ -11,7 +11,10 @@
         phone,
         user_id,
         create_date,
-        images
+        images,
+        open_id,
+        sex,
+        avatar
         from
         user_info
         where
