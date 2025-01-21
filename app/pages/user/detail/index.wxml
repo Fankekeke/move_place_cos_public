@@ -23,7 +23,7 @@
                         <view wx:if="{{ item.sendUser == userInfo.id }}" class="cu-item self">
                             <view class="main">
                                 <view class="action">
-                                    <view class="cu-tag radius sm">{{ item.takeStatus == 1 ? '已读' : '未读' }} </view>
+                                    <!-- <view class="cu-tag radius sm">{{ item.takeStatus == 1 ? '已读' : '未读' }} </view> -->
                                 </view>
                                 <view class="content shadow">{{ item.content }}</view>
                             </view>

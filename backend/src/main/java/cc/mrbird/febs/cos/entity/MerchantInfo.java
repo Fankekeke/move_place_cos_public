@@ -109,6 +109,11 @@ public class MerchantInfo implements Serializable {
     private BigDecimal balance;
 
     /**
+     * 所属用户
+     */
+    private Integer userInfoId;
+
+    /**
      * 营业星期
      */
     @TableField(exist = false)

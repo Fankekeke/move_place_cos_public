@@ -21,8 +21,14 @@
         </navigator>
     </view>
     <view class="cu-item arrow">
+        <navigator class='content' open-type="navigate" hover-class='none' url="/pages/user/alert/index">
+            <text class='icon-order text-green'></text>
+            <text class='text-grey'>我的消息</text>
+        </navigator>
+    </view>
+    <view class="cu-item arrow">
         <navigator class='content' open-type="navigate" hover-class='none' url="/pages/vipcard/index/index">
-            <text class='icon-vipcard text-green'></text>
+            <text class='icon-card text-green'></text>
             <text class='text-grey'>优惠券</text>
         </navigator>
     </view>
@@ -40,13 +46,13 @@
     </view>
     <view class="cu-item arrow">
         <navigator class='content' open-type="navigate" hover-class='none' url="/pages/user/address/index">
-            <text class='icon-location text-orange'></text>
+            <text class='icon-check text-orange'></text>
             <text class='text-grey'>投诉管理</text>
         </navigator>
     </view>
     <view class="cu-item arrow">
         <navigator class='content' open-type="navigate" hover-class='none' url="/pages/address/edit/index">
-            <text class='icon-vipcard text-green'></text>
+            <text class='icon-list text-green'></text>
             <text class='text-grey'>我的信息</text>
         </navigator>
     </view>

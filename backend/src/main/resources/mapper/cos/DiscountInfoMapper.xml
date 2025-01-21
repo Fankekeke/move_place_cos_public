@@ -64,7 +64,7 @@
         discount_info di
         left join user_info ui on (ui.id = di.user_id)
         where 1 = 1
-          AND ui.user_id = #{userId}
+          AND ui.id = #{userId}
         order by di.create_date desc
     </select>
 </mapper>

@@ -46,4 +46,41 @@
         order by
         ci.create_date desc
     </select>
+
+    <!-- 查询用户投诉信息 -->
+    <select id="queryComplaintList" resultType="java.util.LinkedHashMap">
+        select
+        ci.id,
+        ci.user_id,
+        ci.order_code,
+        ci.create_date,
+        ci.merchant_id,
+        ci.content,
+        ci.status,
+        ui.name as userName,
+        ui.phone as userPhone,
+        ui.images as userImages,
+        oi.start_address,
+        oi.end_address,
+        oi.images,
+        mi.name as merchantName,
+        mi.principal,
+        mi.phone as merchantPhone,
+        mi.address
+        from
+        complaint_info ci
+        left join user_info ui on
+        (ui.id = ci.user_id)
+        left join order_info oi on
+        (oi.code = ci.order_code)
+        left join merchant_info mi on
+        (mi.id = ci.merchant_id)
+        where
+        1 = 1
+        <if test="userId != null">
+            AND ui.id = #{userId}
+        </if>
+        order by
+        ci.create_date desc
+    </select>
 </mapper>

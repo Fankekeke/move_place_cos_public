@@ -93,7 +93,7 @@ public class MessageInfoController {
     @GetMapping("/messageListById")
     public R messageListById(@RequestParam Integer userId) {
         MerchantInfo merchantInfo = merchantInfoService.getOne(Wrappers.<MerchantInfo>lambdaQuery().eq(MerchantInfo::getUserId, userId));
-        return R.ok(messageInfoService.messageListById(merchantInfo.getId()));
+        return R.ok(messageInfoService.messageListById(merchantInfo.getUserInfoId()));
     }
 
     /**

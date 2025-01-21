@@ -6,10 +6,10 @@
           <a-avatar
             :size="46"
             icon="user"
-            :src="item.takeUserAvatar"
+            :src="'http://127.0.0.1:9527/imagesWeb/' + item.sendUserAvatar"
           />
-          <span style="margin-left: 35px;font-size: 13px">
-            {{ item.takeUserName }}
+          <span style="margin-left: 15px;font-size: 13px">
+            {{ item.sendUserName }}
           </span>
         </a-menu-item>
       </a-menu>

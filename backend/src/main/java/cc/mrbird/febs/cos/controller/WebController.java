@@ -1,6 +1,7 @@
 package cc.mrbird.febs.cos.controller;
 
 import cc.mrbird.febs.common.utils.R;
+import cc.mrbird.febs.cos.dao.NotifyInfoMapper;
 import cc.mrbird.febs.cos.entity.*;
 import cc.mrbird.febs.cos.service.*;
 import cn.hutool.core.date.DateUtil;
@@ -37,7 +38,7 @@ public class WebController {
 
     private final IUserInfoService userInfoService;
 
-    private final IAuditInfoService auditInfoService;
+    private final IComplaintInfoService complaintInfoService;
 
     private final IBulletinInfoService bulletinInfoService;
 
@@ -52,6 +53,11 @@ public class WebController {
     private final IOrderInfoService orderInfoService;
 
     private final IEvaluateInfoService evaluationService;
+
+    private final NotifyInfoMapper mobileInfoMapper;
+
+    private final INotifyInfoService notifyInfoService;
+
 
     /**
      * File 转MultipartFile
@@ -259,6 +265,38 @@ public class WebController {
 //        return R.ok(result);
 //    }
 
+    /**
+     * 根据用户获取消息信息
+     *
+     * @param userId 用户ID1
+     * @return 结果
+     */
+    @GetMapping("/queryMessageByUser")
+    public R queryMessageByUser(@RequestParam("userId") Integer userId) {
+        return R.ok(mobileInfoMapper.selectList(Wrappers.<NotifyInfo>lambdaQuery().eq(NotifyInfo::getUserId, userId)));
+    }
+
+    /**
+     * 删除消息信息
+     *
+     * @param messageId 消息ID
+     * @return 结果
+     */
+    @GetMapping("/deleteMessage")
+    public R deleteMessage(@RequestParam("messageId") Integer messageId) {
+        return R.ok(notifyInfoService.update(Wrappers.<NotifyInfo>lambdaUpdate().set(NotifyInfo::getDelFlag, 1).eq(NotifyInfo::getId, messageId)));
+    }
+
+    /**
+     * 查询用户投诉信息
+     *
+     * @param userId 用户ID
+     * @return 结果
+     */
+    @GetMapping("/queryComplaintListById")
+    public R queryComplaintListById(@RequestParam Integer userId) {
+        return R.ok(complaintInfoService.queryComplaintList(userId));
+    }
 
     /**
      * 获取贴子信息
@@ -523,7 +561,7 @@ public class WebController {
      */
     @GetMapping("/getOrderListByUserId")
     public R getOrderListByUserId(Integer userId) {
-        return R.ok(orderInfoService.queryOrderByUserIdSort(userId));
+        return R.ok(orderInfoService.queryOrderByUserId(userId));
     }
 
     /**

@@ -5,8 +5,21 @@ Page({
         StatusBar: app.globalData.StatusBar,
         CustomBar: app.globalData.CustomBar,
         TabbarBot: app.globalData.tabbar_bottom,
-        TabCur: 0, scrollLeft: 0,
-        SortMenu: [{ id: 0, name: "全部订单" }, { id: 1, name: "待收货" }, { id: 2, name: "已完成" }],
+        TabCur: 0,
+        scrollLeft: 0,
+        SortMenu: [{
+            id: 0,
+            name: "未支付"
+        }, {
+            id: 1,
+            name: "等待分配"
+        }, {
+            id: 2,
+            name: "正在赶往"
+        }, {
+            id: 3,
+            name: "运输完成"
+        }],
         userInfo: null,
         orderListCopy: [],
         orderList: [],
@@ -21,10 +34,23 @@ Page({
             key: 'userInfo',
             success: (res) => {
                 if (res.data.type == 2) {
-                    this.setData({ SortMenu: [{ id: 0, name: "全部订单" }, { id: 1, name: "待收货" }, { id: 2, name: "已完成" }]})
+                    this.setData({
+                        SortMenu: [{
+                            id: 0,
+                            name: "全部订单"
+                        }, {
+                            id: 1,
+                            name: "待收货"
+                        }, {
+                            id: 2,
+                            name: "已完成"
+                        }]
+                    })
                     //this.getOrderByUserId(res.data.id)
                 }
-                this.setData({ userInfo: res.data })
+                this.setData({
+                    userInfo: res.data
+                })
                 this.getOrderListByUserId(res.data.id)
             },
             fail: res => {
@@ -37,10 +63,14 @@ Page({
         })
     },
     getOrderByUserId(userId) {
-        http.get('getOrderByUserId', { userId }).then((r) => {
+        http.get('getOrderByUserId', {
+            userId
+        }).then((r) => {
             r.data.forEach(item => {
-                item.image = item.images.split(',')[0],
-                    item.days = this.timeFormat(item.createDate)
+                if (item.images) {
+                    item.image = item.images.split(',')[0]
+                }
+                item.days = this.timeFormat(item.createDate)
             });
             this.setData({
                 myOrderList: r.data
@@ -65,7 +95,9 @@ Page({
             content: '确定要收货吗？',
             success: (sm) => {
                 if (sm.confirm) {
-                    http.get('receipt', { orderId: e.currentTarget.dataset['index'] }).then((r) => {
+                    http.get('receipt', {
+                        orderId: e.currentTarget.dataset['index']
+                    }).then((r) => {
                         wx.showToast({
                             title: '收货成功',
                             icon: 'success',
@@ -84,7 +116,12 @@ Page({
     evaluationSubmit: function (e) {
         let that = this
         if (this.data.remarks != '') {
-            http.post('evaluationAdd', { orderId: this.data.orderId, score: this.data.value, content: this.data.remarks, userId: this.data.userInfo.id }).then((r) => {
+            http.post('evaluationAdd', {
+                orderId: this.data.orderId,
+                score: this.data.value,
+                content: this.data.remarks,
+                userId: this.data.userInfo.id
+            }).then((r) => {
                 that.setData({
                     show: false
                 })
@@ -148,10 +185,15 @@ Page({
         }
     },
     getOrderListByUserId(userId) {
-        http.get('getOrderListByUserId', { userId }).then((r) => {
+        http.get('getOrderListByUserId', {
+            userId
+        }).then((r) => {
             r.data.forEach(item => {
-                item.image = item.images.split(',')[0],
-                    item.days = this.timeFormat(item.createDate)
+                console.log(item.images)
+                if (item.images) {
+                    item.image = item.images.split(',')[0]
+                }
+                item.days = this.timeFormat(item.createDate)
             });
             this.setData({
                 orderList: r.data,
