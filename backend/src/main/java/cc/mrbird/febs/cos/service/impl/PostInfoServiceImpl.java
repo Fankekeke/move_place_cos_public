@@ -73,4 +73,15 @@ public class PostInfoServiceImpl extends ServiceImpl<PostInfoMapper, PostInfo> i
     public List<LinkedHashMap<String, Object>> getPostListHot() {
         return baseMapper.getPostListHot();
     }
+
+    /**
+     * 根据用户获取贴子信息
+     *
+     * @param userId 用户ID
+     * @return 结果
+     */
+    @Override
+    public List<LinkedHashMap<String, Object>> getPostByUser(Integer userId) {
+        return baseMapper.getPostByUser(userId);
+    }
 }

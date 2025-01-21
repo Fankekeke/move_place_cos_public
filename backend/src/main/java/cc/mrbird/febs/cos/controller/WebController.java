@@ -41,6 +41,8 @@ public class WebController {
 
     private final IBulletinInfoService bulletinInfoService;
 
+    private final IDiscountInfoService discountInfoService;
+
     private final IPostInfoService postInfoService;
 
     private final IReplyInfoService replyInfoService;
@@ -126,7 +128,6 @@ public class WebController {
             if (newFileName != null) {
                 //上传成功
                 warning = newFileName;
-
             } else {
                 warning = "上传失败";
             }
@@ -257,103 +258,8 @@ public class WebController {
 //        result.put("postInfo", postInfoService.getPostListHot());
 //        return R.ok(result);
 //    }
-//
-//    /**
-//     * 用户添加审核信息
-//     *
-//     * @param auditInfo
-//     * @return 结果
-//     */
-//    @PostMapping("/userAuditAdd")
-//    public R userAuditAdd(@RequestBody AuditInfo auditInfo) {
-//        auditInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
-//        auditInfo.setAuditStatus(0);
-//        return R.ok(auditInfoService.save(auditInfo));
-//    }
-//
-//    /**
-//     * 根据用户ID获取审核信息
-//     *
-//     * @param userId
-//     * @return 结果
-//     */
-//    @GetMapping("/auditInfoByUser")
-//    public R auditInfoByUser(@RequestParam Integer userId) {
-//        return R.ok(auditInfoService.getOne(Wrappers.<AuditInfo>lambdaQuery().eq(AuditInfo::getUserId, userId)));
-//    }
-//
-//    /**
-//     * 根据用户ID获取地址信息
-//     *
-//     * @param userId
-//     * @return 结果
-//     */
-//    @GetMapping("/addressInfoByUser")
-//    public R addressInfoByUser(@RequestParam Integer userId) {
-//        return R.ok(addressInfoService.list(Wrappers.<AddressInfo>lambdaQuery().eq(AddressInfo::getUserId, userId)));
-//    }
-//
-//    /**
-//     * 根据ID获取地址信息
-//     *
-//     * @param addressId
-//     * @return 结果
-//     */
-//    @GetMapping("/addressInfoById")
-//    public R addressInfoById(@RequestParam Integer addressId) {
-//        return R.ok(addressInfoService.getById(addressId));
-//    }
-//
-//    /**
-//     * 获取用户默认地址
-//     *
-//     * @return 结果
-//     */
-//    @GetMapping("/selDefaultAddress")
-//    public R selDefaultAddress(@RequestParam Integer userId) {
-//        return R.ok(addressInfoService.getOne(Wrappers.<AddressInfo>lambdaQuery().eq(AddressInfo::getUserId, userId).eq(AddressInfo::getDefaultAddress, 1)));
-//    }
-//
-//    /**
-//     * 用户添加收货地址
-//     *
-//     * @param addressInfo
-//     * @return 结果
-//     */
-//    @PostMapping("/addressAdd")
-//    public R addressAdd(@RequestBody AddressInfo addressInfo) {
-//        if (addressInfo.getDefaultAddress() == 1) {
-//            addressInfoService.update(Wrappers.<AddressInfo>lambdaUpdate().set(AddressInfo::getDefaultAddress, 0).eq(AddressInfo::getUserId, addressInfo.getUserId()));
-//        }
-//        addressInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
-//        return R.ok(addressInfoService.save(addressInfo));
-//    }
-//
-//    /**
-//     * 用户编辑收货地址
-//     *
-//     * @param addressInfo
-//     * @return 结果
-//     */
-//    @PostMapping("/addressEdit")
-//    public R addressEdit(@RequestBody AddressInfo addressInfo) {
-//        if (addressInfo.getDefaultAddress() == 1) {
-//            addressInfoService.update(Wrappers.<AddressInfo>lambdaUpdate().set(AddressInfo::getDefaultAddress, 0).eq(AddressInfo::getUserId, addressInfo.getUserId()));
-//        }
-//        return R.ok(addressInfoService.updateById(addressInfo));
-//    }
-//
-//    /**
-//     * 用户删除收获地址
-//     *
-//     * @param addressId
-//     * @return 结果
-//     */
-//    @GetMapping("/address/delete")
-//    public R addressRemove(@RequestParam Integer addressId) {
-//        return R.ok(addressInfoService.removeById(addressId));
-//    }
-//
+
+
     /**
      * 获取贴子信息
      *
@@ -608,6 +514,7 @@ public class WebController {
 //        return R.ok(commodityInfoService.getGoodsFuzzy(key));
 //    }
 //
+
     /**
      * 获取用户所有订单
      *
@@ -616,7 +523,40 @@ public class WebController {
      */
     @GetMapping("/getOrderListByUserId")
     public R getOrderListByUserId(Integer userId) {
-        return R.ok(orderInfoService.queryOrderByUserId(userId));
+        return R.ok(orderInfoService.queryOrderByUserIdSort(userId));
+    }
+
+    /**
+     * 根据状态用户ID获取优惠券信息
+     *
+     * @param userId 用户ID
+     * @return 结果
+     */
+    @GetMapping("/queryDiscountSortByUserId")
+    public R queryDiscountSortByUserId(Integer userId) {
+        return R.ok(discountInfoService.queryDiscountSortByUserId(userId));
+    }
+
+    /**
+     * 根据用户获取贴子信息
+     *
+     * @param userId 用户ID
+     * @return 结果
+     */
+    @GetMapping("/getPostByUser")
+    public R getPostByUser(@RequestParam("userId") Integer userId) {
+        return R.ok(postInfoService.getPostByUser(userId));
+    }
+
+    /**
+     * 删除贴子信息
+     *
+     * @param postId 贴子ID
+     * @return 结果
+     */
+    @GetMapping("/deletePost")
+    public R deletePost(@RequestParam("postId") Integer postId) {
+        return R.ok(postInfoService.removeById(postId));
     }
 //
 //    /**

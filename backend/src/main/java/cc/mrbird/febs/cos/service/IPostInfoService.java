@@ -51,4 +51,12 @@ public interface IPostInfoService extends IService<PostInfo> {
      * @return 结果
      */
     List<LinkedHashMap<String, Object>> getPostListHot();
+
+    /**
+     * 根据用户获取贴子信息
+     *
+     * @param userId 用户ID
+     * @return 结果
+     */
+    List<LinkedHashMap<String, Object>> getPostByUser(Integer userId);
 }

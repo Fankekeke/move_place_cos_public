@@ -30,4 +30,12 @@ public interface IDiscountInfoService extends IService<DiscountInfo> {
      * @return 结果
      */
     List<LinkedHashMap<String, Object>> queryDiscountByUserId(Integer userId);
+
+    /**
+     * 根据状态用户ID获取优惠券信息
+     *
+     * @param userId 用户ID
+     * @return 结果
+     */
+    LinkedHashMap<String, Object> queryDiscountSortByUserId(Integer userId);
 }

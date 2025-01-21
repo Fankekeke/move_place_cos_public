@@ -77,6 +77,59 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
     }
 
     /**
+     * 根据订单状态分类用户获取订单信息
+     *
+     * @param userId 用户ID
+     * @return 结果
+     */
+    @Override
+    public LinkedHashMap<String, Object> queryOrderByUserIdSort(Integer userId) {
+        // 返回数据
+        LinkedHashMap<String, Object> result = new LinkedHashMap<String, Object>() {
+            {
+                put("waitPay", Collections.emptyList());
+                put("waitDistribute", Collections.emptyList());
+                put("waitWork", Collections.emptyList());
+                put("waitComplete", Collections.emptyList());
+            }
+        };
+        List<LinkedHashMap<String, Object>> orderList = baseMapper.queryOrderByUserId(userId);
+        if (CollectionUtil.isEmpty(orderList)) {
+            return result;
+        }
+        List<LinkedHashMap<String, Object>> waitPayList = new ArrayList<>();
+        List<LinkedHashMap<String, Object>> waitDistributeList = new ArrayList<>();
+        List<LinkedHashMap<String, Object>> waitWorkList = new ArrayList<>();
+        List<LinkedHashMap<String, Object>> waitCompleteList = new ArrayList<>();
+        for (LinkedHashMap<String, Object> mapItem : orderList) {
+            String status = (String) mapItem.get("status");
+            if (StrUtil.isEmpty(status)) {
+                continue;
+            }
+            switch (status) {
+                case "0":
+                    waitPayList.add(mapItem);
+                    break;
+                case "1":
+                    waitDistributeList.add(mapItem);
+                    break;
+                case "2":
+                    waitWorkList.add(mapItem);
+                    break;
+                case "3":
+                    waitCompleteList.add(mapItem);
+                    break;
+                default:
+            }
+        }
+        result.put("waitPay", waitPayList);
+        result.put("waitDistribute", waitDistributeList);
+        result.put("waitWork", waitWorkList);
+        result.put("waitComplete", waitCompleteList);
+        return result;
+    }
+
+    /**
      * 设置订单状态
      *
      * @param orderCode 订单编号
@@ -92,10 +145,10 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
         NotifyInfo notifyInfo = new NotifyInfo(userInfo.getCode(), 0, DateUtil.formatDateTime(new Date()), userInfo.getName());
         switch (status) {
             case 1:
-                notifyInfo.setContent("你好【" + orderInfo.getCode() + "】，此订单已付款，正在等待管理员分配人员");
+                notifyInfo.setContent("你好【" + orderInfo.getCode() + "】，此订单已付款，正在等待分配人员");
                 break;
             case 2:
-                notifyInfo.setContent("你好【" + orderInfo.getCode() + "】，此订单管理员已分配完成，请等待");
+                notifyInfo.setContent("你好【" + orderInfo.getCode() + "】，此订单已分配完成，请等待前往运输");
                 break;
             case 3:
                 notifyInfo.setContent("你好【" + orderInfo.getCode() + "】，此订单已经完成，请进行评价");
