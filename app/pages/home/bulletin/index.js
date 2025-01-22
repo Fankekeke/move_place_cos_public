@@ -22,7 +22,9 @@ Page({
   getPostInfo() {
     http.get('getBulletinList').then((r) => {
       r.data.forEach(item => {
-        item.imagesList = item.images.split(',')
+        if (item.images) {
+          item.imagesList = item.images.split(',')
+        }
       });
       this.setData({bulletinList: r.data})
     })

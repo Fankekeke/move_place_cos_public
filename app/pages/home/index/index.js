@@ -5,7 +5,8 @@ Page({
 		StatusBar: app.globalData.StatusBar,
 		CustomBar: app.globalData.CustomBar,
 		hidden: true,
-		current: 0,lines: 0,
+		current: 0,
+		lines: 0,
 		swiperlist: [{
 			id: 0,
 			url: 'https://www.huolala.cn/rs/img/housemove/tab_1_bg.png',
@@ -26,31 +27,19 @@ Page({
 			name: '公告',
 			type: 1
 		}, {
-			id: 2,
-			icon: 'group_fill',
-			color: 'orange',
-			name: '商家',
-			type: 2
-		}, {
 			id: 3,
 			icon: 'shopfill',
 			color: 'yellow',
 			name: '论坛',
 			type: 3
-		}, {
-			id: 4,
-			icon: 'discoverfill',
-			color: 'olive',
-			name: '商品',
-			type: 4
 		}],
 		Headlines: [{
-			id:1,
-			title:"新品上架",
+			id: 1,
+			title: "搬家公司入驻",
 			type: 1
-		},{
-			id:2,
-			title:"省钱大作战",
+		}, {
+			id: 2,
+			title: "搬家大作战",
 			type: 2
 		}],
 		shopInfo: [],
@@ -63,61 +52,94 @@ Page({
 	onLoad: function () {
 		/*console.log(app.globalData.StatusBar);
 		console.log(app.globalData.CustomBar);*/
-	    // wx.getSetting({
-	    //     success: res => {
+		// wx.getSetting({
+		//     success: res => {
 		//         if (!res.authSetting['scope.userInfo']) {
 		//             wx.redirectTo({
 		//               	url: '/pages/auth/auth'
 		//             })
 		//         }
-	    //     }
-	    // });
+		//     }
+		// });
 		this.home()
 	},
+	/**
+   * 选择位置
+   */
+  chooseLocation() {
+	    const _this = this;
+	    wx.chooseLocation({
+	      success(res) {
+					console.log(res)
+	//         _this.setData({
+	//           ['taskData.longitude']: point[0],
+	//           ['taskData.latitude']: point[1],
+	//         })
+	//         wx.showLoading({
+	//           title: '地址解析中...',
+	//         })
+	        // 地址解析
+	      },
+	      fail(e) {
+	        console.log(e);
+	      }
+	    })
+	  },
 	timeFormat(time) {
-        var nowTime = new Date();
-        var day = nowTime.getDate();
-        var hours = parseInt(nowTime.getHours());
-        var minutes = nowTime.getMinutes();
-        // 开始分解付入的时间
-        var timeday = time.substring(8, 10);
-        var timehours = parseInt(time.substring(11, 13));
-        var timeminutes = time.substring(14, 16);
-        var d_day = Math.abs(day - timeday);
-        var d_hours = hours - timehours;
-        var d_minutes = Math.abs(minutes - timeminutes);
-        if (d_day <= 1) {
-            switch (d_day) {
-                case 0:
-                    if (d_hours == 0 && d_minutes > 0) {
-                        return d_minutes + '分钟前';
-                    } else if (d_hours == 0 && d_minutes == 0) {
-                        return '1分钟前';
-                    } else {
-                        return d_hours + '小时前';
-                    }
-                    break;
-                case 1:
-                    if (d_hours < 0) {
-                        return (24 + d_hours) + '小时前';
-                    } else {
-                        return d_day + '天前';
-                    }
-                    break;
-            }
-        } else if (d_day > 1 && d_day < 10) {
-            return d_day + '天前';
-        } else {
-            return time;
-        }
-    },
+		var nowTime = new Date();
+		var day = nowTime.getDate();
+		var hours = parseInt(nowTime.getHours());
+		var minutes = nowTime.getMinutes();
+		// 开始分解付入的时间
+		var timeday = time.substring(8, 10);
+		var timehours = parseInt(time.substring(11, 13));
+		var timeminutes = time.substring(14, 16);
+		var d_day = Math.abs(day - timeday);
+		var d_hours = hours - timehours;
+		var d_minutes = Math.abs(minutes - timeminutes);
+		if (d_day <= 1) {
+			switch (d_day) {
+				case 0:
+					if (d_hours == 0 && d_minutes > 0) {
+						return d_minutes + '分钟前';
+					} else if (d_hours == 0 && d_minutes == 0) {
+						return '1分钟前';
+					} else {
+						return d_hours + '小时前';
+					}
+					break;
+				case 1:
+					if (d_hours < 0) {
+						return (24 + d_hours) + '小时前';
+					} else {
+						return d_day + '天前';
+					}
+					break;
+			}
+		} else if (d_day > 1 && d_day < 10) {
+			return d_day + '天前';
+		} else {
+			return time;
+		}
+	},
+	shopDeatil(e) {
+		wx.navigateTo({
+			url: '/pages/shop/index/index?shopId=' + e.currentTarget.dataset.shopid + ''
+		});
+	},
 	home() {
 		http.get('home').then((r) => {
-			r.commodityHot.forEach(item => {
-				item.image = item.images.split(',')[0]
+			console.log(r)
+
+			r.shopInfo.forEach(item => {
+				if (item.images) {
+					item.image = item.images.split(',')[0]
+				}
 			});
 			r.postInfo.forEach(item => {
-				item.image = item.images.split(',')[0]
+				if (item.images) {
+					item.image = item.images.split(',')[0]
+				}
 				item.days = this.timeFormat(item.createDate)
 			});
 			this.setData({
@@ -129,12 +151,12 @@ Page({
 	},
 	postDetail(event) {
 		wx.navigateTo({
-			url: '/pages/coupon/detail/index?postId='+event.currentTarget.dataset.postid+''
+			url: '/pages/coupon/detail/index?postId=' + event.currentTarget.dataset.postid + ''
 		});
 	},
 	swiperchange: function (e) {
 		this.setData({
-			current:e.detail.current
+			current: e.detail.current
 		});
 	},
 	swipclick: function (e) {
@@ -149,7 +171,7 @@ Page({
 	},
 	lineschange: function (e) {
 		this.setData({
-			lines:e.detail.current
+			lines: e.detail.current
 		});
 	},
 	linesclick: function (e) {
@@ -165,7 +187,7 @@ Page({
 	itemckcred: function (e) {
 		let that = this;
 		var item = e.currentTarget.dataset;
-		console.log(item.index,item.itemtype)
+		console.log(item.index, item.itemtype)
 		if (item.itemtype === 1) {
 			wx.navigateTo({
 				url: '/pages/home/bulletin/index'
@@ -188,11 +210,13 @@ Page({
 		}
 	},
 	getKeysValue: function (e) {
-		this.setData({ keys: e.detail.value })
+		this.setData({
+			keys: e.detail.value
+		})
 	},
 	search: function () {
 		wx.navigateTo({
-			url: '/pages/home/search/index?key='+this.data.keys+''
+			url: '/pages/home/search/index?key=' + this.data.keys + ''
 		});
 	}
 });

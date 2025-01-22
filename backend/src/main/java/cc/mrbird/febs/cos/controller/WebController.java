@@ -26,10 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api")
@@ -57,6 +54,8 @@ public class WebController {
     private final NotifyInfoMapper mobileInfoMapper;
 
     private final INotifyInfoService notifyInfoService;
+
+    private final IMerchantInfoService merchantInfoService;
 
 
     /**
@@ -552,6 +551,40 @@ public class WebController {
 //        return R.ok(commodityInfoService.getGoodsFuzzy(key));
 //    }
 //
+
+    /**
+     * 进入小程序主页信息
+     *
+     * @return 结果
+     */
+    @GetMapping("/home")
+    public R home() {
+        LinkedHashMap<String, Object> result = new LinkedHashMap<>();
+        result.put("shopInfo", merchantInfoService.list(Wrappers.<MerchantInfo>lambdaQuery().eq(MerchantInfo::getStatus, 1).last("limit 3")));
+        result.put("postInfo", postInfoService.getPostListHot());
+        return R.ok(result);
+    }
+
+    /**
+     * 获取搬家公司详情
+     *
+     * @param shopId 公司ID
+     * @return 结果
+     */
+    @GetMapping("/getShopDetail")
+    public R getShopDetail(Integer shopId) {
+        // 返回数据
+        LinkedHashMap<String, Object> result = new LinkedHashMap<String, Object>() {
+            {
+                put("shop", merchantInfoService.getById(shopId));
+                put("evaluate", Collections.emptyList());
+            }
+        };
+        // 评价信息
+        List<LinkedHashMap<String, Object>> evaluateList = evaluationService.queryEvaluateByShopId(shopId);
+        result.put("evaluate", evaluateList);
+        return R.ok(result);
+    }
 
     /**
      * 获取用户所有订单

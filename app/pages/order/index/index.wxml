@@ -20,7 +20,7 @@
             <view class="head-title-box">
                 <text class="icon-shop"></text>
                 <text>{{ item.merchantName }}</text>
-                <!-- <text class="icon-right"></text> -->
+                <text class="icon-right"></text>
             </view>
             <navigator open-type="navigate" hover-class='none' url="/pages/order/details/index?orderId={{ item.orderId }}">
                 <view class="cu-list menu menu-avatar">
