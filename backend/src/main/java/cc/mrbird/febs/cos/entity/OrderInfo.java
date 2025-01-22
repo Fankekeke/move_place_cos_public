@@ -131,6 +131,11 @@ public class OrderInfo implements Serializable {
     private String vehicleCode;
 
     /**
+     * 优惠价格
+     */
+    private String discountAmount;
+
+    /**
      * 折后价格
      */
     private BigDecimal afterAmount;

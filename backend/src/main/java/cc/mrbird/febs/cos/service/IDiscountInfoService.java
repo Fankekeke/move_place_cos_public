@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -22,6 +23,14 @@ public interface IDiscountInfoService extends IService<DiscountInfo> {
      * @return 结果
      */
     IPage<LinkedHashMap<String, Object>> selectDiscountPage(Page<DiscountInfo> page, DiscountInfo discountInfo);
+
+    /**
+     * 获取可用优惠券
+     *
+     * @param userId 用户ID
+     * @return 结果
+     */
+    List<DiscountInfo> queryUseDiscountByUserId(Integer userId, BigDecimal amount);
 
     /**
      * 根据用户ID获取优惠券信息

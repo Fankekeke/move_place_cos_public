@@ -90,7 +90,7 @@
 <!--论坛-->
 <view class="cu-bar bg-white solid-bottom margin-top">
     <view class='action'>
-        <text class='icon-title text-orange'></text> 论坛
+        <text class='icon-title text-orange'></text> 社区交流
     </view>
     <navigator hover-class='none' url="/pages/coupon/index/index">
         <view class='action' style="font-size: 27rpx;"> 更多 <view class='icon-right'></view> </view>
@@ -112,7 +112,7 @@
 <!--设计师-->
 <view class="cu-bar bg-white solid-bottom margin-top">
     <view class='action'>
-        <text class='icon-title text-orange'></text> 商铺
+        <text class='icon-title text-orange'></text> 搬家公司
     </view>
     <navigator hover-class='none' url="/pages/home/groom/index">
         <view class='action' style="font-size: 27rpx;"> 更多 <view class='icon-right'></view> </view>

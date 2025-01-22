@@ -7,6 +7,7 @@ import cc.mrbird.febs.cos.dao.OrderInfoMapper;
 import cc.mrbird.febs.cos.service.*;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -51,6 +52,8 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
     private final IMerchantInfoService merchantInfoService;
 
     private final IVehicleInfoService vehicleInfoService;
+
+    private final IDiscountInfoService discountInfoService;
 
     /**
      * 分页获取订单信息
@@ -320,6 +323,28 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
                 put("orderCode", orderInfo.getCode());
             }
         };
+        // 是否添加优惠券
+        if (StrUtil.isNotEmpty(orderInfo.getDiscountCode())) {
+            // 获取优惠券信息
+            DiscountInfo discountInfo = discountInfoService.getOne(Wrappers.<DiscountInfo>lambdaQuery().eq(DiscountInfo::getCode, orderInfo.getDiscountCode()));
+            if (discountInfo != null && "0".equals(discountInfo.getStatus())) {
+                if ("1".equals(discountInfo.getType())) {
+                    // 计算满减后金额
+                    result.put("discountAmount", discountInfo.getDiscountPrice());
+                    result.put("afterAmount", orderInfo.getAmount().subtract(discountInfo.getDiscountPrice()));
+                } else {
+                    BigDecimal afterAmount = orderInfo.getAmount().multiply(NumberUtil.div(discountInfo.getRebate(), 10));
+                    // 计算折扣后金额
+                    result.put("afterAmount", afterAmount);
+                    // 优惠金额
+                    result.put("discountAmount", NumberUtil.sub(orderInfo.getAmount(), afterAmount));
+                }
+            }
+        } else {
+            result.put("discountAmount", BigDecimal.ZERO);
+            result.put("afterAmount", orderInfo.getAmount());
+        }
+
         result.put("vehiclePrice", vehiclePrice);
         return result;
     }
