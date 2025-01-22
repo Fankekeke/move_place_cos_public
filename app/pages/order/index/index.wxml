@@ -19,34 +19,40 @@
         <view class="canui-order-item bg-white" wx:for="{{ orderList }}" wx:if="{{ TabCur == 0 || TabCur == 2 || TabCur == 1 }}">
             <view class="head-title-box">
                 <text class="icon-shop"></text>
-                <text>{{ item.userName }}的小店</text>
-                <text class="icon-right"></text>
+                <text>{{ item.merchantName }}</text>
+                <!-- <text class="icon-right"></text> -->
             </view>
             <navigator open-type="navigate" hover-class='none' url="/pages/order/details/index?orderId={{ item.orderId }}">
                 <view class="cu-list menu menu-avatar">
                     <view class="cu-item">
                         <view class="cu-avatar radius lg" style="background-image:url(http://127.0.0.1:9527/imagesWeb/{{ item.image }});"></view>
                         <view class='content canui-xzwz tow' style="padding-left: 15px">
-                            {{ item.name }}
+                            <view style="font-size: 12px">{{ item.startAddress }}</view>
+                            <view style="font-size: 12px;margin-top: 5px">{{ item.endAddress }}</view>
                             <!-- <view style="font-size: 12px" wx:if="{{ item.type == 1 }}">食品</view>
                             <view style="font-size: 12px" wx:if="{{ item.type == 2 }}">饮品</view>
                             <view style="font-size: 12px" wx:if="{{ item.type == 3 }}">药品</view> -->
                         </view>
                         <view class='action' style="padding-left: 15px">
-                            <view class='text-price'>{{ item.price }}</view>
-                            <view class="text-xs text-right text-gray">x1</view>
+                            <view class='text-price'>{{ item.amount }}</view>
+                            <view class="text-xs text-right text-gray">{{item.distanceLength}} 公里</view>
                         </view>
                     </view>
                 </view>
             </navigator>
+            <view>
+                <text class="text-right canui-text-left" style="font-size: 12px">
+                    备注：{{ item.remark ? item.remark : '- -' }}
+                </text>
+            </view>
             <view>
                 <text class="text-right text-red canui-text-left" style="font-size: 11px">
                     {{ item.days }}
                 </text>
             </view>
             <view class="order-price-box">
-                共1件商品 合计：
-                <text class="text-price">{{ item.price }}</text>
+                折后合计：
+                <text class="text-price">{{ item.afterAmount }}</text>
             </view>
             <view class="grid col-4 flex justify-end order-btn-box">
                 <text wx:if="{{ item.evaluationStatus != null }}" class="text-right text-red" style="font-size: 11px">
