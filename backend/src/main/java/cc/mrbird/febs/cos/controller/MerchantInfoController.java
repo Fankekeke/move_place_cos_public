@@ -3,7 +3,9 @@ package cc.mrbird.febs.cos.controller;
 
 import cc.mrbird.febs.common.utils.R;
 import cc.mrbird.febs.cos.entity.MerchantInfo;
+import cc.mrbird.febs.cos.entity.UserInfo;
 import cc.mrbird.febs.cos.service.IMerchantInfoService;
+import cc.mrbird.febs.cos.service.IUserInfoService;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -23,6 +25,8 @@ import java.util.*;
 public class MerchantInfoController {
 
     private final IMerchantInfoService merchantInfoService;
+
+    private final IUserInfoService userInfoService;
 
     /**
      * 分页获取公司信息
@@ -121,6 +125,14 @@ public class MerchantInfoController {
                 operateDayResult.add(weekMap.get(s));
             }
             merchantInfo.setOperateDay(StrUtil.join(",", operateDayResult));
+        }
+        // 修改绑定用户信息
+        if (merchantInfo.getUserInfoId() != null) {
+            UserInfo userInfo = userInfoService.getById(merchantInfo.getUserInfoId());
+            if (userInfo != null) {
+                userInfo.setName(merchantInfo.getName());
+                userInfo.setImages(merchantInfo.getImages());
+            }
         }
         return R.ok(merchantInfoService.save(merchantInfo));
     }
