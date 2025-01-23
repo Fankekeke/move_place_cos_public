@@ -121,6 +121,13 @@ Page({
 			})
 			return false;
 		}
+		let param = {
+			startPoint: this.data.startPoint,
+			endPoint: this.data.endPoint
+		}
+		wx.navigateTo({
+			url: '/pages/scar/order/index?address=' + JSON.stringify(param)
+	});
 	},
 	timeFormat(time) {
 		var nowTime = new Date();

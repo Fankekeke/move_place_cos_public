@@ -51,7 +51,7 @@
             <van-cell clickable arrow-direction="left" border="{{false}}" center title="运输地点" label="{{ endPoint.endAddress }}" is-link bindtap="endChooseLocation"/>
         </van-cell-group>
         <view style="padding: 10px 12px 0 12px">
-            <van-button type="info" size="normal" style="width: 100%" block @bindtap="submit">提交预约</van-button>
+            <van-button type="info" size="normal" style="width: 100%" block bind:click="submit">提交预约</van-button>
         </view>
     </view>
 </view>

@@ -12,8 +12,11 @@
         <view class="cu-list menu bg-white">
             <view class="cu-item">
                 <view class='content'>
-                    <view class="text-df">{{ addressInfo.name }} <text>{{ addressInfo.phone }}</text></view>
-                    <view class='text-gray text-sm canui-xzwz'>{{ addressInfo.address }}</view>
+                    <view class="text-df" style="margin-bottom: 10px;font-size: 14px">{{ userInfo.name }}
+                        <text>{{ userInfo.phone }}</text></view>
+                    <view class='text-gray text-sm canui-xzwz' style="margin-bottom: 8px">
+                        起始地址：{{ startPoint.startAddress }}</view>
+                    <view class='text-gray text-sm canui-xzwz'>运输地址：{{ endPoint.endAddress }}</view>
                 </view>
                 <!-- <view class='action'><view class='text-grey icon-right'></view></view> -->
             </view>
@@ -21,7 +24,43 @@
         </view>
     </view>
 
-    <view class="canui-card-order">
+    <view style="margin:  0 10px 20px 10px">
+        <view class="bg-white canui-coupon">
+            <van-cell-group inset border="{{true}}">
+                <van-cell is-link clickable arrow-direction="left" border="{{true}}" center title="车辆配置"
+                    label="{{ vehicle.label }}" is-link data-type="1" bindtap="openPopup" />
+                <van-cell is-link clickable arrow-direction="left" border="{{true}}" center title="搬运人数"
+                    label="{{ staff.label }}" is-link data-type="2" bindtap="openPopup" />
+                <van-cell is-link clickable arrow-direction="left" border="{{true}}" center title="有无电梯"
+                    label="{{ elevator.label }}" is-link data-type="3" bindtap="openPopup" />
+                <van-cell is-link clickable arrow-direction="left" border="{{true}}" center title="预约时间"
+                    label="{{ appointmentTime }}" is-link data-type="4" bindtap="openPopup" />
+            </van-cell-group>
+        </view>
+        <van-button type="info" block style="width: 100%">保存配置</van-button>
+    </view>
+    <van-popup close-on-click-overlay round show="{{ vehicle.show }}" data-type="1" bind:close="onClose"
+        position="bottom">
+        <van-picker columns="{{ vehicle.options }}" data-type="1" bind:cancel="onClose" bind:confirm="onChange"
+            show-toolbar />
+    </van-popup>
+
+    <van-popup close-on-click-overlay round show="{{ staff.show }}" data-type="2" bind:close="onClose"
+        position="bottom">
+        <van-picker columns="{{ staff.options }}" data-type="2" bind:cancel="onClose" bind:confirm="onChange"
+            show-toolbar />
+    </van-popup>
+
+    <van-popup close-on-click-overlay round show="{{ elevator.show }}" data-type="3" bind:close="onClose"
+        position="bottom">
+        <van-picker columns="{{ elevator.options }}" data-type="3" bind:cancel="onClose" bind:confirm="onChange"
+            show-toolbar />
+    </van-popup>
+
+    <van-calendar color="#0b438d" show="{{ appointmentTimeShow }}" bind:close="onClose" position="bottom"
+        bind:confirm="onConfirm" />
+
+    <!-- <view class="canui-card-order">
         <view class="canui-order-item bg-white" wx:for="{{ orderList }}">
             <view class="head-title-box">
                 <text class="icon-shop"></text>
@@ -54,21 +93,21 @@
                         合计 <text class="text-price text-red">{{ item.price }}</text>
                     </view>
                 </view>
-                <!-- <view class="cu-item arrow">
+                <view class="cu-item arrow">
                     <view class='content'>会员卡</view>
                     <view class='action'>
                         无可用
                     </view>
-                </view> -->
+                </view>
             </view>
-            <!-- <view class="cu-form-group bg-white canui-input">
+            <view class="cu-form-group bg-white canui-input">
                 <view class='title'>备注</view>
                 <input placeholder="两字短标题" class='radius' name='input'></input>
-            </view> -->
+            </view>
         </view>
-    </view>
+    </view> -->
 
-    <!-- <view class="canui-coupon">
+    <view class="canui-coupon">
         <view class="cu-list menu bg-white solid-bottom canui-selet">
             <view class="cu-item arrow">
                 <view class='content'>优惠券</view>
@@ -77,7 +116,7 @@
                 </view>
             </view>
         </view>
-    </view> -->
+    </view>
 
     <view class="order-price-log">
         <view class="bg-white log-card">
@@ -96,10 +135,10 @@
 
 </view>
 
-<view class="bg-white canui-foor-fixed canui-submit-view {{TabbarBot=='y'?'canui-submit-order':''}}">
+<!-- <view class="bg-white canui-foor-fixed canui-submit-view {{TabbarBot=='y'?'canui-submit-order':''}}">
     <view class="bg-red light text-sm canui-pay-tip">您的货物预定1~3内发货</view>
     <view class="canui-submit">
         <text class='text-red text-price canui-price'>{{ allPrice }}</text>
         <text class='bg-red canui-submit-btn' bindtap='submit'>提交订单</text>
     </view>
-</view>
+</view> -->

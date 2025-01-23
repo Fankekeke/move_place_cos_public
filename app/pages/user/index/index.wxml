@@ -7,13 +7,19 @@
     <!-- 用户已经授权过直接展示头像和用户名，大家实际开发中这里可以换成别的操作 -->
     <block wx:else>
         <view class="cu-avatar round lg" style="background-image:url({{userInfo.avatar}});"></view>
-        <view class='text-xl' style="margin-top: 15px;font-size: 15px">{{userInfo.userName}}</view>
+        <view class='text-xl' style="margin-top: 15px;font-size: 15px">{{userInfo.name}}</view>
         <!-- <view class='margin-top-sm'>
             <text style="font-size: 13px" wx:if="{{userInfo.type == 1}}">普通会员</text>
         </view> -->
     </block>
 </view>
 <view class="cu-list menu card-menu margin-top-xl margin-bottom-xl shadow-lg">
+    <view class="cu-item arrow">
+        <navigator class='content' open-type="navigate" hover-class='none' url="/pages/scar/order/index">
+            <text class='icon-list text-green'></text>
+            <text class='text-grey'>test</text>
+        </navigator>
+    </view>
     <view class="cu-item arrow">
         <navigator class='content' open-type="navigate" hover-class='none' url="/pages/order/index/index">
             <text class='icon-send text-cyan'></text>

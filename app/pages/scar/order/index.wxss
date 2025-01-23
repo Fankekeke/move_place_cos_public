@@ -124,4 +124,6 @@ page {
     padding-bottom: 30rpx;
 }
 
-
+.van-cell__title {
+    font-size: 13px;
+}

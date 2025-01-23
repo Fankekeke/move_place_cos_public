@@ -566,6 +566,17 @@ public class WebController {
     }
 
     /**
+     * 计算订单价格
+     *
+     * @param orderInfo 订单信息
+     * @return 结果
+     */
+    @PostMapping("/calculateAmountResult")
+    public R calculateAmountResult(@RequestBody OrderInfo orderInfo) {
+        return R.ok(orderInfoService.calculateAmountResult(orderInfo));
+    }
+
+    /**
      * 获取搬家公司详情
      *
      * @param shopId 公司ID
