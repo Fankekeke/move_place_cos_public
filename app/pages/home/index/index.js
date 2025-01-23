@@ -71,41 +71,57 @@ Page({
 		this.home()
 	},
 	/**
-   * 选择位置
-   */
-  startChooseLocation() {
-	    const _this = this;
-	    wx.chooseLocation({
-	      success(res) {
-					console.log(res)
-	        _this.setData({
-	          ['startPoint.startAddress']: res.address,
-	          ['startPoint.point']: {latitude: res.latitude, longitude: res.longitude},
-	        })
-	      },
-	      fail(e) {
-	        console.log(e);
-	      }
-	    })
-	  },
+	 * 选择位置
+	 */
+	startChooseLocation() {
+		const _this = this;
+		wx.chooseLocation({
+			success(res) {
+				console.log(res)
+				_this.setData({
+					['startPoint.startAddress']: res.address,
+					['startPoint.point']: {
+						latitude: res.latitude,
+						longitude: res.longitude
+					},
+				})
+			},
+			fail(e) {
+				console.log(e);
+			}
+		})
+	},
 	/**
-   * 选择位置
-   */
-  endChooseLocation() {
-	    const _this = this;
-	    wx.chooseLocation({
-	      success(res) {
-					console.log(res)
-	        _this.setData({
-	          ['endPoint.endAddress']: res.address,
-	          ['endPoint.point']: {latitude: res.latitude, longitude: res.longitude},
-	        })
-	      },
-	      fail(e) {
-	        console.log(e);
-	      }
-	    })
-	  },
+	 * 选择位置
+	 */
+	endChooseLocation() {
+		const _this = this;
+		wx.chooseLocation({
+			success(res) {
+				console.log(res)
+				_this.setData({
+					['endPoint.endAddress']: res.address,
+					['endPoint.point']: {
+						latitude: res.latitude,
+						longitude: res.longitude
+					},
+				})
+			},
+			fail(e) {
+				console.log(e);
+			}
+		})
+	},
+	submit() {
+		if (!this.data.startPoint.startAddress || !this.data.endPoint.endAddress) {
+			wx.showToast({
+				title: '请选择起始地点和运输地点',
+				icon: 'error',
+				duration: 1000
+			})
+			return false;
+		}
+	},
 	timeFormat(time) {
 		var nowTime = new Date();
 		var day = nowTime.getDate();
