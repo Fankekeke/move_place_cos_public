@@ -47,8 +47,8 @@
 <view class="bg-white solid-bottom">
     <view style="padding: 15px 10px 20px 10px">
         <van-cell-group inset border="{{false}}">
-            <van-cell clickable arrow-direction="left" border="{{false}}" center title="起始地点" label="{{ startAddress }}" is-link bindtap="chooseLocation"/>
-            <van-cell clickable arrow-direction="left" border="{{false}}" center title="起始地点" label="{{ endAddress }}" is-link />
+            <van-cell clickable arrow-direction="left" border="{{false}}" center title="起始地点" label="{{ startPoint.startAddress }}" is-link bindtap="startChooseLocation"/>
+            <van-cell clickable arrow-direction="left" border="{{false}}" center title="起始地点" label="{{ endPoint.endAddress }}" is-link bindtap="endChooseLocation"/>
         </van-cell-group>
         <view style="padding: 10px 12px 0 12px">
             <van-button type="info" size="normal" style="width: 100%" block>提交预约</van-button>

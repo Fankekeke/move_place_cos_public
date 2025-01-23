@@ -47,7 +47,14 @@ Page({
 		commodityHot: [],
 		keys: '',
 		videosrc: "http://wxsnsdy.tc.qq.com/105/20210/snsdyvideodownload?filekey=30280201010421301f0201690402534804102ca905ce620b1241b726bc41dcff44e00204012882540400&bizid=1023&hy=SH&fileparam=302c020101042530230204136ffd93020457e3c4ff02024ef202031e8d7f02030f42400204045a320a0201000400",
-
+		startPoint: {
+			startAddress: '',
+			point: null
+		},
+		endPoint: {
+			endAddress: '',
+			point: null
+		},
 	},
 	onLoad: function () {
 		/*console.log(app.globalData.StatusBar);
@@ -66,19 +73,33 @@ Page({
 	/**
    * 选择位置
    */
-  chooseLocation() {
+  startChooseLocation() {
 	    const _this = this;
 	    wx.chooseLocation({
 	      success(res) {
 					console.log(res)
-	//         _this.setData({
-	//           ['taskData.longitude']: point[0],
-	//           ['taskData.latitude']: point[1],
-	//         })
-	//         wx.showLoading({
-	//           title: '地址解析中...',
-	//         })
-	        // 地址解析
+	        _this.setData({
+	          ['startPoint.startAddress']: res.address,
+	          ['startPoint.point']: {latitude: res.latitude, longitude: res.longitude},
+	        })
+	      },
+	      fail(e) {
+	        console.log(e);
+	      }
+	    })
+	  },
+	/**
+   * 选择位置
+   */
+  endChooseLocation() {
+	    const _this = this;
+	    wx.chooseLocation({
+	      success(res) {
+					console.log(res)
+	        _this.setData({
+	          ['endPoint.endAddress']: res.address,
+	          ['endPoint.point']: {latitude: res.latitude, longitude: res.longitude},
+	        })
 	      },
 	      fail(e) {
 	        console.log(e);
