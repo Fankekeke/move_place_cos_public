@@ -67,7 +67,24 @@ Page({
             }
         })
     },
-
+    calculateAmountResult() {
+        let data = {
+            userId: this.data.userInfo.id,
+            vehicleOptions: this.data.vehicle.value,
+            staffOptions: this.data.staff.value,
+            startAddress: this.data.startPoint.startAddress,
+            endAddress: this.data.endPoint.endAddress,
+            startLongitude: this.data.startPoint.point.longitude,
+            startLatitude: this.data.startPoint.point.latitude,
+            endLongitude: this.data.endPoint.point.longitude,
+            endLatitude: this.data.endPoint.point.latitude,
+            hasElevator: this.data.elevator.value
+        }
+        http.post('calculateAmountResult', data).then((r) => {
+            //this.setData({ addressInfo: r.data })
+        })
+        
+    },
     openPopup(e) {
         console.log(e.currentTarget.dataset.type)
         if (e.currentTarget.dataset.type == 1) {
@@ -137,11 +154,6 @@ Page({
     formatDate(date) {
         date = new Date(date);
         return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
-    },
-    calculateAmountResult(data) {
-        http.post('calculateAmountResult', data).then((r) => {
-            //this.setData({ addressInfo: r.data })
-        })
     },
     getUserAddress(userId) {
         http.get('selDefaultAddress', {

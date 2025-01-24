@@ -37,7 +37,7 @@
                     label="{{ appointmentTime }}" is-link data-type="4" bindtap="openPopup" />
             </van-cell-group>
         </view>
-        <van-button type="info" block style="width: 100%">保存配置</van-button>
+        <van-button type="info" block style="width: 100%" bind:click="calculateAmountResult">保存配置</van-button>
     </view>
     <van-popup close-on-click-overlay round show="{{ vehicle.show }}" data-type="1" bind:close="onClose"
         position="bottom">
