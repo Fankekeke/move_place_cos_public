@@ -17,7 +17,7 @@
         <a-col :span="6" style="height: 100%;box-shadow: 3px 3px 3px rgba(0, 0, 0, .2);color:#fff">
           <div>
             <div class="scenicInfo" style="height: 100vh; overflow-y: auto;padding-left: 5px;overflow-x: hidden">
-              <a-carousel autoplay style="height: 250px;" v-if="orderData.images !== undefined && orderData.images !== ''">
+              <a-carousel autoplay style="height: 250px;" v-if="orderData.images">
                 <div style="width: 100%;height: 250px" v-for="(item, index) in orderData.images.split(',')" :key="index">
                   <img :src="'http://127.0.0.1:9527/imagesWeb/'+item" style="width: 100%;height: 100%">
                 </div>
@@ -37,10 +37,10 @@
                   </a-col>
                   <br/>
                   <br/>
-                  <a-col :span="8"><b>客户名称：</b>
+                  <a-col :span="12"><b>客户名称：</b>
                     {{ userInfo.name !== null ? userInfo.name : '- -' }}
                   </a-col>
-                  <a-col :span="8"><b>联系方式：</b>
+                  <a-col :span="12"><b>联系方式：</b>
                     {{ userInfo.phone !== null ? userInfo.phone : '- -' }}
                   </a-col>
                 </a-row>
@@ -100,6 +100,21 @@
                 </a-row>
                 <br/>
                 <a-row style="padding-left: 24px;padding-right: 24px;">
+                  <a-col style="margin-bottom: 15px"><span style="font-size: 14px;font-weight: 650;color: #000c17">其他要求</span></a-col>
+                  {{ orderData.remark !== null ? orderData.remark : '- -' }}
+                </a-row>
+                <br/>
+                <a-row style="padding-left: 24px;padding-right: 24px;">
+                  <a-col style="margin-bottom: 15px"><span style="font-size: 14px;font-weight: 650;color: #000c17">距离起始地点公里数</span></a-col>
+                  {{ orderData.startDistance !== null ? orderData.startDistance : '- -' }} 公里
+                </a-row>
+                <br/>
+                <a-row style="padding-left: 24px;padding-right: 24px;">
+                  <a-col style="margin-bottom: 15px"><span style="font-size: 14px;font-weight: 650;color: #000c17">距离运输地点公里数</span></a-col>
+                  {{ orderData.startDistance !== null ? orderData.endDistance : '- -' }} 公里
+                </a-row>
+                <br/>
+                <a-row style="padding-left: 24px;padding-right: 24px;">
                   <a-col style="margin-bottom: 15px"><span style="font-size: 14px;font-weight: 650;color: #000c17">起始地址</span></a-col>
                   {{ orderData.startAddress !== null ? orderData.startAddress : '- -' }}
                 </a-row>
@@ -142,17 +157,6 @@
                   <a-skeleton active v-if="checkLoading" />
                   <apexchart v-if="!checkLoading" type="radar" height="300" :options="chartOptions" :series="series"></apexchart>
                 </a-card>
-                <br/>
-                <a-row style="padding-left: 24px;padding-right: 24px;" v-if="staffList.length !== 0">
-                  <a-col><span style="font-size: 14px;font-weight: 650;color: #000c17">员工信息</span></a-col>
-                </a-row>
-                <br/>
-                <a-row style="padding-left: 24px;padding-right: 24px;" v-if="staffList.length !== 0">
-                  <a-col :span="6" v-for="(item, index) in staffList" :key="index">
-                    <a-avatar shape="square" :size="95" :src="'http://127.0.0.1:9527/imagesWeb/' + item.images.split(',')[0]" icon="user" />
-                    <p>{{ item.name }}【{{ item.type == 1 ? '搬运工' : '驾驶员' }}】</p>
-                  </a-col>
-                </a-row>
                 <br/>
                 <br/>
                 <div style="text-align: center">
@@ -231,7 +235,7 @@ export default {
           baiduMap.initMap('areas')
           setTimeout(() => {
             this.navigation(this.orderData)
-          }, 200)
+          }, 500)
           this.getLocal()
         }, 200)
       }

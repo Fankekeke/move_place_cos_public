@@ -304,7 +304,7 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
         double distance = DistanceUtil.getDistance(orderInfo.getStartLongitude().doubleValue(), orderInfo.getStartLatitude().doubleValue(), orderInfo.getEndLongitude().doubleValue(), orderInfo.getEndLatitude().doubleValue());
         if (distance != 0) {
             distance = NumberUtil.div(distance, 1000, 2);
-            orderInfo.setDistanceLength(new BigDecimal(distance));
+            orderInfo.setDistanceLength(BigDecimal.valueOf(distance));
         }
 
         // 价格公式
@@ -315,7 +315,7 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
         env.put("距离", orderInfo.getDistanceLength());
         env.put("距离单价", rulesMap.get("DISTANCE_PRICE"));
         env.put("配送车辆金额", vehiclePrice);
-        env.put("配送员数量", orderInfo.getStaffOptions() != null ? orderInfo.getStaffOptions() : 0);
+        env.put("配送员数量", orderInfo.getStaffOptions() != null ? Integer.parseInt(orderInfo.getStaffOptions()) : 0);
         env.put("配送员金额", rulesMap.get("STAFF_PRICE"));
         env.put("无电梯费用", rulesMap.get("NOT_ELEVATOR"));
         orderInfo.setAmount(new BigDecimal(compiledExp.execute(env).toString()));
@@ -400,6 +400,36 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
         UserInfo userInfo = userInfoMapper.selectById(orderInfo.getUserId());
         result.put("user", userInfo);
         return result;
+    }
+
+    /**
+     * 获取未接单订单
+     *
+     * @param userId 公司ID
+     * @return 结果
+     */
+    @Override
+    public List<LinkedHashMap<String, Object>> queryNotCheckList(Integer userId) {
+        // 获取公司信息
+        MerchantInfo merchantInfo = merchantInfoService.getOne(Wrappers.<MerchantInfo>lambdaQuery().eq(MerchantInfo::getUserId, userId));
+        // 获取所有未接单订单
+        List<LinkedHashMap<String, Object>> orderList = baseMapper.queryOrderByNotCheck();
+        if (CollectionUtil.isEmpty(orderList)) {
+            return Collections.emptyList();
+        }
+
+        for (LinkedHashMap<String, Object> order : orderList) {
+            // 计算起始地址与商家地址距离
+            double startDistance = DistanceUtil.getDistance(merchantInfo.getLongitude().doubleValue(), merchantInfo.getLatitude().doubleValue(), Double.parseDouble(order.get("startLongitude").toString()), Double.parseDouble(order.get("startLatitude").toString()));
+            double endDistance = DistanceUtil.getDistance(merchantInfo.getLongitude().doubleValue(), merchantInfo.getLatitude().doubleValue(), Double.parseDouble(order.get("endLongitude").toString()), Double.parseDouble(order.get("endLatitude").toString()));
+            double workDistance = DistanceUtil.getDistance(Double.parseDouble(order.get("startLongitude").toString()), Double.parseDouble(order.get("startLatitude").toString()), Double.parseDouble(order.get("endLongitude").toString()), Double.parseDouble(order.get("endLatitude").toString()));
+
+            order.put("startDistance", NumberUtil.div(startDistance, 1000, 2));
+            order.put("endDistance", NumberUtil.div(endDistance, 1000, 2));
+            order.put("workDistance", NumberUtil.div(workDistance, 1000, 2));
+        }
+
+        return orderList;
     }
 
     /**

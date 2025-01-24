@@ -9,7 +9,7 @@ Page({
         scrollLeft: 0,
         SortMenu: [{
             id: 0,
-            name: "未支付"
+            name: "等待接单"
         }, {
             id: 1,
             name: "等待分配"
@@ -33,21 +33,6 @@ Page({
         wx.getStorage({
             key: 'userInfo',
             success: (res) => {
-                if (res.data.type == 2) {
-                    this.setData({
-                        SortMenu: [{
-                            id: 0,
-                            name: "全部订单"
-                        }, {
-                            id: 1,
-                            name: "待收货"
-                        }, {
-                            id: 2,
-                            name: "已完成"
-                        }]
-                    })
-                    //this.getOrderByUserId(res.data.id)
-                }
                 this.setData({
                     userInfo: res.data
                 })

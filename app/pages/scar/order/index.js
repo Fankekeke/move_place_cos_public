@@ -11,6 +11,7 @@ Page({
         commodityId: null,
         orderList: [],
         allPrice: 0,
+        fileList: [],
         userInfo: null,
         startPoint: {
             startAddress: '',
@@ -38,9 +39,19 @@ Page({
             value: '1',
             options: ['无', '有']
         },
+        remark: {
+            show: false,
+            value: ''
+        },
         appointmentTime: '',
-        appointmentTimeShow: false
-
+        appointmentTimeShow: false,
+        calculateAmountInfo: null,
+        discount: {
+            show: false,
+            label: '',
+            value: '',
+            options: []
+        }
     },
     onLoad: function (options) {
         wx.getStorage({
@@ -78,12 +89,53 @@ Page({
             startLatitude: this.data.startPoint.point.latitude,
             endLongitude: this.data.endPoint.point.longitude,
             endLatitude: this.data.endPoint.point.latitude,
-            hasElevator: this.data.elevator.value
+            hasElevator: this.data.elevator.value,
+            discountCode: this.data.discount.value
         }
         http.post('calculateAmountResult', data).then((r) => {
-            //this.setData({ addressInfo: r.data })
+            this.setData({
+                calculateAmountInfo: r
+            })
+            this.queryUseDiscountByUserId(this.data.userInfo.id, r.amount)
         })
-        
+    },
+    afterRead(event) {
+        const {
+            file
+        } = event.detail;
+        let that = this
+        // 当设置 mutiple 为 true 时, file 为数组格式，否则为对象格式
+        wx.uploadFile({
+            url: 'http://127.0.0.1:9527/file/fileUpload', // 仅为示例，非真实的接口地址
+            filePath: file.url,
+            name: 'avatar',
+            success(res) {
+                // 上传完成需要更新 fileList
+                const {
+                    fileList = []
+                } = that.data;
+                fileList.push({
+                    ...file,
+                    url: res.data
+                });
+                that.setData({
+                    fileList
+                });
+            },
+        });
+    },
+    queryUseDiscountByUserId(userId, amount) {
+        http.get('queryUseDiscountByUserId', {
+            userId,
+            amount
+        }).then((r) => {
+            r.data.forEach(item => {
+                item.text = item.couponName
+            })
+            this.setData({
+                'discount.options': r.data
+            })
+        })
     },
     openPopup(e) {
         console.log(e.currentTarget.dataset.type)
@@ -102,6 +154,10 @@ Page({
         } else if (e.currentTarget.dataset.type == 4) {
             this.setData({
                 appointmentTimeShow: true,
+            })
+        } else if (e.currentTarget.dataset.type == 5) {
+            this.setData({
+                'discount.show': true,
             })
         }
     },
@@ -122,7 +178,16 @@ Page({
             this.setData({
                 appointmentTimeShow: false,
             })
+        } else if (e.currentTarget.dataset.type == 5) {
+            this.setData({
+                'discount.show': false,
+            })
         }
+    },
+    onRemarkChange(e) {
+        this.setData({
+            'remark.value':  e.detail,
+        })
     },
     onChange(e) {
         if (e.currentTarget.dataset.type == 1) {
@@ -143,6 +208,13 @@ Page({
                 'elevator.value': e.detail.index,
                 'elevator.show': false
             })
+        } else if (e.currentTarget.dataset.type == 5) {
+            this.setData({
+                'discount.label': e.detail.value.couponName,
+                'discount.value': e.detail.value.code,
+                'discount.show': false
+            })
+            this.calculateAmountResult()
         }
     },
     onConfirm(event) {
@@ -193,46 +265,54 @@ Page({
         })
     },
     submit() {
+        if (this.data.fileList.length === 0) {
+            wx.showToast({
+                title: '请上传货物图片',
+                icon: 'none',
+                duration: 2000
+            })
+            return false
+        }
         wx.showLoading({
             title: '正在模拟支付',
         })
         setTimeout(() => {
-            if (this.data.orderType == 1) {
-                let data = {
-                    ids: this.data.orderIds.join(',')
-                }
-                http.get('goodsCartComplete', data).then((r) => {
-                    wx.showToast({
-                        title: '支付成功',
-                        icon: 'success',
-                        duration: 1000
-                    })
-                    setTimeout(() => {
-                        wx.navigateBack({
-                            changed: true
-                        });
-                    }, 1000)
-                })
-            } else {
-                let data = {
-                    commodityId: this.data.commodityId,
-                    price: this.data.allPrice,
-                    addressId: this.data.addressInfo.id,
-                    userId: this.data.userInfo.id
-                }
-                http.post('buyGoods', data).then((r) => {
-                    wx.showToast({
-                        title: '支付成功',
-                        icon: 'success',
-                        duration: 1000
-                    })
-                    setTimeout(() => {
-                        wx.navigateBack({
-                            changed: true
-                        });
-                    }, 1000)
-                })
+            let images = []
+            this.data.fileList.forEach(item => {
+              images.push(item.url)
+            });
+            let data = {
+                userId: this.data.userInfo.id,
+                vehicleOptions: this.data.vehicle.value,
+                staffOptions: this.data.staff.value,
+                startAddress: this.data.startPoint.startAddress,
+                endAddress: this.data.endPoint.endAddress,
+                startLongitude: this.data.startPoint.point.longitude,
+                startLatitude: this.data.startPoint.point.latitude,
+                endLongitude: this.data.endPoint.point.longitude,
+                endLatitude: this.data.endPoint.point.latitude,
+                hasElevator: this.data.elevator.value,
+                discountCode: this.data.discount.value,
+                distanceLength: this.data.calculateAmountInfo.distanceLength,
+                amount: this.data.calculateAmountInfo.amount,
+                remark: this.data.remark.value,
+                discountAmount: this.data.calculateAmountInfo.discountAmount,
+                afterAmount: this.data.calculateAmountInfo.afterAmount,
+                appointmentTime: this.data.appointmentTime,
+                images: images.length !== 0 ? images.join(',') : null
             }
+            http.post('addOrder', data).then((r) => {
+                wx.showToast({
+                    title: '支付成功',
+                    icon: 'success',
+                    duration: 1000
+                })
+                setTimeout(() => {
+                    wx.navigateBack({
+                        changed: true
+                    });
+                }, 1000)
+            })
             wx.hideLoading()
         }, 1000)
     }

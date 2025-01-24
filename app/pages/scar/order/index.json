@@ -9,6 +9,7 @@
     "van-picker": "../../../dist/picker/index",
     "van-popup": "../../../dist/popup/index",
     "van-icon": "../../../dist/icon/index",
-    "van-button": "../../../dist/button/index"
+    "van-button": "../../../dist/button/index",
+    "van-uploader": "../../../dist/uploader/index"
   }
 }

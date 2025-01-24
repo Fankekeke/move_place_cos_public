@@ -47,7 +47,7 @@
                       {{ orderInfo.integral }}
                     </a-col>
                     <a-col :span="8"><b>订单状态：</b>
-                      <span v-if="orderInfo.status === '0'" style="color: red">未支付</span>
+                      <span v-if="orderInfo.status === '0'" style="color: red">等待接单</span>
                       <span v-if="orderInfo.status === '1'" style="color: blue">已支付</span>
                       <span v-if="orderInfo.status === '2'" style="color: orange">配送中</span>
                       <span v-if="orderInfo.status === '3'" style="color: green">已收货</span>

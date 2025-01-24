@@ -94,6 +94,14 @@ public interface IOrderInfoService extends IService<OrderInfo> {
     LinkedHashMap<String, Object> selectDetailByCode(String orderCode);
 
     /**
+     * 获取未接单订单
+     *
+     * @param userId 公司ID
+     * @return 结果
+     */
+    List<LinkedHashMap<String, Object>> queryNotCheckList(Integer userId);
+
+    /**
      * 根据用户ID查询未完成订单
      *
      * @param userId 用户ID

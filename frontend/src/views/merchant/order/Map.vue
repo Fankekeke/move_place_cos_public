@@ -50,7 +50,7 @@
                     {{ orderData.amount !== null ? orderData.amount : '- -' }}元
                   </a-col>
                   <a-col :span="8"><b>订单状态：</b>
-                    <span v-if="orderData.status == 0">未支付</span>
+                    <span v-if="orderData.status == 0">等待接单</span>
                     <span v-if="orderData.status == 1">正在分配</span>
                     <span v-if="orderData.status == 2">运输中</span>
                     <span v-if="orderData.status == 3">运输完成</span>
@@ -157,7 +157,7 @@
                 <br/>
                 <div style="text-align: center">
                   <a-icon type="smile" theme="twoTone" style="font-size: 75px"/>
-                  <p style="margin-top: 25px;font-size: 20px;font-family: SimHei" v-if="orderData.status == 0">未支付</p>
+                  <p style="margin-top: 25px;font-size: 20px;font-family: SimHei" v-if="orderData.status == 0">等待接单</p>
                   <p style="margin-top: 25px;font-size: 20px;font-family: SimHei" v-if="orderData.status == 1">正在分配</p>
                   <p style="margin-top: 25px;font-size: 20px;font-family: SimHei" v-if="orderData.status == 2">运输中</p>
                   <p style="margin-top: 25px;font-size: 20px;font-family: SimHei" v-if="orderData.status == 3">运输完成</p>

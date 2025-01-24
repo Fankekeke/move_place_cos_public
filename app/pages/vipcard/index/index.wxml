@@ -22,7 +22,7 @@
 
         <view class="canui-item" wx:if="{{TabCur == 1}}">
             <view wx:for="{{ useList }}" class="canui-card-bg-img radius shadow-warp"
-                style="background-image: url('https://cdn.nlark.com/yuque/0/2019/jpeg/285274/1552962638649-assets/web-upload/25d4b7d6-e41b-431d-9b5b-43fa3b575b39.jpeg')">
+                style="margin-top:10px; background-image: url('https://cdn.nlark.com/yuque/0/2019/jpeg/285274/1552962638649-assets/web-upload/25d4b7d6-e41b-431d-9b5b-43fa3b575b39.jpeg')">
                 <view class='bg-shadeTop radius'>
                     <view class="canui-card-head">
                         <text class="canui-card-name">{{ item.code }}</text>
@@ -37,7 +37,7 @@
 
         <view class="canui-item" wx:if="{{TabCur == 2}}">
             <view wx:for="{{ usedList }}" class="canui-card-bg-img radius shadow-warp"
-                style="background-image: url('https://cdn.nlark.com/yuque/0/2019/jpeg/280373/1551799188571-assets/web-upload/9d73921e-c4e4-4231-a07a-4caca0d26b64.jpeg')">
+                style="margin-top:10px; background-image: url('https://cdn.nlark.com/yuque/0/2019/jpeg/280373/1551799188571-assets/web-upload/9d73921e-c4e4-4231-a07a-4caca0d26b64.jpeg')">
                 <view class='bg-shadeTop radius'>
                     <view class="canui-card-head">
                         <text class="canui-card-name">{{ item.code }}</text>

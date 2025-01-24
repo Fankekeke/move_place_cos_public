@@ -6,6 +6,7 @@ import cc.mrbird.febs.cos.entity.*;
 import cc.mrbird.febs.cos.service.*;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSON;
@@ -21,11 +22,13 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.math.BigDecimal;
 import java.util.*;
 
 @RestController
@@ -56,6 +59,8 @@ public class WebController {
     private final INotifyInfoService notifyInfoService;
 
     private final IMerchantInfoService merchantInfoService;
+
+    private final IPaymentRecordService paymentRecordService;
 
 
     /**
@@ -577,6 +582,45 @@ public class WebController {
     }
 
     /**
+     * 添加订单信息
+     *
+     * @param orderInfo 订单信息
+     * @return 结果
+     */
+    @PostMapping("/addOrder")
+    @Transactional(rollbackFor = Exception.class)
+    public R addOrder(@RequestBody OrderInfo orderInfo) {
+        orderInfo.setCode("ORD-" + System.currentTimeMillis());
+        orderInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
+        orderInfo.setStatus("0");
+        // 获取用户信息
+        UserInfo userInfo = userInfoService.getById(orderInfo.getUserId());
+        // 添加通知
+        NotifyInfo notifyInfo = new NotifyInfo(userInfo.getCode(), 0, DateUtil.formatDateTime(new Date()), userInfo.getName());
+        notifyInfo.setContent("你好【" + orderInfo.getCode() + "】，此订单已付款，正在等待分配人员");
+        notifyInfo.setUserId(userInfo.getId());
+        notifyInfoService.save(notifyInfo);
+
+        // 添加付款记录
+        PaymentRecord paymentInfo = new PaymentRecord();
+        paymentInfo.setAmount(orderInfo.getAfterAmount());
+        paymentInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
+        paymentInfo.setUserCode(userInfo.getCode());
+        paymentInfo.setOrderCode(orderInfo.getCode());
+        paymentRecordService.save(paymentInfo);
+
+        // 判断是否使用优惠券
+        if (StrUtil.isNotEmpty(orderInfo.getDiscountCode())) {
+            // 更新优惠券状态
+            DiscountInfo discountInfo = discountInfoService.getOne(Wrappers.<DiscountInfo>lambdaQuery().eq(DiscountInfo::getCode, orderInfo.getDiscountCode()));
+            discountInfo.setStatus("1");
+            discountInfoService.updateById(discountInfo);
+        }
+
+        return R.ok(orderInfoService.save(orderInfo));
+    }
+
+    /**
      * 获取搬家公司详情
      *
      * @param shopId 公司ID
@@ -595,6 +639,17 @@ public class WebController {
         List<LinkedHashMap<String, Object>> evaluateList = evaluationService.queryEvaluateByShopId(shopId);
         result.put("evaluate", evaluateList);
         return R.ok(result);
+    }
+
+    /**
+     * 获取可用优惠券
+     *
+     * @param userId 用户ID
+     * @return 结果
+     */
+    @GetMapping("/queryUseDiscountByUserId")
+    public R queryUseDiscountByUserId(Integer userId, BigDecimal amount) {
+        return R.ok(discountInfoService.queryUseDiscountByUserId(userId, amount));
     }
 
     /**

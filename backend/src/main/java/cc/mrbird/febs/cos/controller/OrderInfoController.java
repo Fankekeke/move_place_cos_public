@@ -67,6 +67,17 @@ public class OrderInfoController {
     }
 
     /**
+     * 获取未接单订单
+     *
+     * @param userId 公司ID
+     * @return 结果
+     */
+    @GetMapping("notCheckList")
+    public R queryNotCheckList(Integer userId) {
+        return R.ok(orderInfoService.queryNotCheckList(userId));
+    }
+
+    /**
      * 获取订单信息列表
      *
      * @return 结果

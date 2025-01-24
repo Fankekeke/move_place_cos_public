@@ -32,6 +32,13 @@ public interface OrderInfoMapper extends BaseMapper<OrderInfo> {
     List<LinkedHashMap<String, Object>> queryOrderByUserId(@Param("userId") Integer userId);
 
     /**
+     * 获取未接单订单
+     *
+     * @return 结果
+     */
+    List<LinkedHashMap<String, Object>> queryOrderByNotCheck();
+
+    /**
      * 近十天内订单数量统计
      *
      * @return 结果

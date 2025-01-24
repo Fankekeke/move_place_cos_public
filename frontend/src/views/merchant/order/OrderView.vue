@@ -8,7 +8,7 @@
     <div style="font-size: 13px;font-family: SimHei" v-if="orderData !== null">
       <div style="padding-left: 24px;padding-right: 24px;margin-bottom: 50px;margin-top: 50px">
         <a-steps :current="current" progress-dot size="small">
-          <a-step title="待付款" />
+          <a-step title="等待接单" />
           <a-step title="正在分配" />
           <a-step title="运输中" />
           <a-step title="运输完成" />
@@ -29,7 +29,7 @@
       <br/>
       <a-row style="padding-left: 24px;padding-right: 24px;">
         <a-col :span="8"><b>当前状态：</b>
-          <span v-if="orderData.status == '0'">待付款</span>
+          <span v-if="orderData.status == '0'">等待接单</span>
           <span v-if="orderData.status == '1'">正在分配</span>
           <span v-if="orderData.status == '2'">运输中</span>
           <span v-if="orderData.status == '3'">运输完成</span>

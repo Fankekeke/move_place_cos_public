@@ -35,10 +35,14 @@
                     label="{{ elevator.label }}" is-link data-type="3" bindtap="openPopup" />
                 <van-cell is-link clickable arrow-direction="left" border="{{true}}" center title="预约时间"
                     label="{{ appointmentTime }}" is-link data-type="4" bindtap="openPopup" />
+                <van-uploader file-list="{{ fileList }}" bind:after-read="afterRead" style="display: block;margin-top: 15px;" />
+                <van-field value="{{ remark.value }}" label="其他需求" type="textarea" placeholder="请输入其他需求" autosize
+                    border="{{ true }}" bind:change="onRemarkChange"/>
             </van-cell-group>
         </view>
         <van-button type="info" block style="width: 100%" bind:click="calculateAmountResult">保存配置</van-button>
     </view>
+
     <van-popup close-on-click-overlay round show="{{ vehicle.show }}" data-type="1" bind:close="onClose"
         position="bottom">
         <van-picker columns="{{ vehicle.options }}" data-type="1" bind:cancel="onClose" bind:confirm="onChange"
@@ -111,34 +115,71 @@
         <view class="cu-list menu bg-white solid-bottom canui-selet">
             <view class="cu-item arrow">
                 <view class='content'>优惠券</view>
-                <view class='action'>
+                <view class='action' wx:if="{{discount.options.length === 0}}">
                     无可用
+                </view>
+                <view wx:if="{{discount.options.length !== 0}}" class='action' data-type="5" bindtap="openPopup">
+                    <text wx:if="{{discount.value}}">{{discount.label}}</text>
+                    <text wx:else>选择</text>
                 </view>
             </view>
         </view>
     </view>
 
-    <view class="order-price-log">
-        <view class="bg-white log-card">
-            <view class="log-list">
-                <text>商品总价</text> <text class="text-price canui-text-right">{{ allPrice }}</text>
+    <van-popup close-on-click-overlay round show="{{ discount.show }}" data-type="5" bind:close="onClose"
+        position="bottom">
+        <van-picker columns="{{ discount.options }}" data-type="5" bind:cancel="onClose" bind:confirm="onChange"
+            show-toolbar />
+    </van-popup>
+
+    <view class="order-price-log" wx:if="{{calculateAmountInfo != null}}">
+        <view class="bg-white log-card" style="font-size: 12px">
+            <view class="log-list" style="margin-bottom: 8px">
+                <text>基础金额</text> <text class="text-price canui-text-right text-red">{{ calculateAmountInfo.base }} 元</text>
             </view>
-            <view class="log-list">
-                <text>运费(快递)</text> <text class="text-price canui-text-right text-red">0.00</text>
+            <view class="log-list" style="margin-bottom: 8px">
+                <text>距离</text> <text
+                    class="text-price canui-text-right text-red">{{ calculateAmountInfo.distanceLength }} 公里</text>
+            </view>
+            <view class="log-list" style="margin-bottom: 8px">
+                <text>距离单价</text> <text
+                    class="text-price canui-text-right text-red">{{ calculateAmountInfo.distancePrice }} 元</text>
+            </view>
+            <view class="log-list" style="margin-bottom: 8px">
+                <text>配送员数量</text> <text class="canui-text-right text-red">{{ calculateAmountInfo.staffNum }}</text>
+            </view>
+            <view class="log-list" style="margin-bottom: 8px">
+                <text>配送员金额</text> <text
+                    class="text-price canui-text-right text-red">{{ calculateAmountInfo.staffPrice }} 元</text>
+            </view>
+            <view class="log-list" style="margin-bottom: 8px">
+                <text>无电梯费用</text> <text class="text-price canui-text-right text-red">{{ calculateAmountInfo.elevator }} 元</text>
+            </view>
+            <view class="log-list" style="margin-bottom: 8px">
+                <text>车辆价格</text> <text
+                    class="text-price canui-text-right text-red">{{ calculateAmountInfo.vehiclePrice }} 元</text>
+            </view>
+            <view class="log-list" style="margin-bottom: 8px">
+                <text>订单总价</text> <text class="text-price canui-text-right text-red">{{ calculateAmountInfo.amount }} 元</text>
+            </view>
+            <view class="log-list" style="margin-bottom: 8px">
+                <text>优惠价格</text> <text
+                    class="text-price canui-text-right text-red">{{ calculateAmountInfo.discountAmount }} 元</text>
             </view>
             <view class="log-list bg-white text-df">
-                <text>订单总价</text><text class="text-sm text-gray">（手续费除外）</text>
-                <text class="text-price canui-text-right text-red">{{ allPrice }}</text>
+                <text>折后价格</text><text class="text-sm text-gray">（手续费除外）</text>
+                <text class="text-price canui-text-right text-red">{{ calculateAmountInfo.afterAmount }} 元</text>
             </view>
         </view>
     </view>
 
 </view>
 
-<!-- <view class="bg-white canui-foor-fixed canui-submit-view {{TabbarBot=='y'?'canui-submit-order':''}}">
-    <view class="bg-red light text-sm canui-pay-tip">您的货物预定1~3内发货</view>
+<view class="bg-white canui-foor-fixed canui-submit-view {{TabbarBot=='y'?'canui-submit-order':''}}"
+    wx:if="{{calculateAmountInfo != null}}">
+    <view class="bg-red light text-sm canui-pay-tip">提交订单后请等待搬家公司接单</view>
     <view class="canui-submit">
-        <text class='text-red text-price canui-price'>{{ allPrice }}</text>
+        <text class='text-red text-price canui-price'>{{ calculateAmountInfo.afterAmount }}</text>
         <text class='bg-red canui-submit-btn' bindtap='submit'>提交订单</text>
     </view>
-</view> -->
+</view>

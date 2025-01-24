@@ -27,7 +27,7 @@
                 :labelCol="{span: 5}"
                 :wrapperCol="{span: 18, offset: 1}">
                 <a-select v-model="queryParams.status" allowClear>
-                  <a-select-option value="0">待付款</a-select-option>
+                  <a-select-option value="0">等待接单</a-select-option>
                   <a-select-option value="1">正在分配</a-select-option>
                   <a-select-option value="2">运输中</a-select-option>
                   <a-select-option value="3">运输完成</a-select-option>
@@ -247,7 +247,7 @@ export default {
         customRender: (text, row, index) => {
           switch (text) {
             case '0':
-              return <a-tag>待付款</a-tag>
+              return <a-tag>等待接单</a-tag>
             case '1':
               return <a-tag>正在分配</a-tag>
             case '2':
