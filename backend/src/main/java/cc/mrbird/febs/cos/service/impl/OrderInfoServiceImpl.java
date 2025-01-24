@@ -1,5 +1,6 @@
 package cc.mrbird.febs.cos.service.impl;
 
+import cc.mrbird.febs.common.utils.DistanceUtil;
 import cc.mrbird.febs.cos.dao.StaffInfoMapper;
 import cc.mrbird.febs.cos.dao.UserInfoMapper;
 import cc.mrbird.febs.cos.entity.*;
@@ -299,6 +300,13 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
                 break;
             default:
         }
+        // 计算两个点位距离
+        double distance = DistanceUtil.getDistance(orderInfo.getStartLongitude().doubleValue(), orderInfo.getStartLatitude().doubleValue(), orderInfo.getEndLongitude().doubleValue(), orderInfo.getEndLatitude().doubleValue());
+        if (distance != 0) {
+            distance = NumberUtil.div(distance, 1000, 2);
+            orderInfo.setDistanceLength(new BigDecimal(distance));
+        }
+
         // 价格公式
         String expression = "基础金额 + (距离 * 距离单价) + 配送车辆金额 + (配送员数量 * 配送员金额) + 无电梯费用";
         Expression compiledExp = AviatorEvaluator.compile(expression);

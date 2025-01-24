@@ -24,6 +24,7 @@
         oi.amount,
         oi.discount_amount,
         oi.after_amount,
+        oi.appointment_time,
         ui.name as userName,
         ui.phone,
         ui.images as userImages,
@@ -87,6 +88,7 @@
         oi.amount,
         oi.discount_amount,
         oi.after_amount,
+        oi.appointment_time,
         ui.name as userName,
         ui.phone,
         ui.images as userImages,
@@ -138,6 +140,7 @@
         oi.create_date,
         oi.amount,
         oi.driver_code,
+        oi.appointment_time,
         ui.name as userName,
         ui.phone,
         ui.images as userImages

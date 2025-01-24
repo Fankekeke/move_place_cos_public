@@ -140,6 +140,11 @@ public class OrderInfo implements Serializable {
      */
     private BigDecimal afterAmount;
 
+    /**
+     * 预约时间
+     */
+    private String appointmentTime;
+
     @TableField(exist = false)
     private String merchantName;
 
