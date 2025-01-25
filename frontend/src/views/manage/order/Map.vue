@@ -150,7 +150,7 @@
                 <a-row style="padding-left: 24px;padding-right: 24px;" v-if="staffList.length !== 0">
                   <a-col :span="6" v-for="(item, index) in staffList" :key="index">
                     <a-avatar shape="square" :size="95" :src="'http://127.0.0.1:9527/imagesWeb/' + item.images.split(',')[0]" icon="user" />
-                    <p>{{ item.name }}【{{ item.type == 1 ? '搬运工' : '驾驶员' }}】</p>
+                    <p>{{ item.name }}【{{ item.type == 1 ? '司机' : '搬运工' }}】</p>
                   </a-col>
                 </a-row>
                 <br/>

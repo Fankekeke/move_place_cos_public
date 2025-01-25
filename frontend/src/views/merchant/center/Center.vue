@@ -103,7 +103,7 @@ export default {
       this.orderMapView.visiable = true
     },
     checkOrder (orderId) {
-      this.$get(`/cos/order-info/checkOrder`, {orderId, staffId: this.currentUser.userId}).then((r) => {
+      this.$get(`/cos/order-info/checkOrder`, {orderId, userId: this.currentUser.userId}).then((r) => {
         this.$message.success('接单成功！请在订单中心查看')
         this.getExpertInfo(this.currentUser.userId)
       })

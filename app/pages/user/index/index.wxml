@@ -15,12 +15,6 @@
 </view>
 <view class="cu-list menu card-menu margin-top-xl margin-bottom-xl shadow-lg">
     <view class="cu-item arrow">
-        <navigator class='content' open-type="navigate" hover-class='none' url="/pages/scar/order/index">
-            <text class='icon-list text-green'></text>
-            <text class='text-grey'>test</text>
-        </navigator>
-    </view>
-    <view class="cu-item arrow">
         <navigator class='content' open-type="navigate" hover-class='none' url="/pages/order/index/index">
             <text class='icon-send text-cyan'></text>
             <text class='text-grey'>我的订单</text>

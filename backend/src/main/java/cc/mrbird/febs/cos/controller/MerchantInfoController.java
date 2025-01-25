@@ -126,14 +126,6 @@ public class MerchantInfoController {
             }
             merchantInfo.setOperateDay(StrUtil.join(",", operateDayResult));
         }
-        // 修改绑定用户信息
-        if (merchantInfo.getUserInfoId() != null) {
-            UserInfo userInfo = userInfoService.getById(merchantInfo.getUserInfoId());
-            if (userInfo != null) {
-                userInfo.setName(merchantInfo.getName());
-                userInfo.setImages(merchantInfo.getImages());
-            }
-        }
         return R.ok(merchantInfoService.save(merchantInfo));
     }
 
@@ -163,6 +155,16 @@ public class MerchantInfoController {
                 operateDayResult.add(weekMap.get(s));
             }
             merchantInfo.setOperateDay(StrUtil.join(",", operateDayResult));
+        }
+        // 修改绑定用户信息
+        MerchantInfo merchantInfo1 = merchantInfoService.getById(merchantInfo.getId());
+        if (merchantInfo1.getUserInfoId() != null) {
+            UserInfo userInfo = userInfoService.getById(merchantInfo1.getUserInfoId());
+            if (userInfo != null) {
+                userInfo.setName(merchantInfo.getName());
+                userInfo.setImages(merchantInfo.getImages());
+                userInfoService.updateById(userInfo);
+            }
         }
         return R.ok(merchantInfoService.updateById(merchantInfo));
     }

@@ -34,6 +34,31 @@ public class OrderInfoController {
     }
 
     /**
+     * 公司接单
+     *
+     * @param orderId 订单编号
+     * @param userId  用户ID
+     * @return 结果
+     */
+    @GetMapping("/checkOrder")
+    public R checkOrder(Integer orderId, Integer userId) {
+        return R.ok(orderInfoService.checkOrder(orderId, userId));
+    }
+
+    /**
+     * 管理员对订单分配
+     *
+     * @param orderCode    订单编号
+     * @param driverCode   司机编号
+     * @param staffCodeStr 帮运
+     * @return 结果
+     */
+    @GetMapping("/checkOrderStaff")
+    public R checkOrderStaff(@RequestParam("orderCode") String orderCode, @RequestParam("vehicleCode") String vehicleCode, @RequestParam("driverCode") String driverCode, @RequestParam(value = "staffCodeStr", required = false) String staffCodeStr) throws Exception {
+        return R.ok(orderInfoService.checkOrder(orderCode, vehicleCode, driverCode, staffCodeStr));
+    }
+
+    /**
      * 获取ID获取审核详情
      *
      * @param id 主键

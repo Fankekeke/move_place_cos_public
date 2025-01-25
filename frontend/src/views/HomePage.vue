@@ -40,15 +40,15 @@
             <a-row class="more-info" v-if="user.roleId == 75">
               <a-col :span="4"></a-col>
               <a-col :span="4"></a-col>
-              <a-col :span="4">
-                <head-info title="员工数量" :content="titleAdminData.staffNum" :center="false" :bordered="false"/>
-              </a-col>
-              <a-col :span="4">
-                <head-info title="总收益" :content="titleAdminData.totalPrice" :center="false" :bordered="false"/>
-              </a-col>
-              <a-col :span="4">
-                <head-info title="总订单数" :content="titleAdminData.totalNum" :center="false"/>
-              </a-col>
+<!--              <a-col :span="4">-->
+<!--                <head-info title="员工数量" :content="titleAdminData.staffNum" :center="false" :bordered="false"/>-->
+<!--              </a-col>-->
+<!--              <a-col :span="4">-->
+<!--                <head-info title="总收益" :content="titleAdminData.totalPrice" :center="false" :bordered="false"/>-->
+<!--              </a-col>-->
+<!--              <a-col :span="4">-->
+<!--                <head-info title="总订单数" :content="titleAdminData.totalNum" :center="false"/>-->
+<!--              </a-col>-->
             </a-row>
           </div>
         </a-col>

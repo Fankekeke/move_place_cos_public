@@ -42,7 +42,7 @@
     "ignoreUploadUnusedFiles": true
   },
   "compileType": "miniprogram",
-  "libVersion": "2.21.4",
+  "libVersion": "2.14.1",
   "appid": "wx76a6577665633a86",
   "projectname": "搬家小程序",
   "editorSetting": {

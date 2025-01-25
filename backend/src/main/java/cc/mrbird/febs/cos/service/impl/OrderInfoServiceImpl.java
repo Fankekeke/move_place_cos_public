@@ -134,6 +134,31 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
     }
 
     /**
+     * 公司接单
+     *
+     * @param orderId 订单编号
+     * @param userId  用户ID
+     * @return 结果
+     */
+    @Override
+    public Boolean checkOrder(Integer orderId, Integer userId) {
+        // 获取订单信息
+        OrderInfo orderInfo = this.getById(orderId);
+        // 获取公司信息
+        MerchantInfo merchantInfo = merchantInfoService.getOne(Wrappers.<MerchantInfo>lambdaQuery().eq(MerchantInfo::getUserId, userId));
+        orderInfo.setMerchantId(merchantInfo.getId());
+
+        // 付款记录绑定
+        PaymentRecord paymentRecord = paymentRecordService.getOne(Wrappers.<PaymentRecord>lambdaQuery().eq(PaymentRecord::getOrderCode, orderInfo.getCode()));
+        if (paymentRecord != null) {
+            paymentRecord.setMerchantId(merchantInfo.getId());
+            paymentRecordService.updateById(paymentRecord);
+        }
+        this.updateById(orderInfo);
+        return this.audit(orderInfo.getCode(), 1);
+    }
+
+    /**
      * 设置订单状态
      *
      * @param orderCode 订单编号
@@ -173,7 +198,7 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean checkOrder(String orderCode, String driverCode, String staffCodeStr) throws Exception {
+    public boolean checkOrder(String orderCode, String vehicleCode, String driverCode, String staffCodeStr) throws Exception {
         // 获取订单信息
         OrderInfo orderInfo = this.getOne(Wrappers.<OrderInfo>lambdaQuery().eq(OrderInfo::getCode, orderCode));
         if (orderInfo == null) {
@@ -182,6 +207,10 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
         // 绑定司机1
         if (StrUtil.isNotEmpty(driverCode) && orderInfo.getVehicleOptions() != null) {
             orderInfo.setDriverCode(driverCode);
+        }
+        // 绑定车辆
+        if (StrUtil.isNotEmpty(vehicleCode)) {
+            orderInfo.setVehicleCode(vehicleCode);
         }
         this.updateById(orderInfo);
         // 绑定搬运工
@@ -233,6 +262,26 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
         env.put("服务得分", evaluateInfo.getServiceScore());
         evaluateInfo.setOverScore(new BigDecimal(compiledExp.execute(env).toString()));
         return evaluateInfoService.save(evaluateInfo);
+    }
+
+    /**
+     * 运输结束回调
+     *
+     * @param orderId 订单ID
+     * @return 结果
+     */
+    @Override
+    public boolean receipt(Integer orderId) {
+        // 获取订单信息
+        OrderInfo orderInfo = this.getById(orderId);
+        // 商家余额添加
+        MerchantInfo merchantInfo = merchantInfoService.getById(orderInfo.getMerchantId());
+        if (merchantInfo != null) {
+            BigDecimal balance = NumberUtil.add(merchantInfo.getBalance() == null ? BigDecimal.ZERO : merchantInfo.getBalance(), orderInfo.getAfterAmount());
+            merchantInfo.setBalance(balance);
+            merchantInfoService.updateById(merchantInfo);
+        }
+        return this.audit(orderInfo.getCode(), 3);
     }
 
     /**

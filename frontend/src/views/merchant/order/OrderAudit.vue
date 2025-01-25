@@ -49,7 +49,13 @@
         <a-col :span="8"><b>实际价格：</b>
           {{ orderData.afterAmount }} 元
         </a-col>
-        <a-col :span="16"><b>备注：</b>
+        <a-col :span="8"><b>预约时间：</b>
+          {{ orderData.appointmentTime }}
+        </a-col>
+      </a-row>
+      <br/>
+      <a-row style="padding-left: 24px;padding-right: 24px;">
+        <a-col :span="24"><b>备注：</b>
           {{ orderData.remark }}
         </a-col>
       </a-row>
@@ -141,14 +147,21 @@
       </a-row>
       <br/>
       <a-row :gutter="15" style="padding-left: 24px;padding-right: 24px;">
-        <a-col :span="12">
+        <a-col :span="8">
+          <a-form-item label='选择车辆'>
+            <a-select style="width: 100%" v-model="vehicleCheck">
+              <a-select-option :value="item.vehicleCode" v-for="(item, index) in vehicleList" :key="index">{{ item.vehicleNo }}</a-select-option>
+            </a-select>
+          </a-form-item>
+        </a-col>
+        <a-col :span="8">
           <a-form-item label='选择司机'>
             <a-select style="width: 100%" v-model="driverCheck">
               <a-select-option :value="item.code" v-for="(item, index) in driverList" :key="index">{{ item.name }}</a-select-option>
             </a-select>
           </a-form-item>
         </a-col>
-        <a-col :span="12">
+        <a-col :span="8" v-if="orderData.staffOptions != 0">
           <a-form-item label='选择搬运工'>
             <a-select style="width: 100%" mode="multiple" v-model="staffCheck">
               <a-select-option :value="item.code" v-for="(item, index) in staffList" :key="index">{{ item.name }}</a-select-option>
@@ -206,6 +219,7 @@ export default {
         this.current = this.orderData.status
         this.imagesInit(this.orderData.images)
         this.dataInit(this.orderData.code)
+        this.selectVehicle(this.orderData.vehicleOptions)
       }
     }
   },
@@ -221,8 +235,10 @@ export default {
       },
       staffList: [],
       driverCheck: [],
+      vehicleCheck: [],
       staffCheck: [],
       driverList: [],
+      vehicleList: [],
       current: 0,
       userInfo: null,
       vehicleInfo: null,
@@ -246,6 +262,14 @@ export default {
         console.log(JSON.stringify(r.data))
         this.staffList = r.data.staff
         this.driverList = r.data.driver
+      })
+    },
+    selectVehicle (vehicleType) {
+      this.$get(`/cos/vehicle-info/queryVehicleList`, {
+        merchantId: this.currentUser.userId,
+        vehicleType
+      }).then((r) => {
+        this.vehicleList = r.data.data
       })
     },
     onDateChange (date) {
@@ -274,17 +298,20 @@ export default {
       }
     },
     submit () {
-      if (this.driverCheck.length !== 0) {
-        this.$get(`/cos/order-info/checkOrder`, {
+      if (this.driverCheck.length !== 0 || this.vehicleCheck.length !== 0) {
+        let param = {
           'orderCode': this.orderData.code,
           'driverCode': this.driverCheck,
-          'staffCodeStr': this.staffCheck.join(',')
-        }).then((r) => {
+          'staffCodeStr': this.staffCheck.join(','),
+          'vehicleCode': this.vehicleCheck
+        }
+        console.log(param)
+        this.$get(`/cos/order-info/checkOrderStaff`, param).then((r) => {
           this.cleanData()
           this.$emit('success')
         })
       } else {
-        this.$message.warn('请选择司机')
+        this.$message.warn('请选择完整')
       }
     },
     onClose () {
@@ -294,6 +321,7 @@ export default {
     cleanData () {
       this.staffCheck = []
       this.driverCheck = []
+      this.vehicleCheck = []
     }
   }
 }

@@ -46,7 +46,13 @@
         <a-col :span="8"><b>实际价格：</b>
           {{ orderData.afterAmount }} 元
         </a-col>
-        <a-col :span="16"><b>备注：</b>
+        <a-col :span="8"><b>预约时间：</b>
+          {{ orderData.appointmentTime }}
+        </a-col>
+      </a-row>
+      <br/>
+      <a-row style="padding-left: 24px;padding-right: 24px;">
+        <a-col :span="24"><b>备注：</b>
           {{ orderData.remark }}
         </a-col>
       </a-row>

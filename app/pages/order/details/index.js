@@ -5,7 +5,11 @@ Page({
         StatusBar: app.globalData.StatusBar,
         CustomBar: app.globalData.CustomBar,
         TabbarBot: app.globalData.tabbar_bottom,
-        orderInfo: null
+        orderInfo: null,
+        merchant: null,
+        user: null,
+        staff: [],
+        vehicle: null
     },
     onLoad: function (options) {
         this.getOrderDetail(options.orderId)
@@ -33,13 +37,33 @@ Page({
           })
     },
     getOrderDetail(orderId) {
-        http.get('selOrderListByOrderIds', {ids: orderId}).then((r) => {
-            r.data.forEach(item => {
+        http.get('queryOrderDetail', {orderId: orderId}).then((r) => {
+            console.log(r)
+            // r.data.forEach(item => {
+            //     item.image = item.images.split(',')[0]
+            // });
+            let merchant = r.merchant;
+            if (merchant.images) {
+                merchant.image = merchant.images.split(',')[0]
+            }
+            let staff = r.staff;
+            let user = r.user;
+            staff.forEach(item => {
                 item.image = item.images.split(',')[0]
             });
+            let order = r.order;
+            if (order.images) {
+                order.imageList = order.images.split(',')
+            }
+            let vehicle = r.vehicle;
 			this.setData({
-                orderInfo: r.data[0]
+                orderInfo: order,
+                merchant,
+                staff,
+                vehicle,
+                user
             })
+            console.log(this.data.orderInfo)
 		})
     }
 });

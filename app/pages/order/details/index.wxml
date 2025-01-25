@@ -11,8 +11,10 @@
         <view class="cu-list menu">
             <view class="cu-item">
                 <view class='content'>
-                    <view class="text-df" wx:if="{{ orderInfo.orderStatus == 1 }}">包裹正在运送路上</view>
-                    <view class="text-df" wx:if="{{ orderInfo.orderStatus == 3 }}">包裹已送达</view>
+                    <view class="text-df" wx:if="{{ orderInfo.status == 0 }}">等待公司接单</view>
+                    <view class="text-df" wx:if="{{ orderInfo.status == 1 }}">等待分配</view>
+                    <view class="text-df" wx:if="{{ orderInfo.status == 2 }}">正在运输中</view>
+                    <view class="text-df" wx:if="{{ orderInfo.status == 3 }}">运输已完成</view>
                     <!-- <view class='text-sm'>2019-03-21 18:00:00</view> -->
                 </view>
                 <view class='action canui-status-3'></view>
@@ -25,11 +27,13 @@
         <view class="cu-list menu bg-white">
             <view class="cu-item">
                 <view class='content'>
-                    <view class="canui-xzwz text-df" wx:if="{{ orderInfo.orderStatus == 1 }}">包裹正在运送路上</view>
-                    <view class="canui-xzwz text-df" wx:if="{{ orderInfo.orderStatus == 3 }}">包裹已送达</view>
+                    <view class="canui-xzwz text-df" wx:if="{{ orderInfo.status == 0 }}">等待公司接单</view>
+                    <view class="canui-xzwz text-df" wx:if="{{ orderInfo.status == 1 }}">等待分配</view>
+                    <view class="canui-xzwz text-df" wx:if="{{ orderInfo.status == 2 }}">正在运输中</view>
+                    <view class="canui-xzwz text-df" wx:if="{{ orderInfo.status == 3 }}">运输已完成</view>
                     <!-- <view class='text-gray text-sm'>2019-03-21 18:00:00</view> -->
                 </view>
-                <view class='action'><view class='text-grey icon-right'></view></view>
+                <!-- <view class='action'><view class='text-grey icon-right'></view></view> -->
             </view>
         </view>
     </view>
@@ -39,42 +43,43 @@
         <view class="canui-card-order">
             <view class="canui-order-item bg-white">
                 <view class="head-title-box">
-                    <navigator open-type="navigate" hover-class='none' url="/pages/shop/index/index?shopId={{ orderInfo.shopId }}">
+                    <navigator open-type="navigate" hover-class='none' url="/pages/shop/index/index?shopId={{ merchant.id }}">
                         <text class="icon-shop"></text>
-                        <text>{{ orderInfo.userName }}的小店</text>
+                        <text>{{ merchant.name }}</text>
                         <text class="icon-right"></text>
                     </navigator>
                 </view>
                 <view class="cu-list menu menu-avatar">
-                    <navigator open-type="navigate" class="cu-item" hover-class='none' url="/pages/shop/goods/details?commoditId={{ orderInfo.id }}">
-                        <view class="cu-avatar radius lg" style="background-image:url(http://127.0.0.1:9527/imagesWeb/{{ orderInfo.image }});"></view>
-                        <view class='content canui-xzwz tow'>{{ orderInfo.name }}</view>
-                        <view class='action'>
-                            <view class='text-price'>{{ orderInfo.price }}</view>
-                            <view class="text-xs text-right text-gray">x1</view>
-                        </view>
-                    </navigator>
+                    <view style="margin-top: 10px">
+                        <view  wx:for="{{orderInfo.imageList}}" class="cu-avatar radius lg" style="background-image:url(http://127.0.0.1:9527/imagesWeb/{{ item }});margin-right: 10px"></view>
+                    </view>
+                    <view style="margin-top: 10px">
+                        {{ orderInfo.code }}
+                    </view>
+                    <view style="margin-top: 10px;font-size: 13px;line-height: 26px">
+                        其他要求：{{ orderInfo.remark }}
+                    </view>
                 </view>
             </view>
         </view>
 
         <view class="text-gray text-sm solid-bottom order-price-log">
             <view class="log-list">
-                <text>商品总价</text> <text class="text-price canui-text-right">{{ orderInfo.price }}</text>
+                <text>价格</text> <text class="text-price canui-text-right">{{ orderInfo.amount }}</text>
             </view>
             <view class="log-list">
-                <text>运费(快递)</text> <text class="text-price canui-text-right">0.00</text>
+                <text>优惠价格</text> <text class="text-price canui-text-right">{{ orderInfo.discountAmount }}</text>
             </view>
             <view class="log-list bg-white text-df">
-                <text>订单总价</text><text class="text-sm text-gray">（手续费除外）</text>
-                <text class="text-price canui-text-right">{{ orderInfo.price }}</text>
+                <text>折后总价</text><text class="text-sm text-gray">（手续费除外）</text>
+                <text class="text-price canui-text-right">{{ orderInfo.afterAmount }}</text>
             </view>
         </view>
         <view class="order-price-log-zj">
-            <text>实际消费积分</text> <text class="text-price canui-text-right text-red">{{ orderInfo.price }}</text>
+            <text>总公里数</text> <text class="canui-text-right text-red">{{ orderInfo.distanceLength }}公里</text>
         </view>
         <view class="order-price-log-zj">
-            <text>实付手续费</text> <text class="text-price canui-text-right text-red">0.00</text>
+            <text>时间</text> <text class="canui-text-right">{{orderInfo.createDate}}</text>
         </view>
     </view>
 
@@ -82,8 +87,9 @@
         <view class="cu-list menu bg-white">
             <view class="cu-item">
                 <view class='content'>
-                    <view class="text-df">{{ orderInfo.takeUser }} <text>{{ orderInfo.phone }}</text></view>
-                    <view class='text-gray text-sm canui-xzwz'>地址：{{ orderInfo.address }}</view>
+                    <view class="text-df">{{ user.name }} <text>{{ user.phone }}</text></view>
+                    <view class='text-gray text-sm canui-xzwz'>起始地址：{{ orderInfo.startAddress }}</view>
+                    <view class='text-gray text-sm canui-xzwz'>运输地址：{{ orderInfo.endAddress }}</view>
                 </view>
             </view>
         </view>
@@ -93,24 +99,24 @@
 
         <view class="order-menu-list solid-bottom">
             <view class="log-list bg-white text-df">
-                <text>订单编号：</text> <text class="text-gray">{{ orderInfo.orderCode }}</text>
+                <text>订单编号：</text> <text class="text-gray">{{ orderInfo.code }}</text>
             </view>
             <view class="log-list bg-white text-df">
-                <text>下单时间：</text> <text class="text-gray">{{ orderInfo.orderDate }}</text>
+                <text>下单时间：</text> <text class="text-gray">{{ orderInfo.createDate }}</text>
             </view>
         </view>
-        <view class="order-menu-list solid-bottom">
+        <!-- <view class="order-menu-list solid-bottom">
             <view class="log-list bg-white text-df">
                 <text>快递单号：</text> <text class="text-gray">123456789789</text>
             </view>
             <view class="log-list bg-white text-df">
                 <text>快递名称：</text> <text class="text-gray">顺丰快递</text>
             </view>
-        </view>
+        </view> -->
     </view>
 
     <view class="grid col-2 flex bg-white order-contact-box">
-        <view class="contact-table" bindtap='message' data-shopId='{{ orderInfo.userId }}' data-shopName='{{ orderInfo.userName }}'>
+        <view class="contact-table" bindtap='message' data-shopId='{{ merchant.userInfoId }}' data-shopName='{{ merchant.name }}'>
             <text class="icon-service text-blue"></text> 联系客服
         </view>
         <view class="contact-table" bindtap='takePhone'>

@@ -27,7 +27,11 @@ Page({
         show: false,
         value: 3,
         remarks: '',
-        orderId: null
+        orderId: null,
+        rate: 5,
+        fileList: [],
+        complaintShow: false,
+        complaintRemarks: '',
     },
     onLoad: function (options) {
         wx.getStorage({
@@ -47,6 +51,28 @@ Page({
             }
         })
     },
+    afterRead(event) {
+        const { file } = event.detail;
+        let that = this
+        // 当设置 mutiple 为 true 时, file 为数组格式，否则为对象格式
+        wx.uploadFile({
+          url: 'http://127.0.0.1:9527/file/fileUpload', // 仅为示例，非真实的接口地址
+          filePath: file.url,
+          name: 'avatar',
+          success(res) {
+            // 上传完成需要更新 fileList
+            const { fileList = [] } = that.data;
+            fileList.push({ ...file, url: res.data });
+            that.setData({ fileList });
+          },
+        });
+      },
+    evaluateChange(event) {
+        this.setData({
+          rate: event.detail,
+        });
+        console.log(this.data.rate)
+      },
     getOrderByUserId(userId) {
         http.get('getOrderByUserId', {
             userId
@@ -63,7 +89,6 @@ Page({
         })
     },
     onChange: function (e) {
-        console.log(123)
         this.setData({
             value: e.detail
         })
@@ -74,17 +99,23 @@ Page({
             orderId: e.currentTarget.dataset['index']
         })
     },
+    complaint: function (e) {
+        this.setData({
+            complaintShow: true,
+            orderId: e.currentTarget.dataset['index']
+        })
+    },
     receipt: function (e) {
         wx.showModal({
             title: '提示',
-            content: '确定要收货吗？',
+            content: '确定要运输完成吗？',
             success: (sm) => {
                 if (sm.confirm) {
                     http.get('receipt', {
                         orderId: e.currentTarget.dataset['index']
                     }).then((r) => {
                         wx.showToast({
-                            title: '收货成功',
+                            title: '运输结束',
                             icon: 'success',
                             duration: 1000
                         })
@@ -98,14 +129,46 @@ Page({
             }
         })
     },
+    complaintSubmit () {
+        if (this.data.complaintRemarks != '') {
+            http.get('complaintAdd', {
+                orderId: this.data.orderId,
+                content: this.data.complaintRemarks,
+                userId: this.data.userInfo.id
+            }).then((r) => {
+                this.setData({
+                    shcomplaintShowow: false
+                })
+                wx.showToast({
+                    title: '投诉提交成功',
+                    icon: 'success',
+                    duration: 1000
+                })
+                setTimeout(() => {
+                    this.getOrderListByUserId(this.data.userInfo.id)
+                }, 1000)
+            })
+        } else {
+            wx.showToast({
+                title: '请填写投诉内容',
+                icon: 'none',
+                duration: 1000
+            })
+        }
+    },
     evaluationSubmit: function (e) {
         let that = this
         if (this.data.remarks != '') {
+            let images = []
+            this.data.fileList.forEach(item => {
+                images.push(item.url)
+            });
             http.post('evaluationAdd', {
                 orderId: this.data.orderId,
-                score: this.data.value,
+                overScore: this.data.rate,
                 content: this.data.remarks,
-                userId: this.data.userInfo.id
+                userId: this.data.userInfo.id,
+                images: images.length !== 0 ? images.join(',') : null
             }).then((r) => {
                 that.setData({
                     show: false
@@ -126,6 +189,11 @@ Page({
                 duration: 1000
             })
         }
+    },
+    onComplaintClose() {
+        this.setData({
+            complaintShow: false
+        })
     },
     onClose: function () {
         this.setData({
@@ -180,8 +248,15 @@ Page({
                 }
                 item.days = this.timeFormat(item.createDate)
             });
+            
+            let orderList = []
+            r.data.forEach(item => {
+                if (item.status == 0) {
+                    orderList.push(item)
+                }
+            });
             this.setData({
-                orderList: r.data,
+                orderList: orderList,
                 orderListCopy: r.data
             })
         })
@@ -192,32 +267,43 @@ Page({
             TabCur: e.currentTarget.dataset.id,
             scrollLeft: (e.currentTarget.dataset.id - 1) * 60
         })
-        if (e.currentTarget.dataset.id == 0) {
-            this.setData({
-                orderList: this.data.orderListCopy
-            })
-        }
-        if (e.currentTarget.dataset.id == 1) {
-            let orderList = []
+        // if (e.currentTarget.dataset.id == 0) {
+        //     this.setData({
+        //         orderList: this.data.orderListCopy
+        //     })
+        // }
+        let orderList = []
             this.data.orderListCopy.forEach(item => {
-                if (item.orderStatus == 1) {
+                if (item.status == e.currentTarget.dataset.id) {
                     orderList.push(item)
                 }
             });
             this.setData({
                 orderList
             })
-        }
-        if (e.currentTarget.dataset.id == 2) {
-            let orderList = []
-            this.data.orderListCopy.forEach(item => {
-                if (item.orderStatus == 3) {
-                    orderList.push(item)
-                }
-            });
-            this.setData({
-                orderList
-            })
-        }
+            console.log(this.data.orderList)
+
+        // if (e.currentTarget.dataset.id == 1) {
+        //     let orderList = []
+        //     this.data.orderListCopy.forEach(item => {
+        //         if (item.status == 1) {
+        //             orderList.push(item)
+        //         }
+        //     });
+        //     this.setData({
+        //         orderList
+        //     })
+        // }
+        // if (e.currentTarget.dataset.id == 2) {
+        //     let orderList = []
+        //     this.data.orderListCopy.forEach(item => {
+        //         if (item.orderStatus == 3) {
+        //             orderList.push(item)
+        //         }
+        //     });
+        //     this.setData({
+        //         orderList
+        //     })
+        // }
     }
 });

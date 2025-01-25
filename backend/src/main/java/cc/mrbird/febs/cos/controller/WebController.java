@@ -621,6 +621,68 @@ public class WebController {
     }
 
     /**
+     * 获取订单详情
+     *
+     * @param orderId 订单ID
+     * @return 结果
+     */
+    @GetMapping("/queryOrderDetail")
+    public R queryOrderDetail(Integer orderId) {
+        OrderInfo orderInfo = orderInfoService.getById(orderId);
+        return R.ok(orderInfoService.selectDetailByCode(orderInfo.getCode()));
+    }
+
+    /**
+     * 添加评价信息
+     *
+     * @param evaluation
+     * @return 结果
+     */
+    @PostMapping("/evaluationAdd")
+    public R evaluationAdd(@RequestBody EvaluateInfo evaluation) {
+        OrderInfo orderInfo = orderInfoService.getById(evaluation.getOrderId());
+        // 获取用户编号
+        UserInfo userInfo = userInfoService.getById(orderInfo.getUserId());
+        evaluation.setOrderId(orderInfo.getId());
+        evaluation.setOrderCode(orderInfo.getCode());
+        evaluation.setUserCode(userInfo.getCode());
+        evaluation.setCreateDate(DateUtil.formatDateTime(new Date()));
+        evaluation.setMerchantId(orderInfo.getMerchantId());
+        return R.ok(evaluationService.save(evaluation));
+    }
+
+    /**
+     * 添加投诉信息
+     *
+     * @return 结果
+     */
+    @GetMapping("/complaintAdd")
+    public R complaintAdd(Integer userId, Integer orderId, String content) {
+        OrderInfo orderInfo = orderInfoService.getById(orderId);
+        // 获取用户编号
+        UserInfo userInfo = userInfoService.getById(orderInfo.getUserId());
+        ComplaintInfo complaintInfo = new ComplaintInfo();
+        complaintInfo.setContent(content);
+        complaintInfo.setUserId(userId);
+        complaintInfo.setOrderCode(orderInfo.getCode());
+        complaintInfo.setStatus("0");
+        complaintInfo.setCreateDate(DateUtil.formatDateTime(new Date()));
+        complaintInfo.setMerchantId(orderInfo.getMerchantId());
+        return R.ok(complaintInfoService.save(complaintInfo));
+    }
+
+    /**
+     * 运输结束回调
+     *
+     * @param orderId 订单ID
+     * @return 结果
+     */
+    @GetMapping("/receipt")
+    public R receipt(Integer orderId) {
+        return R.ok(orderInfoService.receipt(orderId));
+    }
+
+    /**
      * 获取搬家公司详情
      *
      * @param shopId 公司ID

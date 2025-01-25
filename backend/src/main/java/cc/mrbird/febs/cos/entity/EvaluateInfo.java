@@ -86,6 +86,12 @@ public class EvaluateInfo implements Serializable {
      */
     private Integer merchantId;
 
+    /**
+     * 所属公司
+     */
+    @TableField(exist = false)
+    private Integer orderId;
+
     @TableField(exist = false)
     private String userName;
 

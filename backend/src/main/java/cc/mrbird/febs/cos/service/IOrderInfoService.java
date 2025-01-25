@@ -43,6 +43,15 @@ public interface IOrderInfoService extends IService<OrderInfo> {
     LinkedHashMap<String, Object> queryOrderByUserIdSort(Integer userId);
 
     /**
+     * 公司接单
+     *
+     * @param orderId 订单编号
+     * @param userId  用户ID
+     * @return 结果
+     */
+    Boolean checkOrder(Integer orderId, Integer userId);
+
+    /**
      * 设置订单状态
      *
      * @param orderCode 订单编号
@@ -59,7 +68,7 @@ public interface IOrderInfoService extends IService<OrderInfo> {
      * @param staffCodeStr 帮运
      * @return 结果
      */
-    boolean checkOrder(String orderCode, String driverCode, String staffCodeStr) throws Exception;
+    boolean checkOrder(String orderCode, String vehicleCode, String driverCode, String staffCodeStr) throws Exception;
 
     /**
      * 添加评价信息
@@ -68,6 +77,14 @@ public interface IOrderInfoService extends IService<OrderInfo> {
      * @return 结果
      */
     boolean orderEvaluate(EvaluateInfo evaluateInfo);
+
+    /**
+     * 运输结束回调
+     *
+     * @param orderId 订单ID
+     * @return 结果
+     */
+    boolean receipt(Integer orderId);
 
     /**
      * 计算订单价格

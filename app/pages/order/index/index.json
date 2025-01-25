@@ -9,6 +9,9 @@
     "van-cell": "../../../dist/cell/index",
     "van-cell-group": "../../../dist/cell-group/index",
     "van-notify": "../../../dist/notify/index",
-    "van-icon": "../../../dist/icon/index"
+    "van-icon": "../../../dist/icon/index",
+    "van-slider": "../../../dist/slider/index",
+    "van-uploader": "../../../dist/uploader/index",
+    "van-tag": "../../../dist/tag/index"
   }
 }

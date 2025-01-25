@@ -82,7 +82,7 @@
         <a-col :span="12">
           <div hoverable :bordered="false" style="width: 100%;margin-top: 25px">
             <a-skeleton active v-if="chartLoading" />
-            <p v-if="!chartLoading" style="font-weight: 650;font-size: 15px;margin-bottom: 8px;font-family: SimHei">12月内入库量统计</p>
+            <p v-if="!chartLoading" style="font-weight: 650;font-size: 15px;margin-bottom: 8px;font-family: SimHei">12月内订单量统计</p>
             <apexchart v-if="!chartLoading" type="radar" height="450" :options="chartOptions3" :series="series3"></apexchart>
           </div>
         </a-col>

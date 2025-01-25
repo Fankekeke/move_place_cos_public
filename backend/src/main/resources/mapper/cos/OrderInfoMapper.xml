@@ -62,6 +62,9 @@
         <if test="orderInfo.userId != null">
             AND oi.user_id = #{orderInfo.userId}
         </if>
+        <if test="orderInfo.merchantId != null">
+            AND mi.user_id = #{orderInfo.merchantId}
+        </if>
         order by
         oi.create_date desc
     </select>
@@ -102,7 +105,11 @@
         mi.images AS merchantImages,
         mi.code AS merchantCode,
         mi.address AS address,
-        mi.principal AS principal
+        mi.principal AS principal,
+        evi.id AS evaluationStatus,
+        evi.content AS evaluationContent,
+        ci.id AS complaintId,
+        ci.status AS complaintStatus
         from
         order_info oi
         left join user_info ui on
@@ -110,6 +117,8 @@
         left join evaluate_info ei on (ei.order_code = oi.code)
         left join vehicle_info vi on (vi.vehicle_code = oi.vehicle_code)
         left join merchant_info mi on (mi.id = oi.merchant_id)
+        left join evaluate_info evi on (evi.order_code = oi.code)
+        left join complaint_info ci on (ci.order_code = oi.code)
         where
         1 = 1
         <if test="userId != null">

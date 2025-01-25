@@ -155,19 +155,8 @@ export default {
         },
         ellipsis: true
       }, {
-        title: '折后价格',
-        dataIndex: 'afterOrderPrice',
-        customRender: (text, row, index) => {
-          if (text !== null) {
-            return text + '元'
-          } else {
-            return '- -'
-          }
-        },
-        ellipsis: true
-      }, {
         title: '评价得分',
-        dataIndex: 'score',
+        dataIndex: 'overScore',
         customRender: (text, row, index) => {
           if (text !== null) {
             return text + '分'
@@ -204,17 +193,6 @@ export default {
         },
         ellipsis: true
       }, {
-        title: '获得积分',
-        dataIndex: 'integral',
-        customRender: (text, row, index) => {
-          if (text !== null) {
-            return text
-          } else {
-            return '- -'
-          }
-        },
-        ellipsis: true
-      }, {
         title: '评价时间',
         dataIndex: 'createDate',
         customRender: (text, row, index) => {
@@ -225,10 +203,6 @@ export default {
           }
         },
         ellipsis: true
-      }, {
-        title: '操作',
-        dataIndex: 'operation',
-        scopedSlots: {customRender: 'operation'}
       }]
     }
   },
