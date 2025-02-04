@@ -468,14 +468,20 @@ public class OrderInfoServiceImpl extends ServiceImpl<OrderInfoMapper, OrderInfo
         }
 
         for (LinkedHashMap<String, Object> order : orderList) {
-            // 计算起始地址与商家地址距离
-            double startDistance = DistanceUtil.getDistance(merchantInfo.getLongitude().doubleValue(), merchantInfo.getLatitude().doubleValue(), Double.parseDouble(order.get("startLongitude").toString()), Double.parseDouble(order.get("startLatitude").toString()));
-            double endDistance = DistanceUtil.getDistance(merchantInfo.getLongitude().doubleValue(), merchantInfo.getLatitude().doubleValue(), Double.parseDouble(order.get("endLongitude").toString()), Double.parseDouble(order.get("endLatitude").toString()));
-            double workDistance = DistanceUtil.getDistance(Double.parseDouble(order.get("startLongitude").toString()), Double.parseDouble(order.get("startLatitude").toString()), Double.parseDouble(order.get("endLongitude").toString()), Double.parseDouble(order.get("endLatitude").toString()));
+            if (merchantInfo.getLatitude() == null || merchantInfo.getLongitude() == null) {
+                order.put("startDistance", 0);
+                order.put("endDistance", 0);
+                order.put("workDistance", 0);
+            } else {
+                // 计算起始地址与商家地址距离
+                double startDistance = DistanceUtil.getDistance(merchantInfo.getLongitude().doubleValue(), merchantInfo.getLatitude().doubleValue(), Double.parseDouble(order.get("startLongitude").toString()), Double.parseDouble(order.get("startLatitude").toString()));
+                double endDistance = DistanceUtil.getDistance(merchantInfo.getLongitude().doubleValue(), merchantInfo.getLatitude().doubleValue(), Double.parseDouble(order.get("endLongitude").toString()), Double.parseDouble(order.get("endLatitude").toString()));
+                double workDistance = DistanceUtil.getDistance(Double.parseDouble(order.get("startLongitude").toString()), Double.parseDouble(order.get("startLatitude").toString()), Double.parseDouble(order.get("endLongitude").toString()), Double.parseDouble(order.get("endLatitude").toString()));
 
-            order.put("startDistance", NumberUtil.div(startDistance, 1000, 2));
-            order.put("endDistance", NumberUtil.div(endDistance, 1000, 2));
-            order.put("workDistance", NumberUtil.div(workDistance, 1000, 2));
+                order.put("startDistance", NumberUtil.div(startDistance, 1000, 2));
+                order.put("endDistance", NumberUtil.div(endDistance, 1000, 2));
+                order.put("workDistance", NumberUtil.div(workDistance, 1000, 2));
+            }
         }
 
         return orderList;

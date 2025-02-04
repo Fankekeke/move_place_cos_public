@@ -22,7 +22,22 @@
                 <text>{{ item.merchantName }}</text>
                 <text class="icon-right"></text>
             </view>
-            <navigator open-type="navigate" hover-class='none' url="/pages/order/details/index?orderId={{ item.id }}">
+            <navigator open-type="navigate" hover-class='none' wx:if="{{ TabCur == 0 }}">
+                <view class="cu-list menu menu-avatar">
+                    <view class="cu-item">
+                        <view class="cu-avatar radius lg" style="background-image:url(http://127.0.0.1:9527/imagesWeb/{{ item.image }});"></view>
+                        <view class='content canui-xzwz tow' style="padding-left: 15px">
+                            <view style="font-size: 12px">{{ item.startAddress }}</view>
+                            <view style="font-size: 12px;margin-top: 5px">{{ item.endAddress }}</view>
+                        </view>
+                        <view class='action' style="padding-left: 15px">
+                            <view class='text-price'>{{ item.amount }}</view>
+                            <view class="text-xs text-right text-gray">{{item.distanceLength}} 公里</view>
+                        </view>
+                    </view>
+                </view>
+            </navigator>
+            <navigator open-type="navigate" hover-class='none' url="/pages/order/details/index?orderId={{ item.id }}" wx:else>
                 <view class="cu-list menu menu-avatar">
                     <view class="cu-item">
                         <view class="cu-avatar radius lg" style="background-image:url(http://127.0.0.1:9527/imagesWeb/{{ item.image }});"></view>
