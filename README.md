@@ -1,18 +1,20 @@
-### 基于SpringBoot + Vue的搬家小程序平台.
+![](https://img.shields.io/badge/License-MIT-blue.svg)
 
-搬家服务平台小程序、智能搬家预约系统、同城搬家服务小程序
+![](https://img.shields.io/badge/Version-1.0.0-brightgreen.svg)
 
-#### 管理员功能模块介绍：
-###### 公告信息：发布平台通知、搬家政策或服务调整公告。公司审核：审核搬家公司的资质、车辆及服务范围准入。投诉记录：查看并处理用户对商家或服务的投诉内容。订单评价：监管用户对搬家服务的评分与文字反馈。公司管理：维护所有入驻搬家公司的基本信息与状态。消息管理：统一处理平台内用户、商家间的消息通信。优惠券管理：创建、发放和监控优惠券使用情况。消息通知：向用户或商家推送系统提醒与重要信息。订单信息：查看全平台搬家订单的全流程状态数据。付款记录：查询用户支付及商家收款的交易明细。价格规则：制定基础计价、里程费、楼层费等收费标准。员工管理：管理平台运营及审核人员的账号与权限。客户管理：维护用户资料，处理异常账户或行为。车辆管理：登记并监管搬家车辆信息及可用状态。提现记录：审核并记录商家申请的资金提现流水。数据统计：分析订单量、收入、投诉率等核心运营指标。订单年统计：生成年度搬家订单总量、营收及趋势报表。订单月统计：按月汇总订单数、客单价、热门区域等数据。
+![](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)
 
-#### 商家功能模块介绍：
-###### 公司信息：编辑公司名称、简介、服务范围及联系方式。订单评价：查看客户对本司搬家服务的评分与评论。客户消息：接收并回复用户关于订单的咨询或需求。订单信息：管理已接订单的状态、时间、地址及费用。用户缴费：查看用户是否完成订单支付及到账情况。价格规则：在平台框架内设置本司个性化报价策略。员工管理：管理司机、搬运工等内部人员账号与排班。车辆管理：维护本公司所属搬家车辆的信息与调度。提现记录：提交收益提现申请并查看历史提现明细。贴子管理：发布或管理在社区中的宣传、服务类帖子。公司审核：提交或更新资质材料配合平台年审流程。客户消息：（重复项）用于及时响应用户沟通需求。接单中心：接收新订单请求，确认接单或调配资源。
+# 搬家服务平台 (Moving Service Platform)
 
-#### 用户功能模块介绍：
-###### 小程序注册登录：通过手机号快速注册并安全登录使用。个人信息修改：更新姓名、联系方式、常用地址等资料。我的订单：查看历史及当前搬家订单的进度与详情。我的消息：接收订单状态变更、商家回复等系统通知。优惠券管理：领取、查看和使用平台发放的搬家优惠券。社区交流：在论坛中浏览或参与搬家经验分享讨论。我的贴子：查看自己发布的求助、评价或分享内容。贴子发布：发布搬家需求、问题或服务推荐等帖子。投诉管理：对不满意的服务发起正式投诉并跟踪处理。订单下单：填写起止地址、时间等信息提交搬家请求。订单配置选择：选择车型、搬运人数、是否需要打包等服务项。商家联系：直接与接单搬家公司或师傅在线沟通。订单投诉：针对具体订单提交服务问题或纠纷反馈。订单评价：对已完成的搬家服务进行打分和文字评价。查看订单详情：查阅订单费用明细、车辆信息、服务人员等完整信息。
+一个功能完善的同城搬家服务预约系统，采用前后端分离架构。平台连接用户、商家与管理员，提供从在线预约、智能调度、订单管理到售后评价的全流程服务解决方案。
 
+本项目旨在解决同城搬家市场中信息不透明、价格不标准、服务难监管的痛点。
+用户端：提供便捷的微信小程序体验，支持快速下单、费用预估及进度追踪。
+商家端：为搬家公司提供高效的订单处理、车辆调度及财务管理系统。
+管理端：为平台运营方提供全方位的审核、监管及数据分析能力。
 
 #### 安装环境
+️**注意**：请确保您的开发环境已安装以下依赖。
 
 JAVA 环境 
 
@@ -20,19 +22,18 @@ Node.js环境 [https://nodejs.org/en/] 选择14.17
 
 Yarn 打开cmd， 输入npm install -g yarn !!!必须安装完毕nodejs
 
-Mysql 数据库 [https://blog.csdn.net/qq_40303031/article/details/88935262] 一定要把账户和密码记住
+Mysql 数据库 一定要把账户和密码记住
 
 redis
 
-Idea 编译器 [https://blog.csdn.net/weixin_44505194/article/details/104452880]
+Idea 编译器
 
-WebStorm OR VScode 编译器 [https://www.jianshu.com/p/d63b5bae9dff]
+WebStorm OR VScode 编译器
 
 #### 采用技术及功能
 
 后端：SpringBoot、MybatisPlus、MySQL、Redis、
 前端：Vue、Apex、Antd、Axios
-报表：Spread.js
 
 平台前端：vue(框架) + vuex(全局缓存) + rue-router(路由) + axios(请求插件) + apex(图表)  + antd-ui(ui组件)
 
@@ -40,14 +41,116 @@ WebStorm OR VScode 编译器 [https://www.jianshu.com/p/d63b5bae9dff]
 
 开发环境：windows10 or windows7 ， vscode or webstorm ， idea + lambok
 
-#### 管理员
-公告信息、公司审核、投诉记录、订单评价、公司管理、消息管理、优惠券管理、消息通知、订单信息、付款记录、价格规则、员工管理、客户管理、车辆管理、提现记录、数据统计、订单年统计、订单月统计、
+---
 
-#### 商家
-公司信息、订单评价、客户消息、订单信息、用户缴费、价格规则、员工管理、车辆管理、提现记录、贴子管理、公司审核、客户消息、接单中心、
+## 核心特性
 
-#### 用户
-小程序注册登录、个人信息修改、我的订单、我的消息、优惠券管理、社区交流、我的贴子、贴子发布、投诉管理、订单下单、订单配置选择、商家联系、订单投诉、订单评价、查看订单详情
+- **三端协同架构**：打通用户、商家与管理员三端数据，实现从下单、接单到监管的全链路闭环。
+- **智能调度匹配**：基于地理位置与服务需求，自动匹配最优搬家公司与车辆资源。
+- **透明计价体系**：支持基础里程费、楼层费、打包费等多维度计价规则，费用明细清晰可见。
+- **全流程订单追踪**：实时同步订单状态变更，用户可随时查看车辆位置、服务人员及费用详情。
+- **多维数据洞察**：提供订单量、营收趋势、客单价、热门区域等核心运营指标可视化分析。
+- **灵活权限管控**：支持管理员、商家、员工多级角色权限配置，保障平台数据安全与业务隔离。
+- **社区互动生态**：内置搬家经验分享与求助社区，增强用户粘性与平台活跃度。
+- **合规审核机制**：严格审核商家资质与车辆信息，配合年审流程，保障服务质量与用户权益。
+
+
+---
+
+## ️ 功能模块概览
+
+### 管理员端 (Admin Dashboard)
+
+管理员端提供全局视角的平台运营监控与资源配置能力：
+
+**平台监管与审核**
+
+- **公司资质审核**：严格审核入驻搬家公司的资质、车辆及服务范围准入。
+- **投诉与评价监管**：查看并处理用户投诉，监管商家服务评分与文字反馈。
+- **车辆与人员管理**：登记监管全平台搬家车辆状态，管理运营人员账号与权限。
+- **公告与消息管理**：发布平台通知、政策调整公告，统一处理站内消息通信。
+
+**订单与财务中心**
+
+- **全流程订单监控**：查看全平台搬家订单的实时状态、费用明细及流转数据。
+- **支付与提现审核**：查询用户支付及商家收款明细，审核商家资金提现流水。
+- **价格规则制定**：制定基础计价、里程费、楼层费等平台统一收费标准。
+- **优惠券管理**：创建、发放平台优惠券，并监控核销与使用情况。
+
+**数据统计与分析**
+
+- **核心运营指标**：实时分析订单量、总收入、投诉率等关键运营数据。
+- **年度/月度统计**：生成订单总量、营收趋势、客单价及热门区域分布报表。
+
+### 商家端 (Merchant Portal)
+
+商家端赋能搬家公司高效处理业务，优化内部资源调度：
+
+**订单与业务处理**
+
+- **接单中心**：实时接收新订单请求，快速确认接单或进行资源调配。
+- **订单全周期管理**：管理已接订单的状态、时间、地址及费用，查看用户缴费情况。
+- **客户消息互动**：及时接收并回复用户关于订单的咨询、需求或沟通。
+
+**资源与内部管理**
+
+- **公司与车辆维护**：编辑公司简介、服务范围，维护所属车辆信息与调度状态。
+- **员工排班管理**：管理司机、搬运工等内部人员账号，安排工作排班。
+- **资质年审配合**：提交或更新公司资质材料，配合平台进行的年度审核流程。
+
+**运营与财务**
+
+- **个性化报价设置**：在平台框架内，设置本公司的个性化报价策略与规则。
+- **社区帖子管理**：在社区发布宣传、服务类帖子，提升品牌曝光度。
+- **提现记录查询**：提交收益提现申请，查看历史提现明细与到账状态。
+
+### 用户端 (Mini Program)
+
+用户端提供便捷的微信小程序体验，实现搬家服务的“指尖预约”：
+
+**便捷下单与追踪**
+
+- **快速注册登录**：支持手机号一键注册与安全登录。
+- **智能下单配置**：填写起止地址与时间，灵活选择车型、搬运人数及打包服务。
+- **订单进度追踪**：实时查看订单状态、费用明细、车辆信息及服务人员详情。
+
+**互动与售后**
+
+- **在线沟通**：直接与接单的搬家公司或师傅进行在线沟通。
+- **评价与投诉**：对已完成服务进行打分评价，或对不满意服务发起正式投诉并跟踪处理。
+- **社区交流**：浏览或发布搬家经验分享、求助帖，参与社区互动。
+
+**个人中心**
+
+- **信息与地址管理**：随时更新姓名、联系方式及常用搬家地址。
+- **优惠券管理**：领取、查看和使用平台发放的搬家优惠券，享受实惠。
+- **消息通知**：接收订单状态变更、商家回复及系统重要提醒。
+```
+
+---
+
+## 项目结构
+
+```text
+pharmacy-dispensing-system/
+├── backend/            # 后端 API 服务
+│   ├── src/
+│   │   ├── controllers/  # 控制器
+│   │   ├── models/       # 数据模型
+│   │   ├── routes/       # 路由
+│   │   └── services/     # 业务逻辑
+│   └── package.json
+├── frontend/           # 前端 Web 应用
+│   ├── src/
+│   │   ├── views/      # 页面视图
+│   │   ├── components/ # 公共组件
+│   │   └── store/      # 状态管理
+│   └── package.json
+├── docs/               # 项目文档与 API 接口说明
+├── LICENSE
+└── README.md
+```
+---
 
 
 #### 前台启动方式
@@ -57,43 +160,36 @@ WebStorm OR VScode 编译器 [https://www.jianshu.com/p/d63b5bae9dff]
 #### 默认后台账户密码
 [管理员]
 admin
-1234qwer
+123456
 
-[公司]
-shangjia
-1234qwer
-
-[用户]
-小程序登录
+[员工]
+fank
+123456
 
 #### 项目截图
-
 |  |  |
 |---------------------|---------------------|
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1737813745885.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1737813533972.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1737813738810.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1737813952346.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1737813705802.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1737813943403.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1737813698710.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1737813936267.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1737813673533.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1737813926597.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1737813660252.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1737813911850.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1737813654516.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1737813901437.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1737813645772.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1737813830292.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1737813629514.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1737813817458.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1737813623211.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1737813766202.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1737813616836.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1737813758441.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1737813610452.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1737813752284.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1737813600962.png) |  |
+| ![](./assets/image%20(1).png) | ![](./assets/image%20(2).png) |
+| ![](./assets/image%20(3).png) | ![](./assets/image%20(4).png) |
+| ![](./assets/image%20(5).png) | ![](./assets/image%20(6).png) |
+| ![](./assets/image%20(7).png) | ![](./assets/image%20(8).png) |
+| ![](./assets/image%20(9).png) | ![](./assets/image%20(10).png) |
+| ![](./assets/image%20(11).png) | ![](./assets/image%20(12).png) |
+| ![](./assets/image%20(13).png) | ![](./assets/image%20(14).png) |
+| ![](./assets/image%20(15).png) | ![](./assets/image%20(16).png) |
+| ![](./assets/image%20(17).png) | ![](./assets/image%20(18).png) |
+| ![](./assets/image%20(19).png) | ![](./assets/image%20(20).png) |
+| ![](./assets/image%20(21).png) | ![](./assets/image%20(22).png) |
+| ![](./assets/image%20(23).png) | ![](./assets/image%20(24).png) |
+| ![](./assets/image%20(25).png) |  |
 
-
-|  |  |
-|---------------------|---------------------|
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1737814147006.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1737814067495.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1737814140870.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1737814048550.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1737814125712.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1737814042008.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1737814116311.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1737814023862.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1737814107246.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1737814015070.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1737814098008.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1737814002639.png) |
-| ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1737814082391.png) | ![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/1737814155847.png) |
+| ![](./assets/app_image%20(1).png) | ![](./assets/app_image%20(2).png) |
+| ![](./assets/app_image%20(3).png) | ![](./assets/app_image%20(4).png) |
+| ![](./assets/app_image%20(5).png) | ![](./assets/app_image%20(6).png) |
+| ![](./assets/app_image%20(7).png) | ![](./assets/app_image%20(8).png) |
+| ![](./assets/app_image%20(9).png) | ![](./assets/app_image%20(10).png) |
+| ![](./assets/app_image%20(11).png) | ![](./assets/app_image%20(12).png) |
+| ![](./assets/app_image%20(13).png) | ![](./assets/app_image%20(14).png) |
 
 #### 演示视频
 
@@ -111,9 +207,10 @@ WeChat: `Storm_Berserker`
 
 > 项目部署调试不好包退！功能逻辑没讲明白包退！
 
-![](https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/work/936e9baf53eb9a217af4f89c616dc19.png)
+<div align=center><img align="center" src="./assets/product_word.png" alt="fankekeke" /></div>
 
 #### 其它资源
+[2026年-答辩顺利通过-客户评价🀄](https://berserker287.github.io/2026/06/29/2026%E5%B9%B4%E7%AD%94%E8%BE%A9%E9%A1%BA%E5%88%A9%E9%80%9A%E8%BF%87/)
 
 [2025年-答辩顺利通过-客户评价🍜](https://berserker287.github.io/2025/06/18/2025%E5%B9%B4%E7%AD%94%E8%BE%A9%E9%A1%BA%E5%88%A9%E9%80%9A%E8%BF%87/)
 
@@ -137,4 +234,8 @@ WeChat: `Storm_Berserker`
 
 More info: [悲伤的橘子树](https://berserker287.github.io/)
 
-<p><img align="center" src="https://fank-bucket-oss.oss-cn-beijing.aliyuncs.com/img/%E5%90%88%E4%BD%9C%E7%89%A9%E6%96%99%E6%A0%B7%E5%BC%8F%20(3).png" alt="fankekeke" /></p>
+<div align="center"><img align="center" src="./assets/chat_qr_code.png" alt="fankekeke" width=250 /></div>
+
+<p><img align="center" src="./assets/wechat_group.png" alt="fankekeke" /></p>
+
+**感谢查看**
